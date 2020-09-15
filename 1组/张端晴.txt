@@ -57,5 +57,3 @@ driver.find_element_by_id("verify_code").send_keys("8888")  # 输入验证码
 driver.find_element_by_class_name("J-login-submit").click()  # 点击
 time.sleep(3)
 driver.quit()
-
-
