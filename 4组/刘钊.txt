@@ -1,0 +1,63 @@
+一、自动化测试类型有哪些？能解决一些什么样的问题？
+答：
+类型：
+1、UI自动化测试（Web端自动化测试，移动端自动化测试，桌面应用自动化测试）
+2、接口自动化测试
+3、单元测试（代码）
+解决问题：
+回归测试：缺陷回归，版本回归
+压力测试：
+兼容性测试：
+PC端：操作系统、分辨率、代码版本、浏览器
+手机端：操作系统、分辨率，手机型号、软件版本、网络
+提升工作效率，保证软件质量
+
+二、2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程
+中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源
+的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+答：分析：适合自动化测试的项目符合三个特征（需求变更不频繁，项目周期较长，有回归测试）
+该项目在迭代过程中每周发布新的功能以及少量历史优化内容（需求变更频繁），周期较短，不适合做web自动化测试
+
+三、3、元素定位练习题：
+注册流程
+1)打开TPSHOP商城进入注册页面，暂停3s；
+ #2)完成注册流程；
+ #3)元素定位方式不限；
+  element.click() 点击事件
+
+  # 导包
+from selenium import webdriver
+import time
+
+# 生成对象
+driver = webdriver.Chrome()
+driver.get('http://tpshop-test.itheima.net/Home/User/reg.html')  # 访问页面
+driver.find_element_by_id('username').send_keys('13700134466')  # 账号
+driver.find_element_by_name('verify_code').send_keys('8888')  # 验证码
+driver.find_element_by_id('password').send_keys('asc123')  # 密码
+driver.find_element_by_id('password2').send_keys('asc123')  # 确认密码
+driver.find_element_by_name('invite').send_keys('13800138006')  # 推荐人
+driver.find_element_by_class_name('iyes').click()  # 勾选协议
+driver.find_element_by_class_name('regbtn').click()  # 点击注册
+time.sleep(3)
+driver.quit()
+
+
+
+  #登录练习：
+  #1)打开TPSHOP商城进入登录界面
+  #2)使用注册练习注册成功的用户信息登录TPSHOP
+
+  from selenium import webdriver
+import time
+
+# 实例化
+driver = webdriver.Chrome()
+# 访问页面
+driver.get('http://tpshop-test.itheima.net/Home/user/login.html')  # 页面
+driver.find_element_by_id('username').send_keys('13700134466')  # 账号
+driver.find_element_by_name('password').send_keys('asc123')  # 密码
+driver.find_element_by_name('verify_code').send_keys('8888')  # 验证码
+driver.find_element_by_name('sbtbutton').click()  # 登陆
+time.sleep(3)
+driver.quit()
