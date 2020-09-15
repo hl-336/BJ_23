@@ -64,7 +64,7 @@ time.sleep(1)
 driver.find_element_by_name("verify_code").send_keys("8888")
 time.sleep(1)
 driver.find_element_by_xpath("//*[@href='javascript:void(0);']").click()
-time.sleep(12)
+time.sleep(13)
 
 
 driver.quit()
