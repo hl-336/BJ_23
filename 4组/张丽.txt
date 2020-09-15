@@ -70,6 +70,7 @@ time.sleep(1)
 driver.find_element_by_id("verify_code").send_keys("8888")
 time.sleep(1)
 driver.find_element_by_name("sbtbutton").click()
+等待一秒钟
 time.sleep(1)
+关闭浏览器
 driver.quit()
-
