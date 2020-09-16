@@ -1,0 +1,90 @@
+DAY01
+1.UI自动化测试(功能测试/黑盒测试),接口自动化测试,单元测试
+回归测试
+压力测试
+兼容性测试
+2.适合，需求变动不频繁，项目需要回归测试
+3.import time
+# 导包
+from selenium import webdriver
+# 打开谷歌浏览器对象
+driver=webdriver.Chrome()
+# 输入网址
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+# 业务操作暂停三秒
+time.sleep(3)
+# 找到相应的元素，输入值
+driver.find_element_by_name("username").send_keys("13966666667")
+# 找到相应的元素，输入值
+driver.find_element_by_name("verify_code").send_keys("8888")
+# 找到相应的元素，输入值
+driver.find_element_by_name("password").send_keys("leilei123456")
+# 找到相应的元素，输入值
+driver.find_element_by_name("password2").send_keys("leilei123456")
+# 找到相应的元素，输入值
+driver.find_element_by_name("invite").send_keys("13822222221")
+# 点击注册
+driver.find_element_by_class_name("regbtn").click()
+# 关闭浏览器
+driver.quit();
+4.import time
+# 导包
+from selenium import webdriver
+# 打开谷歌浏览器对象
+driver=webdriver.Chrome()
+# 输入网址
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+# 业务操作暂停三秒
+time.sleep(3)
+# 找到相应的元素，输入值
+driver.find_element_by_name("username").send_keys("13966666667")
+# 找到相应的元素，输入值
+driver.find_element_by_name("verify_code").send_keys("8888")
+# 找到相应的元素，输入值
+driver.find_element_by_name("password").send_keys("leilei123456")
+# 找到相应的元素，输入值
+driver.find_element_by_name("password2").send_keys("leilei123456")
+# 找到相应的元素，输入值
+driver.find_element_by_name("invite").send_keys("13822222221")
+# 点击注册
+driver.find_element_by_class_name("regbtn").click()
+# 关闭浏览器
+driver.quit();
+
+
+DAY02
+选择题
+1.A,B,C,D
+2.A,B,C,D,E,F
+3.A,B,C,D
+4.A,B,D
+5.A,B,C,D
+6.A,B,C
+7.B,D
+代码题
+import time
+# 导包
+from selenium import webdriver
+# 打开谷歌浏览器对象
+driver=webdriver.Chrome()
+# 输入网址
+driver.get("http://ttmp.research.itcast.cn/")
+# 业务操作暂停三秒
+time.sleep(3)
+# 窗口最大化
+driver.maximize_window()
+# 业务操作暂停1秒
+time.sleep(1)
+# 找到相应的元素，输入值
+driver.find_element_by_class_name("el-input__inner").send_keys("13911111111")
+# 业务操作暂停1秒
+time.sleep(1)
+# 找到相应的元素，输入值
+driver.find_element_by_xpath("//input[@placeholder='验证码']").send_keys("246810")
+# 找到相应的元素，输入值
+driver.find_element_by_xpath("//*[@class='el-button el-button--primary']").click()
+print(driver.title)
+print(driver.current_url)
+选择题
+A
+
