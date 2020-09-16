@@ -63,4 +63,11 @@ driver.find_element_by_name("sbtbutton").click()
 time.sleep(2)
 driver.quit()
 ```
-12
+ 2020/9/6
+ 第一题选 b,c,d
+ 第二题，abdef
+ 第三题 abc
+ 第四题，acd
+ 第五题  abd
+ 第六题，ac
+ 第七题 bd
