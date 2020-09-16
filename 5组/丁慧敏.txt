@@ -1,3 +1,4 @@
+Day01
 1、自动化测试类型有哪些？能解决一些什么样的问题？
 答：UI自动化测试、接口自动化测试、单元测试
    解决问题：
@@ -54,3 +55,33 @@ time.sleep(3)
 driver.find_element_by_name("sbtbutton").click()
 time.sleep(3)
 driver.quit()
+
+Day02:
+一、基础题
+1.ABCD
+2.ABCDEF
+3.BC
+4.ABD
+5.ABCD
+6.ABC
+7.BD
+
+代码题：
+1.
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+driver.get("http://ttmp.research.itcast.cn/")
+driver.find_element_by_xpath("//*[@placeholder='请输入手机号']").send_keys("13911111111")
+time.sleep(3)
+driver.find_element_by_xpath('//*[@placeholder="验证码"]').send_keys("246810")
+time.sleep(3)
+driver.find_element_by_xpath("//*[@class='el-button el-button--primary']").click()
+time.sleep(3)
+print("获取的页面标题为：", driver.title)
+print("获取当前页面的url为：", driver.current_url)
+driver.quit()
+
+二、提高题
+1.B
