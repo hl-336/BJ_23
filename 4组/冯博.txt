@@ -28,8 +28,11 @@ PC端
 
 2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
 在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
-不适合
-做自动化测试的项目需要周期长，至少半年以上，以及需求变动不频繁的，该项目以上两点均不符合，所以不适合做自动化测试
+适合
+第一是因为有很少量的历史优化，说明需求变动不会特别频繁，符合web自动化测试的要求
+第二、电商项目一般不会找三方公司去做，都是自己维护，所以项目周期会比较长长，符合web自动化测试的要求
+第三、进入产品版本迭代的时候，说明需要进行回归测试，更加适合做web自动化测试
+综合以上三点原因，该项目是适合做web自动化测试的
 
 3、元素定位练习题：
 
@@ -91,3 +94,107 @@ time.sleep(1)
 driver.find_element_by_name("sbtbutton").click()
 time.sleep(2)
 driver.quit()
+------------------
+DAY02
+----
+1-ACD
+2-ABCDEF
+3-ABCD
+4-BD
+5-ABCD
+6-ABCD
+7-BD
+
+# 导包
+import time
+
+from selenium import webdriver
+
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+time.sleep(2)
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.get("http://localhost/")
+time.sleep(8)
+driver.find_element_by_xpath("//a[@class='red']").click()
+time.sleep(3)
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13800000001")
+time.sleep(2)
+#3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_elements_by_class_name("text_cmu")[2].send_keys("8888")
+time.sleep(2)
+#5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//a[@name='sbtbutton']").click()
+time.sleep(2)
+#6.打印登陆后页面标题和地址信息
+print("页面标题为：", driver.title)
+print("地址信息为：", driver.current_url)
+# 关闭浏览器对象
+driver.quit()
+
+二、提高题
+选择题-B
+代码题:没写全，没想明白！
+
+# 导包
+import time
+
+from selenium import webdriver
+
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+time.sleep(2)
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.get("http://localhost/")
+time.sleep(8)
+driver.find_element_by_xpath("//a[@class='red']").click()
+time.sleep(3)
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("15766212618")
+time.sleep(2)
+#3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_elements_by_class_name("text_cmu")[2].send_keys("8888")
+time.sleep(2)
+#5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//a[@name='sbtbutton']").click()
+# 6.登录成功后(要做个强制等待,因为登录跳转比较慢)
+time.sleep(10)
+# 7.在顶部搜索输入框输入搜索条件:小米,点击搜索
+driver.find_element_by_xpath("//input").send_keys("小米")
+time.sleep(1)
+driver.find_element_by_xpath("//*[text()='搜索']").click()
+time.sleep(2)
+# 关闭浏览器对象
+driver.quit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
