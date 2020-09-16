@@ -1,0 +1,30 @@
+选择题
+1.abcd
+2.abcdef
+3.abcd
+4.abcd
+5.bd
+6.abd
+7.bcd
+
+代码
+# 导包
+import time
+from selenium import webdriver
+
+# 浏览器驱动
+driver = webdriver.Chrome()
+# 打开网址
+driver.get("http://ttmp.research.itcast.cn/#/login")
+# 窗口最大化
+driver.maximize_window()
+time.sleep(2)
+driver.find_element_by_class_name("el-input__inner").send_keys("13911111111")
+time.sleep(2)
+driver.find_element_by_xpath("//form/div[2]/div/div/input").send_keys("246810")
+time.sleep(2)
+driver.find_element_by_xpath("//form/div[4]/div/button").click()
+time.sleep(2)
+print("标题是:",driver.title)
+print("地址信息:",driver.current_url)
+driver.quit()
