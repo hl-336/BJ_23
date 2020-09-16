@@ -1,0 +1,65 @@
+day01作业
+--------------------
+一、自动化测试类型有哪些？能解决一些什么样的问题？
+1.分类：
+UI自动化测试：web端自动化测试、移动端自动化测试、桌面应用自动化测试
+接口自动化测试
+单元测试
+2.解决问题：
+回归测试：历史版本功能的验证、缺陷回归测试
+压力测试：验证多用户是否能满足系统性能指标
+兼容性测试：1）PC端：操作系统兼容性、浏览器兼容性、分辨率兼容 2）移动端测试：品牌、型号、屏幕分辨率、软件版本
+
+二、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程 中，平均每周会发布一些新的功能以及少量历史优化类容。
+在不考虑当前人力资源 的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+ 我认为不适合做自动化测试，项目周期比较短，3个月已经上线，项目规模小，每周发布一些新的功能和少量历史优化内容，需求变动属于比较频繁的，
+ 无法快速编制脚本
+
+三，登录tpshop
+# 1.导包
+import time
+
+from selenium import webdriver
+
+# 2.创建浏览器驱动对象
+driver = webdriver.Chrome()
+
+# 3.打开网址，注册tpshop商城
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+time.sleep(3)
+driver.find_element_by_id("username").send_keys("13610001235")
+driver.find_element_by_name("verify_code").send_keys("8888")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("password2").send_keys("123456")
+driver.find_element_by_name("invite").send_keys("13899990000")
+# driver.find_element_by_class_name("iyes fn-fl J_protocal").click()
+driver.find_element_by_class_name("J_btn_agree").click()
+# 4.3秒后关闭浏览器窗口
+time.sleep(3)
+
+driver.quit()
+四、#登录练习： #1)打开TPSHOP商城进入登录界面 #2)使用注册练习注册成功的用户信息登录TPSHOP
+
+# 1.导包
+import time
+
+from selenium import webdriver
+
+# 2.创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 3.登录网址，输入Tpshop登录网址
+driver.get("http://tpshop-test.itheima.net/Home/user/login.html")
+
+# 4.业务步骤
+# 1）使用id定位输入用户名：13610001235
+driver.find_element_by_id("username").send_keys("13610001235")
+# 2)使用id定位输入密码：123456
+driver.find_element_by_id("password").send_keys("123456")
+
+# 3)使用id定位，输入验证码：8888
+driver.find_element_by_id("verify_code").send_keys("8888")
+# 4)使用name定位，登录按钮
+driver.find_element_by_name("sbtbutton").click()
+# 暂停3秒后关闭浏览器
+time.sleep(3)
+driver.quit()
