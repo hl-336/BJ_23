@@ -37,7 +37,7 @@
  driver.find_element_by_class_name("regbtn").click()
  time.sleep(3)
  driver.quit()
- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  # 登录练习：
  # 2 #1)打开TPSHOP商城进入登录界面
  # 3 #2)使用注册练习注册成功的用户信息登录TPSHOP
