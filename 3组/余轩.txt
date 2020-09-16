@@ -14,22 +14,6 @@ day01
 
 """
 1)打开TPSHOP商城进入注册页面，暂停3s；
-"""
-
-#1)打开TPSHOP商城进入注册页面，暂停3s；
-# 导包
-import time
-from selenium import webdriver
-# 创建浏览器驱动对象
-driver = webdriver.Chrome()
-# 打开浏览器,输入网址
-driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
-# 业务操作
-time.sleep(3)
-# 关闭浏览器
-driver.quit()
-
-"""
 2)完成注册流程
 """
 
@@ -58,24 +42,6 @@ time.sleep(3)
 driver.quit()
 
 """
-登录练习：
-1)打开TPSHOP商城进入登录界面
-"""
-
-# 导包
-import time
-
-from selenium import webdriver
-# 创建驱动对象
-driver = webdriver.Chrome()
-# 打开浏览器，输入网址
-driver.get("http://tpshop-test.itheima.net/Home/user/login.html")
-# 业务操作
-time.sleep(3)
-# 关闭浏览器
-driver.quit()
-
-"""
 2)使用注册练习注册成功的用户信息登录TPSHOP
 """
 # 导包
@@ -97,5 +63,40 @@ driver.find_element_by_class_name("J-login-submit").click()
 time.sleep(3)
 # 关闭浏览器
 driver.quit()
+------------------------------------------------------------------------------------------
+day02
+------------------------------------------------------------------------------------------
+一、
+1.ABC
+2.ABCDEFG
+3.ACD
+4.ABCD
+5.ABCD
+6.ABC
+7.BCD
+2.代码题
+# 导包
+import time
+from selenium import webdriver
+driver = webdriver.Chrome() # 创建浏览器驱动对象
+driver.get("http://tpshop-test.itheima.net/Home/user/login.html") # 打开网址
+# 操作业务
+driver.maximize_window() # 打开浏览器后先窗口最大化
+driver.find_element_by_id("username").send_keys("13844649477")
+# 3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+# 4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath('//*[@class="text_cmu" and @id="verify_code"]').send_keys("8888")
+# 5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath('//*[@class="J-login-submit"]').click()
+# 6.打印登陆后页面标题和地址信息
+print("打印页面标题", driver.title)
+print("地址信息", driver.current_url)
+time.sleep(5)
+# 关闭
+driver.quit()
+
+
+
 
 

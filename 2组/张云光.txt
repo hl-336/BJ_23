@@ -1,0 +1,129 @@
+UI自动化第一天
+1、自动化测试类型有哪些？能解决一些什么样的问题？
+答：自动化包括：
+            1）UI自动化
+                a）b/s web自动化
+                b）移动端自动化
+                c）c/s桌面程序自动化
+            2）接口自动化
+            3）单元测试
+   解决问题：
+         1）回归测试
+            a）版本回归
+            b）缺陷回归
+         2）压力测试
+            a）测试指标
+                1.tps每秒事务数
+                2.吞吐量
+                3.90%用户平均响应时间
+                4.服务器资源利用率
+                5.错误率
+                6.运营指标
+            b）场景设计
+                1.单接口多用户并发测试
+                2.核心业务流程测试
+            ）环境搭建
+                1.有文档按照文档搭建
+                2.无文档，找开发或环境负责人帮助搭建
+            d）结果分析
+                1.满足需求，编写测试报告
+                2.不满足需求，将信息或错误日志发送给相关负责人
+         3）兼容测试
+            a）pc端
+                1.5大浏览器兼容
+                2.分辨率兼容
+                3.操作系统兼容
+            b）移动端
+                1.主流手机品牌兼容
+                2.分辨率兼容
+                3.操作系统兼容
+                4.网络兼容
+                5.自身软件上一本版兼容
+         4）提高工作效率，产品品质
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，
+平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，
+该项目是否适合做web自动化测试并简单说明分析过程？
+答:该项目不适和做自动化测试。详情如下：
+1）.该项目迭代周期较短，需求变化会引起业务流程变化，自动化脚本编写来不及，
+自动化测试周期相对较长，不宜做自动化；
+2）.该项目是个小项目，做自动化测试性价比不高且影响后续工作进程；
+3.TPshop注册
+答：# 导包
+import time
+from selenium import webdriver
+# 链接浏览器
+driver = webdriver.Chrome()
+# 访问注册地址
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+# 注册流程
+driver.find_element_by_id("username").send_keys("13812345678")
+time.sleep(3)
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(3)
+driver.find_element_by_id("password").send_keys("123456")
+time.sleep(3)
+driver.find_element_by_id("password2").send_keys("123456")
+time.sleep(3)
+driver.find_element_by_class_name("J_btn_agree").click()
+time.sleep(3)
+driver.quit()
+4.TPshop登录
+答:# 导包
+import time
+from selenium import webdriver
+# 实例浏览器插件链接对象
+driver = webdriver.Chrome()
+# 输入登录地址
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+# 业务流程
+driver.find_element_by_id("username").send_keys("13812345678")
+time.sleep(3)
+driver.find_element_by_id("password").send_keys("123456")
+time.sleep(3)
+driver.find_element_by_id("verify_code").send_keys("8888")
+time.sleep(3)
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(3)
+driver.quit()
+UI第二天
+1.abcd
+2.abcdef
+3.cd
+4.abd
+5.abcd
+6.abc
+7.abcd
+8.# 导包
+import time
+
+from selenium import webdriver
+# 链接浏览器驱动
+driver = webdriver.Chrome()
+# 输入地址
+driver.get('http://127.0.0.1')
+# 窗口最大化
+driver.maximize_window()
+time.sleep(1)
+# 点击登录
+driver.find_element_by_xpath('//*[text()="登录"]').click()
+time.sleep(1)
+# 输入账号
+driver.find_element_by_id('username').send_keys('13812345678')
+time.sleep(1)
+# 输入密码
+driver.find_element_by_name('password').send_keys('123456')
+time.sleep(1)
+# 验证码
+driver.find_elements_by_class_name('text_cmu')[2].send_keys('8888')
+time.sleep(1)
+# 点击登录
+driver.find_element_by_xpath("//*[@name='sbtbutton']").click()
+time.sleep(1)
+# 获取标题
+print('标题', driver.title)
+# 打印地址
+print('地址', driver.current_url)
+# 关闭浏览器驱动
+driver.quit()
+9.bd
+10.不会写！！！怎么提交不了啊？？？？

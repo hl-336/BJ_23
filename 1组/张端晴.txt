@@ -1,6 +1,5 @@
 ---DAY01---
 1、自动化测试类型有哪些？能解决一些什么样的问题？
-
 自动化测试类型：
 （1）web端自动化测试
 （2）移动端自动化测试
@@ -14,15 +13,13 @@
 （4）提高测试效率,保证产品质量
 
 
-2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
-   在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
-
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
 该项目适合做web自动化测试。
-因为平均每周会发布一些新的功能以及少量历史优化内容，需要频繁做回归测试，而自动化测试正好可以解决回归测试的问题，提高效率。
+已经上线了，需求变更不频繁,而且平均每周会发布一些新的功能以及少量历史优化内容，需要频繁做回归测试，而自动化测试正好可以解决回归测试的问题，提高效率。
 
 
 3、元素定位练习题：
-#注册流程
+(1)#注册流程
 #1)打开TPSHOP商城进入注册页面，暂停3s；
 #2)完成注册流程；
 #3)元素定位方式不限；
@@ -42,7 +39,7 @@ time.sleep(3)
 driver.quit()
 
 
-#登录练习：
+(2)#登录练习：
 #1)打开TPSHOP商城进入登录界面
 #2)使用注册练习注册成功的用户信息登录TPSHOP
 
@@ -57,3 +54,56 @@ driver.find_element_by_id("verify_code").send_keys("8888")  # 输入验证码
 driver.find_element_by_class_name("J-login-submit").click()  # 点击
 time.sleep(3)
 driver.quit()
+
+------------------------------------------------------------------------------------------------------------------------
+
+---DAY02---
+一、基础题
+选择题
+1.[多选]:针对标签定位下面说法正确的是:( A C D )
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？( A B D F )
+3.[多选]:对于xpath下面说法正确的是？( B C D )
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？( A B )
+5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：( A B C D )
+6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：( C )
+7.[多选]定位下面html中所有input标签，使用方法正确的是：( B D )
+
+代码题
+import time
+from selenium import webdriver
+driver = webdriver.Chrome()
+driver.get("http://ttmp.research.itcast.cn/")  # 进入网站
+driver.maximize_window()  # 窗口最大化
+driver.find_element_by_xpath('//*[@placeholder="请输入手机号"]').send_keys("13911111111")  # 输入手机号
+driver.find_element_by_xpath('//*[@placeholder="验证码"]').send_keys("246810")  # 输入验证码
+time.sleep(3)
+driver.find_element_by_class_name("el-button--primary").click()  # 点击登录
+time.sleep(10)
+print(driver.title)  # 打印页面标题
+print(driver.current_url)  # 打印页面地址信息
+driver.quit()
+
+
+二、提高题
+选择题
+1.如下html，class属性每次打开页面后面数字都会发生改变，如需要定位定位第三个input标签，下面表达式正确的是：( B )
+
+代码题
+import time
+from selenium import webdriver
+driver = webdriver.Chrome()
+driver.get("http://ttmp.research.itcast.cn/")  # 进入网站
+driver.maximize_window()  # 窗口最大化
+driver.find_element_by_xpath('//*[@placeholder="请输入手机号"]').send_keys("13911111111")  # 输入手机号
+driver.find_element_by_xpath('//*[@placeholder="验证码"]').send_keys("246810")  # 输入验证码
+time.sleep(3)
+driver.find_element_by_class_name("el-button--primary").click()  # 点击登录
+time.sleep(5)
+print(driver.title)  # 打印页面标题
+print(driver.current_url)  # 打印页面地址信息
+text_data = driver.find_elements_by_class_name("text")  # 获取元素文本
+num_data = driver.find_elements_by_class_name("num")  # 获取元素文本
+for i, j in zip(text_data, num_data):  # 循环遍历两个列表
+    print(i.text, j.text)  # 按格式打印
+driver.quit()
+
