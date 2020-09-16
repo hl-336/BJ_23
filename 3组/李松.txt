@@ -90,6 +90,43 @@ day01Homework
         最终不变版
 
 
+day02Homework
 
+    1、ABCD
+    2、ABCDEF
+    3、ABCD
+    4、ABD
+    5、ABCD
+    6、ABC
+    7、BD
+    8、代码实现如下：
+        # 导包
+        from selenium import webdriver
+
+        # 定义浏览器驱动
+        driver = webdriver.Chrome()
+        # 打开浏览器后先窗口最大化
+        driver.get('http://tpshop-test.itheima.net')
+        driver.maximize_window()
+        # 使用XPath定位点击登录
+        driver.find_element_by_xpath('//*[@href="/Home/user/login.html"]').click()
+        # 使用id定位用户名输入框并输入用户名
+        driver.find_element_by_id("username").send_keys('13833345678')
+        # 使用name定位定位登陆页面密码输入框，输入密码
+        driver.find_element_by_name("password").send_keys('123456')
+        # 使用class定位定位登陆页面验证码输入框，输入验证码
+        driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
+        # 使用xpath定位登陆按钮执行点击
+        driver.find_element_by_xpath('//*[@onclick="checkSubmit();" '
+                                     'and @class="J-login-submit"]').click()
+        # 打印登陆后页面标题和地址信息
+        print(driver.title)
+        print(driver.current_url)
+        # 关闭浏览器
+        driver.close()
+
+
+    9、
+    10、
 
 
