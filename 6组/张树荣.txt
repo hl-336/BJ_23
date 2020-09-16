@@ -51,3 +51,11 @@ driver.find_element_by_link_text("登    录").click()
 time.sleep(3)
 #关闭浏览器驱动
 driver.quit()
+day02
+1.ACD
+2.ABCF
+3.AD
+4.AD
+5.ABCD
+6.CD
+7.AB
