@@ -1,0 +1,58 @@
+DAY01
+1、自动化测试类型有哪些？能解决一些什么样的问题？
+ 答：UI自动化测试，接口自动化测试，单元测试
+    回归测试：对于历史版本功能的验证；对于缺陷修复后的验证
+    压力测试：模拟多个用户验证系统服务器是否能满足要求的过程
+    兼容性测试：PC端（浏览器简荣芳，系统兼容，分辨率）
+             手机端（系统：安卓，ISO，鸿蒙、分辨率、品牌、软件版本兼容：小程序依托于微信客户端的版本，系统软件的版本兼容）
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
+   在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+ 答：因为这个web项目周期比较长，产品版本会迭代，并且每周都会发布新功能，只有少量优化，所以在版本迭代的过程中可以使用web自动化进行回归测试
+3、元素定位练习题：#注册流程
+               #1)打开TPSHOP商城进入注册页面，暂停3s；
+               #2)完成注册流程；
+               #3)元素定位方式不限；
+               element.click()#点击事件
+--------------------------------------------
+# 导包
+import time
+from selenium import webdriver
+# 创建浏览器对象
+driver = webdriver.Chrome()
+# 输入TPSHOP商城网址
+driver.get("http://tpshop-test.itheima.net/")
+# 业务操作
+driver.find_element_by_link_text("注册").click()
+driver.find_element_by_id("username").send_keys("17710624694")
+driver.find_element_by_name("verify_code").send_keys("8888")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("password2").send_keys("123456")
+driver.find_element_by_link_text("同意协议并注册").click()
+# 暂停3秒
+time.sleep(3)
+# 关闭浏览器
+driver.quit()
+---------------------------------
+#登录练习：
+#1)打开TPSHOP商城进入登录界面
+#2)使用注册练习注册成功的用户信息登录TPSHOP
+--------------------------------------
+# 导包
+import time
+from selenium import webdriver
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+# 输入TPSHOP商城网址
+driver.get("http://tpshop-test.itheima.net/")
+# 业务操作
+driver.find_element_by_class_name("red").click()
+driver.find_element_by_id("username").send_keys("17710624694")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+# 暂停3秒
+time.sleep(3)
+# 关闭浏览器
+driver.quit()
+-----------------------------------------

@@ -1,0 +1,74 @@
+day01作业
+1、自动化测试类型有哪些？能解决一些什么样的问题？
+答：
+自动化测试类型：
+    UI自动化测试：B/S架构的web端自动化测试、桌面应用自动化测试、移动端自动化测试；
+    接口自动化测试；
+    单元测试（代码自动化测试）。
+ 解决的问题：
+    回归测试：对于之前历史版本功能的回归测试、对于修复的BUG的回归测试；
+    压力测试：模拟很多用户并发去验证系统服务器是否能够满足需求；
+    兼容性测试：
+        PC端：操作系统、5大核心浏览器（IE、谷歌、火狐、欧鹏、safri）、分辨率、网络（数据网、wifi、数据网和WiFi切换）；
+        移动端：操作系统、分辨率、版本兼容（小程序依托于微信客户端的版本、系统软件版本的兼容）、品牌/机型、
+        网络（数据网、wifi、数据网和WiFi切换）。
+---
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
+在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+答：不适合。
+理由：
+1.该项目耗时只有3个月就上线了，项目周期太短，一般项目至少周期为半年的考虑做web自动化测试；
+2.该项目平均每周就进行更新和优化，项目需求变动太频繁。
+---
+3、元素定位练习题：
+#注册流程
+#1)打开TPSHOP商城进入注册页面，暂停3s；
+#2)完成注册流程；
+#3)元素定位方式不限； element.click()#点击事件
+# 导包
+import time
+
+from selenium import webdriver
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 业务操作
+# 1)打开TPSHOP商城进入注册页面，暂停3s;
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+time.sleep(3)
+# 2)完成注册流程；
+# 3)元素定位方式不限；
+# element.click()#点击事件
+driver.find_element_by_id("username").send_keys("18103929315")
+driver.find_element_by_name("verify_code").send_keys("8888")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("password2").send_keys("123456")
+driver.find_element_by_name("invite").send_keys("13800138006")
+# tpshop注册时协议默认勾选，测试了将协议勾选去掉也能注册成功，这是个缺陷
+# driver.find_element_by_class_name("J_protocal").click()
+driver.find_element_by_class_name("J_btn_agree").click()
+# 停留3秒，然后关闭浏览器
+time.sleep(3)
+driver.quit()
+---
+# 登录练习：
+# 1)打开TPSHOP商城进入登录界面
+# 2)使用注册练习注册成功的用户信息登录TPSHOP
+# 导包
+import time
+
+from selenium import webdriver
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 1)打开TPSHOP商城进入登录界面
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+# 业务流程
+# 2)使用注册练习注册成功的用户信息登录TPSHOP
+driver.find_element_by_id("username").send_keys("18103929315")
+driver.find_element_by_name("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+# 暂停3秒，关闭浏览器
+time.sleep(3)
+driver.quit()

@@ -1,0 +1,93 @@
+DAY01
+------
+1、自动化测试类型有哪些？能解决一些什么样的问题？
+1 UI自动化测试
+   web端自动化测试
+   移动端自动化测试
+   桌面应用自动化测试
+2 接口自动化测试
+3 单元测试
+解决的问题：
+1 回归测试
+   对于历史版本功能的验证
+   对于缺陷修复之后的验证
+2 压力测试
+   模拟多个用户去验证系统服务器是否能满足要求的过程
+3 兼容性测试
+PC端
+ 浏览器兼容
+ 系统兼容
+ 分辨率
+手机端
+ 系统：安卓、iso
+ 分辨率
+ 品牌/机型
+ 软件版本兼容
+   小程序依托于微信客户端的版本
+   系统软件的版本兼容
+
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
+在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+不适合
+做自动化测试的项目需要周期长，至少半年以上，以及需求变动不频繁的，该项目以上两点均不符合，所以不适合做自动化测试
+
+3、元素定位练习题：
+
+# 导包
+import time
+
+from selenium import webdriver
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 注册流程
+# 1)打开TPSHOP商城进入注册页面，暂停3s；
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+time.sleep(3)
+# 2)完成注册流程；
+# 3)元素定位方式不限；
+# 输入手机号
+driver.find_element_by_id("username").send_keys("13000000005")
+time.sleep(1)
+# 输入验证码
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(1)
+# 设置密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(1)
+# 确认密码
+driver.find_element_by_id("password2").send_keys("123456")
+time.sleep(1)
+# 推荐人手机
+driver.find_element_by_name("invite").send_keys("13000000002")
+time.sleep(1)
+# 点击同意协议并注册
+driver.find_element_by_class_name("regbtn").click()
+time.sleep(1)
+driver.quit()
+
+# 导包
+import time
+
+from selenium import webdriver
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+#登录练习：
+#1)打开TPSHOP商城进入登录界面
+driver.get("http://tpshop-test.itheima.net/Home/user/login.html")
+time.sleep(1)
+#2)使用注册练习注册成功的用户信息登录TPSHOP
+# 输入手机号
+driver.find_element_by_class_name("text_cmu").send_keys("13000000005")
+time.sleep(1)
+# 输入密码
+driver.find_element_by_id("password").send_keys("123456")
+time.sleep(1)
+# 输入验证码
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(1)
+# 点击登录
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(2)
+driver.quit()

@@ -1,0 +1,73 @@
+1、自动化测试类型有哪些？能解决一些什么样的问题？
+    答：自动化测试类型：1、UI自动化测试 2、单元测试 3、接口自动化测试
+        解决问题：1、回归测试 2、压力测试 3、兼容性测试 4、提高测试效率、提高产品质量
+
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，
+平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，
+该项目是否适合做web自动化测试并简单说明分析过程？
+    答：不适合做web自动化测试
+        原因：1、项目时间较短，一般项目周期超过半年以上才建议使用
+             2、每周会更新 新的功能，变动较频繁
+             3、新功能如果和之前上线功能有关联，是需要进行回归测试的
+             4、分析分析感觉又适合了？？？？？
+             乱了
+
+3、元素定位练习题
+  #注册流程
+  #1)打开TPSHOP商城进入注册页面，暂停3s；
+  #2)完成注册流程；
+  #3)元素定位方式不限；
+  element.click()#点击事件dongdong
+
+    ```
+        # 1、导包
+        import time
+        from selenium import webdriver
+        # 2、创建浏览器驱动对象
+        driver = webdriver.Chrome()
+        # 3、打开TPSHOP商城进入注册页面
+        driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+        # 4、业务操作
+        # 4.1 填写注册手机号
+        driver.find_element_by_id("username").send_keys("13845679876")
+        # 4.2 填写验证码
+        driver.find_element_by_name("verify_code").send_keys("8888")
+        # 4.3 填写设置密码
+        driver.find_element_by_id("password").send_keys("123456")
+        # 4.4 填写确认密码
+        driver.find_element_by_id("password2").send_keys("123456")
+        time.sleep(2)
+        # 4.5 点击确认注册按钮
+        driver.find_element_by_class_name("regbtn").click()
+        # 4.6 暂停3秒
+        time.sleep(3)
+        # 5、关闭浏览器
+        driver.quit()
+    ```
+
+  #登录练习：
+  #1)打开TPSHOP商城进入登录界面
+  #2)使用注册练习注册成功的用户信息登录TPSHOP
+
+   ```
+        # 1、导包
+        import time
+        from selenium import webdriver
+        # 2、创建浏览器驱动对象
+        driver = webdriver.Chrome()
+        # 3、打开TPSHOP商城进入注册页面
+        driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+        # 4、业务操作
+        # 4.1 填写登录手机号
+        driver.find_element_by_id("username").send_keys("13845679876")
+        # 4.2 填写密码
+        driver.find_element_by_id("password").send_keys("123456")
+        # 4.3 填写验证码
+        driver.find_element_by_id("verify_code").send_keys("8888")
+        # 4.5 点击登录按钮
+        driver.find_element_by_name("sbtbutton").click()
+        # 4.6 暂停3秒
+        time.sleep(3)
+        # 5、关闭浏览器
+        driver.quit()
+   ```
