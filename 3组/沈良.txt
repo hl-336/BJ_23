@@ -64,7 +64,51 @@ time.sleep(1)
 driver.find_element_by_name("verify_code").send_keys("8888")
 time.sleep(1)
 driver.find_element_by_xpath("//*[@href='javascript:void(0);']").click()
-time.sleep(13)
+time.sleep(12)
 
 
 driver.quit()
+
+
+
+
+
+Day2作业
+
+
+1.[多选]:针对标签定位下面说法正确的是:
+A B C
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？
+A B  C E F
+3.[多选]:对于xpath下面说法正确的是？
+A B D
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？
+A
+5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：
+A B C D
+6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：
+A  B C
+7.[多选]定位下面html中所有input标签，使用方法正确的是：
+B D
+
+代码题
+答：
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://127.0.0.1")
+driver.maximize_window()
+driver.find_element_by_link_text("登录").click()
+time.sleep(3)
+driver.find_element_by_id("username").send_keys("17610026018")
+time.sleep(3)
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(3)
+driver.find_element_by_xpath("//*[@class='text_cmu' and @name='verify_code']").send_keys('8888')
+time.sleep(3)
+driver.find_element_by_xpath("//a[@class='J-login-submit']").click()
+print('登录后的标题:', driver.title)
+print('登录后的地址信息:', driver.current_url)
+
