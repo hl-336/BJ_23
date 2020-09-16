@@ -126,7 +126,48 @@ day02Homework
         driver.close()
 
 
-    9、
+    9、BD
     10、
+        # 导包
+        import time
+        from selenium import webdriver
+        import re
+
+        # 先完成登录及窗口最大化
+        driver = webdriver.Chrome()
+        driver.get('http://localhost/')
+        driver.maximize_window()
+        driver.find_element_by_xpath('//*[@href="/Home/user/login.html"]').click()
+        driver.find_element_by_id("username").send_keys('13833345678')
+        driver.find_element_by_name("password").send_keys('123456')
+        driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
+        driver.find_element_by_xpath('//*[@onclick="checkSubmit();"]').click()
+        # 登录成功后(要做个强制等待,因为登录跳转比较慢)
+        time.sleep(10)
+        # 循环打印下面图示相关信息，打印格式如下(要求使用遍历)：
+        # 	会员折扣  10 折
+        #   可用积分  100 分
+        #   账号余额  0.00 元
+        #   优惠卷    0 张
+        # list4 = ['会员折扣  10 折', '可用积分  100 分', '账号余额  0.00 元', '优惠卷    0 张']
+        # for i in list4:
+        #     print(i)
+        for i in driver.find_element_by_xpath('//*[@class="mu-a1"]/li[1]').text:
+            print(i, end='')
+        for i in driver.find_element_by_xpath('//*[@class="mu-a1"]/li[2]').text:
+            print(i, end='')
+        for i in driver.find_element_by_xpath('//*[@class="mu-a2"]/li[1]').text:
+            print(i, end='')
+        for i in driver.find_element_by_xpath('//*[@class="mu-a2"]/li[2]').text:
+            print(i, end='')
+        # a2 = driver.find_element_by_xpath('//*[@class="mu-a1"]/li/a/*[@class="mu-num"]').text
+        # a3 = driver.find_element_by_xpath('//*[@class="mu-a1"]/li/a/*[@class="mu-unit"]').text
+        # print(a1 + '    ' + a2 + ' ' + a3)
+        # # 在顶部搜索输入框输入搜索条件:小米,点击搜索
+        driver.find_element_by_class_name('search_usercenter_text').send_keys('小米')
+        driver.find_element_by_class_name('search_usercenter_btn').click()
+        list_img = driver.find_elements_by_xpath('//*[@class="s_xsall"]')
+        print('\n', '搜索到的小米手机个数为：', len(list_img))
+
 
 
