@@ -1,0 +1,89 @@
+# DAY 01作业
+
+1.自动化测试类型有哪些？能解决一些什么样的问题？
+UI自动化测试：
+单元测试
+接口自动化测试
+解决：
+回归测试：对于历史版本功能的验证，对于缺陷修复之后的验证
+压力测试：模拟多个用户去验证系统服务器是否满足的过程
+兼容性测试：PC端：浏览器兼容，系统兼容，分辨率
+手机端：系统：安卓，iso，分辨率， 品牌
+
+2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程
+中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源
+的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+答：不适合做web自动化测试，因为周期短，
+功能不健全，每周都会添加一些新的产品功能，
+如果做web自动化会造成大量资源浪费，虽然有历史优化类的回归测试，
+但并不适合做web自动化测试，而且公司人力资源也相当充沛。
+3.
+# 导包
+import time
+
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get('http://localhost/Home/User/reg.html')
+driver.find_element_by_id("username").send_keys('13588112239')
+
+driver.find_element_by_name('verify_code').send_keys('8888')
+
+driver.find_element_by_id('password').send_keys('123456')
+driver.find_element_by_id('password2').send_keys('123456')
+driver.find_element_by_name('invite').send_keys('17768019791')
+
+time.sleep(3)
+driver.quit()
+
+4.
+# 导包
+import time
+
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get('http://localhost/Home/user/login.html')
+driver.find_element_by_id("username").send_keys('13588112239')
+driver.find_element_by_id("password").send_keys('123456')
+driver.find_element_by_id("verify_code").send_keys('8888')
+
+time.sleep(3)
+driver.quit()
+
+#DAY02
+
+1:a,b,c,d
+2:a,b,c,d,e,f
+3:a,b,c
+4:b,d
+5:a,b,c,d
+6:a,b,c
+7:a,c
+代码题：
+import time
+
+from selenium import webdriver
+
+
+driver = webdriver.Chrome()
+
+driver.get("http://ttmp.research.itcast.cn/#/login")
+driver.maximize_window()
+print("登陆后标签=",driver.title)
+print("登陆后地址=",driver.current_url)
+
+driver.find_element_by_xpath("//*[@placeholder='请输入手机号']").send_keys('13911111111')
+driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys('246810')
+driver.find_element_by_xpath("//div[4]/div/button/span").click()
+
+
+
+time.sleep(10)
+driver.quit()
+
+提高题：
+1：
+

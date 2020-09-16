@@ -1,0 +1,66 @@
+#### 1、自动化测试类型有哪些？能解决一些什么样的问题？
+
+1.UI自动化测试(**功能测试/黑盒测试**)
+
+2.接口自动化测试
+
+3.单元测试
+
+替代手工，减少重复性的操作，减少成本，发现手工检测不到的问题。
+
+#### 2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+
+该项目适合做web自动化。原因如下：1.系统版本时间较长，有足够的时间去做自动化测试。2.版本迭代过程中历史内容改动较少，原有功能相对稳定。3.人力资源不设限，人力充足情况下手工、自动化可分头进行。
+
+
+
+
+#### 3、元素定位练习题：
+
+```python
+#注册流程
+#1)打开TPSHOP商城进入注册页面，暂停3s；
+#2)完成注册流程；
+#3)元素定位方式不限；
+element.click()#点击事件
+```
+
+```
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+driver.find_element_by_name("username").send_keys("13671302098")
+time.sleep(2)
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(2)
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("password2").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("invite").send_keys("13800000001")
+time.sleep(2)
+driver.find_element_by_xpath("//a [@class='regbtn J_btn_agree']").click()
+time.sleep(2)
+driver.quit()
+```
+```
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+driver.find_element_by_name("username").send_keys("13671302096")
+time.sleep(2)
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(2)
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(2)
+driver.quit()
+```
+12
