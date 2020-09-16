@@ -71,7 +71,6 @@ driver.quit()
 4.TPshop登录
 答:# 导包
 import time
-
 from selenium import webdriver
 # 实例浏览器插件链接对象
 driver = webdriver.Chrome()
