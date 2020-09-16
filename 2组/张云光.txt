@@ -68,7 +68,7 @@ time.sleep(3)
 driver.find_element_by_class_name("J_btn_agree").click()
 time.sleep(3)
 driver.quit()
-4.TPshop登录。
+4.TPshop登录
 答:# 导包
 import time
 
