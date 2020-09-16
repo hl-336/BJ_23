@@ -106,4 +106,3 @@ num_data = driver.find_elements_by_class_name("num")  # 获取元素文本
 for i, j in zip(text_data, num_data):  # 循环遍历两个列表
     print(i.text, j.text)  # 按格式打印
 driver.quit()
-
