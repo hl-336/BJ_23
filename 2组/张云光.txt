@@ -50,7 +50,6 @@ UI自动化第一天
 3.TPshop注册
 答：# 导包
 import time
-
 from selenium import webdriver
 # 链接浏览器
 driver = webdriver.Chrome()
