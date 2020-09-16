@@ -53,3 +53,37 @@ driver.find_element_by_id("verify_code").send_keys('8888')
 time.sleep(3)
 driver.quit()
 
+#DAY02
+
+1:a,b,c,d
+2:a,b,c,d,e,f
+3:a,b,c
+4:b,d
+5:a,b,c,d
+6:a,b,c
+7:a,c
+代码题：
+import time
+
+from selenium import webdriver
+
+
+driver = webdriver.Chrome()
+
+driver.get("http://ttmp.research.itcast.cn/#/login")
+driver.maximize_window()
+print("登陆后标签=",driver.title)
+print("登陆后地址=",driver.current_url)
+
+driver.find_element_by_xpath("//*[@placeholder='请输入手机号']").send_keys('13911111111')
+driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys('246810')
+driver.find_element_by_xpath("//div[4]/div/button/span").click()
+
+
+
+time.sleep(10)
+driver.quit()
+
+提高题：
+1：
+
