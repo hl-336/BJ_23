@@ -55,32 +55,24 @@ driver.quit()
 
 #DAY02
 
-1:a,b,c,d
-2:a,b,c,d,e,f
-3:a,b,c
-4:b,d
-5:a,b,c,d
-6:a,b,c
-7:a,c
+1:a,b,c,d         √
+2:a,b,c,d,e,f     √
+3:a,b,c           D选项也正确,课堂上没提及
+4:b,d             A选项也是正确的,从body标签开始查找
+5:a,b,c,d         √
+6:a,b,c           √如果题目是xpath表示正确问题则答案正确,题目要求是属性层级的话应该只有C
+7:a,c             A错误,题目要求是找到所有的input标签,c方法不存在,D为正确选项,//input表示所有的input标签
 代码题：
 import time
-
 from selenium import webdriver
-
-
 driver = webdriver.Chrome()
-
 driver.get("http://ttmp.research.itcast.cn/#/login")
 driver.maximize_window()
 print("登陆后标签=",driver.title)
 print("登陆后地址=",driver.current_url)
-
 driver.find_element_by_xpath("//*[@placeholder='请输入手机号']").send_keys('13911111111')
 driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys('246810')
 driver.find_element_by_xpath("//div[4]/div/button/span").click()
-
-
-
 time.sleep(10)
 driver.quit()
 

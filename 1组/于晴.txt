@@ -36,7 +36,7 @@ driver.find_element_by_class_name("J-login-submit").click()
 
 
 day02
-1.A C D            √
+1.A C D            B也是正确选项
 2.A B C E F        D也是正确选项
 3.A B C D          √
 4.A D              B也是正确选项
