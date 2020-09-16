@@ -76,3 +76,53 @@ driver.find_element_by_name("sbtbutton").click()
 time.sleep(3)
 # 关闭
 driver.quit()
+
+
+day02作业
+1.A,B,C,D
+2.A,B,C,D.E.F
+3.A,B,C,D
+4.A,B,D
+5.A,B,C,D
+6.C
+7.B,D
+
+代码题
+
+
+# 导包
+import time
+from selenium import webdriver
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 输入网址
+driver.get("http://127.0.0.1/")
+# 窗口最大化
+driver.maximize_window()
+# 定位登录 并点击
+driver.find_element_by_xpath("//*[text()='登录']").click()
+time.sleep(3)
+# 使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13800000008")
+time.sleep(3)
+# 使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(3)
+# 使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath("//*[@id='verify_code']").send_keys("8888")
+time.sleep(3)
+# 使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//*[@name='sbtbutton']").click()
+time.sleep(10)
+# 打印登陆后页面标题和地址信息
+print("登陆后标题", driver.title)  # 打印标题
+print("登陆后地址信息", driver.current_url)  # 打印地址
+# 关闭
+driver.quit()
+
+
+提高题
+选择题C
+
+
