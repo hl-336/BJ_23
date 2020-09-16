@@ -108,7 +108,7 @@ driver.quit()
 
 二、提高题
 选择题-B
-代码题:没写全，没想明白！
+
 
 # 导包
 import time
