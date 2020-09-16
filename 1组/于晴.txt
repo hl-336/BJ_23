@@ -36,13 +36,13 @@ driver.find_element_by_class_name("J-login-submit").click()
 
 
 day02
-1.A C D
-2.A B C E F
-3.A B C D
-4.A D
-5.A B C D
-6.C
-7.B D
+1.A C D            √
+2.A B C E F        D也是正确选项
+3.A B C D          √
+4.A D              B也是正确选项
+5.A B C D          √
+6.C                √
+7.B D              √
 
 driver = webdriver.Chrome()
 driver.get("http://ttmp.research.itcast.cn/")
@@ -50,3 +50,5 @@ driver.maximize_window()
 driver.find_element_by_xpath("//*[@type='text' and @placeholder='请输入手机号']").send_keys("13911111111")
 driver.find_element_by_xpath("//*[@type='text' and @placeholder='验证码']").send_keys("246810")
 driver.find_element_by_xpath("//*[@type=button'and @class='el-button el-button--primary']").click()
+--->
+driver.quit()
