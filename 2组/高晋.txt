@@ -43,20 +43,13 @@ day01-9月15日
 day02-9月16日
 一、基础题
 选择题
-1.[多选]:针对标签定位下面说法正确的是:
-ABCD
-2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？
-ABCDF
-3.[多选]:对于xpath下面说法正确的是？
-ABCD
-4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？
-AB
-5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：
-ABD
-6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：
-ABC
-7.[多选]定位下面html中所有input标签，使用方法正确的是：
-BD
+1.ABCD
+2.ABCDEF
+3.ABCD
+4.ABD
+5.ABCD
+6.C
+7.BD
 代码题
 1.按以下要求完成登陆流程：
 import time
@@ -74,6 +67,11 @@ driver.find_element_by_xpath('//*[@class="login_bnt"]/a').click()
 print(driver.title)
 print(driver.current_url)
 time.sleep(10)
+title_ele = driver.find_elements_by_xpath('//div[@class="mu-afte fl"]/ul/li/a/span')
+data_ele = driver.find_elements_by_xpath('//em[@class="mu-num"]')
+unit_ele = driver.find_elements_by_xpath('//em[@class="mu-unit"]')
+for i in range(len(title_ele)):
+    print(title_ele[i].text, data_ele[i].text, unit_ele[i].text)
 driver.quit()
 二、提高题
 选择题
