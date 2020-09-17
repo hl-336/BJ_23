@@ -79,14 +79,14 @@ day02
 - F.driver.find_element_by_xpath("//*[@title='家用电器']")
 - G.driver.find_element_by_xpath("//*[text()='家用']")
 
-3.[多选]:对于xpath下面说法正确的是？BCD
+3.[多选]:对于xpath下面说法正确的是？ABCD
 
 - A.xpath是一种标记语言，可以用于在html中进行元素查找；
 - B.xpath可以使用标签内的任意元素来进行定位；
 - C.xpath可以基本解决所有元素定位的问题；
 - D.xpath定位方式将整个页面的所有元素进行扫描以定位我们所需要的元素，如果脚本中大量使用xpath做元素定位的话， 脚本的执行速度可能会稍慢。
 
-4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？ABC
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？ABD
 
     <body>
         <div id='testA'>
@@ -189,28 +189,8 @@ time.sleep(8)
 submit = driver.find_elements_by_xpath('//a/span')[1:]
 submit_1 = driver.find_elements_by_xpath("//a/em[@class='mu-num']")
 submit_2 = driver.find_elements_by_xpath("//a/em[@class='mu-unit']")
-list_data1 = []
-list_data2 = []
-list_data3 = []
-
-for i in submit:
-    text_1 = i.get_attribute('textContent')
-    list_data1.append(text_1)
-for i in submit_1:
-    text_2 = i.get_attribute('textContent')
-    list_data2.append(text_2)
-for i in submit_2:
-    text_3 = i.get_attribute('textContent')
-    list_data3.append(text_3)
-
-for i in range(4):
-    name = list_data1[i]
-    num = list_data2[i]
-    units = list_data3[i]
-    k = {'名字': name, '数字': num, '单位': units}
-    list_data.append(k)
-for i in list_data:
-    print(i.get('名字'), i.get('数字'), i.get('单位'))
+for i in range(len(submit)):
+    print(submit[i].text, submit_1[i].text, submit_2[i].text)
 
 driver.find_element_by_xpath("//input[@id='q']").send_keys("小米")
 driver.find_element_by_link_text("搜索").click()
