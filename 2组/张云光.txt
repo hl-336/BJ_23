@@ -85,3 +85,45 @@ time.sleep(3)
 driver.find_element_by_name("sbtbutton").click()
 time.sleep(3)
 driver.quit()
+UI第二天
+1.abcd
+2.abcdef
+3.cd
+4.abd
+5.abcd
+6.abc
+7.abcd
+8.# 导包
+import time
+
+from selenium import webdriver
+# 链接浏览器驱动
+driver = webdriver.Chrome()
+# 输入地址
+driver.get('http://127.0.0.1')
+# 窗口最大化
+driver.maximize_window()
+time.sleep(1)
+# 点击登录
+driver.find_element_by_xpath('//*[text()="登录"]').click()
+time.sleep(1)
+# 输入账号
+driver.find_element_by_id('username').send_keys('13812345678')
+time.sleep(1)
+# 输入密码
+driver.find_element_by_name('password').send_keys('123456')
+time.sleep(1)
+# 验证码
+driver.find_elements_by_class_name('text_cmu')[2].send_keys('8888')
+time.sleep(1)
+# 点击登录
+driver.find_element_by_xpath("//*[@name='sbtbutton']").click()
+time.sleep(1)
+# 获取标题
+print('标题', driver.title)
+# 打印地址
+print('地址', driver.current_url)
+# 关闭浏览器驱动
+driver.quit()
+9.bd
+10.不会写！！！怎么提交不了啊？？？？

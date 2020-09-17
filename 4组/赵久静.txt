@@ -14,6 +14,7 @@ UI自动化测试：web端自动化测试、移动端自动化测试、桌面应
 在不考虑当前人力资源 的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
  我认为不适合做自动化测试，项目周期比较短，3个月已经上线，项目规模小，每周发布一些新的功能和少量历史优化内容，需求变动属于比较频繁的，
  无法快速编制脚本
+ 正确答案：适合进行web自动化测试，产品迭代需要回归测试，每周发布新的功能不会影响历史功能，产品基础功能具备
 
 三，登录tpshop
 # 1.导包
@@ -63,3 +64,185 @@ driver.find_element_by_name("sbtbutton").click()
 # 暂停3秒后关闭浏览器
 time.sleep(3)
 driver.quit()
+day02_作业
+一、基础题
+
+---
+
+选择题
+
+---
+
+1.[多选]:针对标签定位下面说法正确的是:ACD  B 也对
+
+    <body>
+        <input type="text" class="inp fmobile J_cellphone" name="invite">
+        <input class="inp fsecpass J_password2" id="password2" name="password2" >
+    </body>
+
+- A.使用driver.find_element_by_tag_name("input")可以定位第一个input元素；
+- B.使用driver.find_element_by_xpath("//input")可以定位第一个input元素；
+- C.不建议使用标签定位，因为一般情况下每个标签在页面中存在多个的可能性较大；
+- D.页面上所有的元素都有标签名。
+
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？ABCDEF 对
+
+    <body>
+        <div class="item-left">
+    		<h3 class="cata-nav-name">
+    			<div class="cata-nav-wrap">
+    				<i class="ico ico-nav-1"></i>
+    				<a href="/Home/Goods/goodsList/id/2.html" title="家用电器">家用电器</a>
+    			</div>
+    		</h3>
+    	</div>
+    </body>
+
+- A.driver.find_element_by_link_text("家用电器")；
+- B.driver.find_element_by_partial_link_text("电器")
+- C.driver.find_element_by_tag_name("a")
+- D.driver.find_element_by_xpath("//a")
+- E.driver.find_element_by_xpath("//div/a")
+- F.driver.find_element_by_xpath("//*[@title='家用电器']")
+- G.driver.find_element_by_xpath("//*[text()='家用']")  不对，//*[text()='家用电器']
+
+3.[多选]:对于xpath下面说法正确的是？ABCD  B也正确
+
+- A.xpath是一种标记语言，可以用于在html中进行元素查找；
+- B.xpath可以使用标签内的任意元素来进行定位；
+- C.xpath可以基本解决所有元素定位的问题；
+- D.xpath定位方式将整个页面的所有元素进行扫描以定位我们所需要的元素，如果脚本中大量使用xpath做元素定位的话， 脚本的执行速度可能会稍慢。
+
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？ABD
+
+    <body>
+        <div id='testA'>
+        	<input type="text" class="inp fmobile J_cellphone" name="invite" id="password">
+        </div>
+    </body>
+
+- A.//body/div/input
+- B.//input
+- C./div//input
+- D.//input[1]
+
+5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：ABCD
+
+    <div class="navitems2 p" id="navitems5">
+        <ul>
+            <li>
+                <a href="order_list.html" value="全部订单" class="selected">全部订单</a>
+            </li>
+            <li>
+                <a href="WAITPAY.html" value="待付款" class="">待付款</a>
+            </li>
+            <li>
+                <a href="WAITSEND.html" value="待发货" class="">待发货</a>
+            </li>
+        <ul>
+    </div>
+
+- A.//a[@value='待付款']
+- B.//*[@value='待付款']
+- C.//a[@href='WAITPAY.html']
+- D.//*[@value='待付款' and @href='WAITPAY.html']
+
+6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：C  AB对没使用属性
+
+    <div class="navitems2 p" id="navitems5">
+        <ul class="tb1">
+            <li id="table1">
+                <a href="order_list.html" value="全部订单" class="selected">全部订单</a>
+            </li>
+        <ul>
+    </div>
+
+- A. //ul/li/a
+- B.//li/a
+- C.//li[@id='table1']/a
+- D.//ul[@class='tb1']/a[1]
+
+7.[多选]定位下面html中所有input标签，使用方法正确的是：BD
+
+    <div>
+        <div>
+            <input id="username" name="username" value="all" class="usrA">请输入用户名</input>
+        </div>
+        </div id="demoA">
+        	<input id="password" name="password" value="all" class="pwdA">请输入密码</input>
+    	</div>
+    	</div id="demoA">
+        	<input id="phone" name="phone" value="all" class="phone">请输入电话号码</input>
+    	</div>
+    </div>
+
+- A.driver.find_element_tag_name("input")
+- B.driver.find_elements_by_tag_name("input")
+- C.driver.find_elements_by_input("input")
+- D.driver.find_elements_by_xpath("//input")
+
+代码题
+
+---
+
+1.按以下要求完成登陆流程：
+
+    #打开浏览器后先窗口最大化
+    #1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+    #2.使用id定位定位登陆页面用户名输入框，输入用户名
+    #3.使用name定位定位登陆页面密码输入框，输入密码
+    #4.使用class定位定位登陆页面验证码输入框，输入验证码
+    #5.使用xpath定位登陆按钮执行点击
+    #6.打印登陆后页面标题和地址信息
+# 1.导包
+import time
+
+from selenium import webdriver
+
+# 2.创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 3.打开网页，输入网址
+driver.get("http://localhost/")
+driver.maximize_window()
+# 4.业务步骤
+# 1)使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.find_element_by_xpath("//div/a").click()
+# 2)使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13554754711")
+# 3)使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+# 4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_id("verify_code").send_keys("8888")
+# 5使用xpath定位登陆按钮执行点击
+time.sleep(2)
+
+driver.find_element_by_xpath("//div[@class = 'login_bnt']/a").click()
+time.sleep(10)
+# 6.打印登陆后页面标题和地址信息
+print("当前页面的标题=", driver.title)
+print("当前页面的地址信息=", driver.current_url)
+# 退出浏览器
+driver.quit()
+
+二、提高题
+
+---
+
+选择题
+
+---
+
+1.如下html，class属性每次打开页面后面数字都会发生改变，如需要定位定位第三个input标签，下面表达式正确的是：
+
+    <！-class标签每次都打开都会发生改变->
+    <body>
+        <input type="text" class="test001" name="invite">测试</input>
+        <input type="text" class="test002" name="invite">测试</input>
+        <input type="text" class="test003" name="invite">测试</input>
+    	<input type="text" class="test004" name="invite">测试</input>
+    </body>
+
+- A.driver.find_elements(By.XPATH,"//*[contains(@class,'test')]")[2]
+- B.driver.find_elements_by_tag_name("input")[2]
+- C.driver.find_element(By.XPATH,"//*input[3]")
+- D.driver.find_elements_by_xpath("//*[text()='测试']")[2]

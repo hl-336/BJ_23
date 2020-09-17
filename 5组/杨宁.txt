@@ -15,10 +15,14 @@ day01作业
 ---
 2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。
 在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
-答：不适合。
+答：适合。
 理由：
-1.该项目耗时只有3个月就上线了，项目周期太短，一般项目至少周期为半年的考虑做web自动化测试；
-2.该项目平均每周就进行更新和优化，项目需求变动太频繁。
+1.该电商web系统项目基础版本耗时3个月上线，由于后续还会进行产品版本迭代，所以属于公司不倒闭就会一直做下去的，周期长；
+2.该电商web系统项目在后续并不是频繁变动需求，而是满足基本电商购物平台需求了，大的方向是不会变的，
+只是发布新功能和优化历史内容而已；
+3.由上述可知该项目后续会不断进行版本迭代，那么就需要做回归测试；
+综上所述：该项目符合周期长、需求不频繁变动、需要做回归测试的要求，适合做web自动化测试。
+
 ---
 3、元素定位练习题：
 #注册流程
@@ -72,3 +76,230 @@ driver.find_element_by_name("sbtbutton").click()
 # 暂停3秒，关闭浏览器
 time.sleep(3)
 driver.quit()
+
+
+
+day02作业
+1.[多选]:针对标签定位下面说法正确的是:
+
+    <body>
+        <input type="text" class="inp fmobile J_cellphone" name="invite">
+        <input class="inp fsecpass J_password2" id="password2" name="password2" >
+    </body>
+
+- A.使用driver.find_element_by_tag_name("input")可以定位第一个input元素；
+- B.使用driver.find_element_by_xpath("//input")可以定位第一个input元素；
+- C.不建议使用标签定位，因为一般情况下每个标签在页面中存在多个的可能性较大；
+- D.页面上所有的元素都有标签名。
+答：ABCD
+---
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？
+
+    <body>
+        <div class="item-left">
+    		<h3 class="cata-nav-name">
+    			<div class="cata-nav-wrap">
+    				<i class="ico ico-nav-1"></i>
+    				<a href="/Home/Goods/goodsList/id/2.html" title="家用电器">家用电器</a>
+    			</div>
+    		</h3>
+    	</div>
+    </body>
+
+- A.driver.find_element_by_link_text("家用电器")；
+- B.driver.find_element_by_partial_link_text("电器")
+- C.driver.find_element_by_tag_name("a")
+- D.driver.find_element_by_xpath("//a")
+- E.driver.find_element_by_xpath("//div/a")
+- F.driver.find_element_by_xpath("//*[@title='家用电器']")
+- G.driver.find_element_by_xpath("//*[text()='家用']")
+答：ABCDF
+---
+3.[多选]:对于xpath下面说法正确的是？
+
+- A.xpath是一种标记语言，可以用于在html中进行元素查找；
+- B.xpath可以使用标签内的任意元素来进行定位；
+- C.xpath可以基本解决所有元素定位的问题；
+- D.xpath定位方式将整个页面的所有元素进行扫描以定位我们所需要的元素，如果脚本中大量使用xpath做元素定位的话， 脚本的执行速度可能会稍慢。
+答：ABCD
+---
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？
+
+    <body>
+        <div id='testA'>
+        	<input type="text" class="inp fmobile J_cellphone" name="invite" id="password">
+        </div>
+    </body>
+
+- A.//body/div/input
+- B.//input
+- C./div//input
+- D.//input[1]
+答：ABD
+---
+5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：
+
+    <div class="navitems2 p" id="navitems5">
+        <ul>
+            <li>
+                <a href="order_list.html" value="全部订单" class="selected">全部订单</a>
+            </li>
+            <li>
+                <a href="WAITPAY.html" value="待付款" class="">待付款</a>
+            </li>
+            <li>
+                <a href="WAITSEND.html" value="待发货" class="">待发货</a>
+            </li>
+        <ul>
+    </div>
+
+- A.//a[@value='待付款']
+- B.//*[@value='待付款']
+- C.//a[@href='WAITPAY.html']
+- D.//*[@value='待付款' and @href='WAITPAY.html']
+答：ABCD
+---
+6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：
+
+    <div class="navitems2 p" id="navitems5">
+        <ul class="tb1">
+            <li id="table1">
+                <a href="order_list.html" value="全部订单" class="selected">全部订单</a>
+            </li>
+        <ul>
+    </div>
+
+- A. //ul/li/a
+- B.//li/a
+- C.//li[@id='table1']/a
+- D.//ul[@class='tb1']/a[1]
+答：ABCD
+---
+7.[多选]定位下面html中所有input标签，使用方法正确的是：
+
+    <div>
+        <div>
+            <input id="username" name="username" value="all" class="usrA">请输入用户名</input>
+        </div>
+        </div id="demoA">
+        	<input id="password" name="password" value="all" class="pwdA">请输入密码</input>
+    	</div>
+    	</div id="demoA">
+        	<input id="phone" name="phone" value="all" class="phone">请输入电话号码</input>
+    	</div>
+    </div>
+
+- A.driver.find_element_tag_name("input")
+- B.driver.find_elements_by_tag_name("input")
+- C.driver.find_elements_by_input("input")
+- D.driver.find_elements_by_xpath("//input")
+答：BD
+---
+1.如下html，class属性每次打开页面后面数字都会发生改变，如需要定位定位第三个input标签，下面表达式正确的是：
+
+    <！-class标签每次都打开都会发生改变->
+    <body>
+        <input type="text" class="test001" name="invite">测试</input>
+        <input type="text" class="test002" name="invite">测试</input>
+        <input type="text" class="test003" name="invite">测试</input>
+    	<input type="text" class="test004" name="invite">测试</input>
+    </body>
+
+- A.driver.find_elements(By.XPATH,"//*[contains(@class,'test')]")[2]
+- B.driver.find_elements_by_tag_name("input")[2]
+- C.driver.find_element(By.XPATH,"//*input[3]")
+- D.driver.find_elements_by_xpath("//*[text()='测试']")[2]
+答:BD
+---
+代码题
+#打开浏览器后先窗口最大化
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+#3.使用name定位定位登陆页面密码输入框，输入密码
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+#5.使用xpath定位登陆按钮执行点击
+#6.打印登陆后页面标题和地址信息
+---
+(记得窗口最大化)
+1.登录成功后(要做个强制等待,因为登录跳转比较慢)
+2.循环打印下面图示相关信息，打印格式如下(要求使用遍历)：
+	会员折扣  10 折
+    可用积分  100 分
+    账号余额  0.00 元
+    优惠卷    0 张
+3.在顶部搜索输入框输入搜索条件:小米,点击搜索
+4.根据已学的类容获取到商品数量
+答:
+# 导包
+import time
+
+from selenium import webdriver
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+# 打开浏览器后先窗口最大化
+# driver.get("http://127.0.0.1/")  # 本地
+driver.get("http://tpshop-test.itheima.net/")  # 在线
+time.sleep(3)
+driver.maximize_window()
+# 1.使用xpath定位tpshop首页登陆超链接，并执行点击
+driver.find_element_by_xpath("//a[text()='登录']").click()
+# 2.使用id定位登陆页面用户名输入框，输入用户名
+# driver.find_element_by_id("username").send_keys("17761976940")  # 本地
+driver.find_element_by_id("username").send_keys("13800138006")  # 在线
+# 3.使用name定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+# 4.使用class定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath("//div[@class='text_uspa check_cum']/input").send_keys("8888")
+# 5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//*[@onclick='checkSubmit();']").click()
+# 6.打印登陆后页面标题和地址信息
+print(driver.title)
+print(driver.current_url)
+# 1.登录成功后(要做个强制等待,因为登录跳转比较慢)
+time.sleep(20)
+# 2.循环打印下面图示相关信息，打印格式如下(要求使用遍历)：
+# 	会员折扣  10 折
+#     可用积分  100 分
+#     账号余额  0.00 元
+#     优惠卷    0 张
+title_info = driver.find_elements_by_xpath("//div[@class='mu-afte fl']/ul/li/a/span")
+data_info = driver.find_elements_by_xpath("//em[@class='mu-num']")
+unit_info = driver.find_elements_by_xpath("//em[@class='mu-unit']")
+for i in range(len(title_info)):
+    print(title_info[i].text, data_info[i].text, unit_info[i].text)
+# 3.在顶部搜索输入框输入搜索条件:小米,点击搜索
+driver.find_element_by_xpath("//*[@class='search_usercenter_text']").send_keys("小米")
+time.sleep(10)
+driver.find_element_by_xpath("//*[text()='搜索']").click()
+# 4.根据已学的类容获取到商品数量
+# 7.等待20秒，关闭浏览器
+time.sleep(20)
+driver.quit()
+---
+黑马头条
+答：
+# 导包
+import time
+
+from selenium import webdriver
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 打开网址
+driver.get("http://ttmp.research.itcast.cn/")
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+#2.使用包含定位登陆页面手机号输入框，输入手机号
+driver.find_element_by_xpath("//*[contains(@placeholder,'请输入手机号')]").send_keys("13911111111")
+time.sleep(3)
+# 3.点击获取验证码
+# driver.find_element_by_xpath("//span[text()='发送验证码']").click()
+# time.sleep(3)
+#4.使用开始定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath("//*[starts-with(@placeholder,'验')]").send_keys("246810")
+time.sleep(3)
+# 4.点击登陆
+driver.find_element_by_xpath("//button[@class='el-button el-button--primary']").click()
+time.sleep(10)
+driver.quit()
+

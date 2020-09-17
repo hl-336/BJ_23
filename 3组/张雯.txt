@@ -44,7 +44,6 @@ time.sleep(4)
 driver.quit()
 
 
-
 第二题
 import time
 from selenium import webdriver
@@ -60,3 +59,41 @@ def type_login(self):
 time.sleep(4)
 driver.quit()
 
+
+
+
+day02
+
+# 一 基础题
+# 1.B
+# 2.ABFG
+# 3.AB
+# 4.AB
+# 5.CD
+# 6.ABC
+# 7.ACD
+
+# 二 代码题
+# 1.按以下要求完成登陆流程：
+
+# 导入
+import time
+from selenium import webdriver
+# 打开浏览器后先窗口最大化
+driver = webdriver.Chrome()
+driver.get("http://127.0.0.1/Home/User/login.html")
+# 实现窗口最大化
+driver.set_window_size(2000, 5000)
+# 使用xpath定位tpshop首页登陆超链接，并执行点击
+driver.find_element_by_partail_link_text("超链接的局部或者完整文本内容")
+# 使用id定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13811111111")
+# 使用name定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("1234576")
+# 使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_class_name("text_cmu").send_keys("1234576")
+# 使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//*[contains(@placeholder,'登')]").click()
+# 打印登陆后页面标题和地址信息
+print(driver.title)
+print(driver.current_url)

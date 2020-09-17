@@ -1,3 +1,5 @@
+DAY01作业：
+
 1、自动化测试类型有哪些？能解决一些什么样的问题？
     答：自动化测试类型：1、UI自动化测试 2、单元测试 3、接口自动化测试
         解决问题：1、回归测试 2、压力测试 3、兼容性测试 4、提高测试效率、提高产品质量
@@ -71,3 +73,64 @@
         # 5、关闭浏览器
         driver.quit()
    ```
+
+DAY02_作业：
+
+一、选择题
+ 1、ABCD
+ 2、ABCDEF
+ 3、ABCD
+ 4、ABD
+ 5、ABCD
+ 6、ABC
+ 7、BCD
+二、代码题
+    # 打开浏览器后先窗口最大化
+    # 1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+    # 2.使用id定位    定位登陆页面用户名输入框，输入用户名
+    # 3.使用name定位  定位登陆页面密码输入框，输入密码
+    # 4.使用class定位 定位登陆页面验证码输入框，输入验证码
+    # 5.使用xpath定位登陆按钮执行点击
+    # 6.打印登陆后页面标题和地址信息
+    # http://ttmp.research.itcast.cn/
+    # 测试账号:13911111111
+    # 验证码:246810
+
+
+    # 1、导包
+    import time
+    from selenium import webdriver
+    # 2、创建浏览器驱动对象
+    driver = webdriver.Chrome()
+    # 3、打开tpshop商城首页
+    driver.get(
+        "http://ttmp.research.itcast.cn/"
+    )
+    time.sleep(1)
+    # 4.1、使用class定位定位登陆页面用户名输入框，输入用户名
+    driver.find_elements_by_class_name("el-input__inner")[0].send_keys("13911111111")
+    time.sleep()
+    # 4.2、使用xpath定位 定位登陆页面验证码输入框，输入验证码
+    driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys("246810")
+    time.sleep(1)
+    # 4.3、使用class定位登陆按钮执行点击登录
+    driver.find_element_by_class_name("el-button--primary").click()
+    time.sleep(1)
+    # 4.4、打印登陆后页面标题和地址信息
+    print(driver.title)
+    print(driver.current_url)
+    time.sleep(2)
+    # 关闭弹窗
+    driver.find_element_by_xpath("//*[@class='el-notification__closeBtn el-icon-close']").click()
+    # 窗口最大化
+    driver.maximize_window()
+    time.sleep(2)
+
+    # 获取并遍历元素内容
+    name_text = driver.find_elements_by_xpath("//*[@class='el-col el-col-3']/div")
+    for i in name_text:
+        abc = i.text
+        print(abc)
+
+    # 5、关闭浏览器
+    driver.quit()
