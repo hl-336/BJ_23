@@ -229,28 +229,31 @@ day02作业
     优惠卷    0 张
 3.在顶部搜索输入框输入搜索条件:小米,点击搜索
 4.根据已学的类容获取到商品数量
-答：本地tpshop
+答:
 # 导包
 import time
 
 from selenium import webdriver
+
 # 创建浏览器对象
 driver = webdriver.Chrome()
-#打开浏览器后先窗口最大化
-driver.get("http://127.0.0.1/")
+# 打开浏览器后先窗口最大化
+# driver.get("http://127.0.0.1/")  # 本地
+driver.get("http://tpshop-test.itheima.net/")  # 在线
 time.sleep(3)
 driver.maximize_window()
-#1.使用xpath定位tpshop首页登陆超链接，并执行点击
+# 1.使用xpath定位tpshop首页登陆超链接，并执行点击
 driver.find_element_by_xpath("//a[text()='登录']").click()
-#2.使用id定位登陆页面用户名输入框，输入用户名
-driver.find_element_by_id("username").send_keys("17761976940")
-#3.使用name定位登陆页面密码输入框，输入密码
+# 2.使用id定位登陆页面用户名输入框，输入用户名
+# driver.find_element_by_id("username").send_keys("17761976940")  # 本地
+driver.find_element_by_id("username").send_keys("13800138006")  # 在线
+# 3.使用name定位登陆页面密码输入框，输入密码
 driver.find_element_by_name("password").send_keys("123456")
-#4.使用class定位登陆页面验证码输入框，输入验证码
+# 4.使用class定位登陆页面验证码输入框，输入验证码
 driver.find_element_by_xpath("//div[@class='text_uspa check_cum']/input").send_keys("8888")
-#5.使用xpath定位登陆按钮执行点击
+# 5.使用xpath定位登陆按钮执行点击
 driver.find_element_by_xpath("//*[@onclick='checkSubmit();']").click()
-#6.打印登陆后页面标题和地址信息
+# 6.打印登陆后页面标题和地址信息
 print(driver.title)
 print(driver.current_url)
 # 1.登录成功后(要做个强制等待,因为登录跳转比较慢)
@@ -260,12 +263,17 @@ time.sleep(20)
 #     可用积分  100 分
 #     账号余额  0.00 元
 #     优惠卷    0 张
+title_info = driver.find_elements_by_xpath("//div[@class='mu-afte fl']/ul/li/a/span")
+data_info = driver.find_elements_by_xpath("//em[@class='mu-num']")
+unit_info = driver.find_elements_by_xpath("//em[@class='mu-unit']")
+for i in range(len(title_info)):
+    print(title_info[i].text, data_info[i].text, unit_info[i].text)
 # 3.在顶部搜索输入框输入搜索条件:小米,点击搜索
 driver.find_element_by_xpath("//*[@class='search_usercenter_text']").send_keys("小米")
 time.sleep(10)
 driver.find_element_by_xpath("//*[text()='搜索']").click()
 # 4.根据已学的类容获取到商品数量
-#7.等待10秒，关闭浏览器
+# 7.等待20秒，关闭浏览器
 time.sleep(20)
 driver.quit()
 ---

@@ -1,61 +1,78 @@
-1、自动化测试类型有哪些？能解决一些什么样的问题？
-类型：1.web自动化测试
-2.app移动端自动化测试
-3.接口自动化测试
-4.桌面应用自动化测试
-5.单元自动化测试
-解决问题：可以解决回归测试、性能测试、兼容测试和保证产品质量、提高功能效率
-2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程
-中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源
-的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
-可以做web自动化测试
-因为该项目周期长、需求变更不频繁、旧功能需要做回归测试
-3.#导包
+1.ABC
+2.ABC
+3.B
+4.ACD
+5.BD
+6.ABC
+7.ABCD
+8.action=ActionChains(driver)
+action.move_to_elememt(driver.find_element_by_id('testA'))
+action.perform()
+代码提
+#导包
 import time
 
 from selenium import webdriver
 #创建浏览器驱动对象
-driver=webdriver.Chrome()
-#打开tpshop注册网站
-driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
-#暂停3秒
-#输入手机号码
-driver.find_element_by_id("username").send_keys("18150367239")
-#输入验证码
-driver.find_element_by_name("verify_code").send_keys("8888")
-#输入密码
-driver.find_element_by_id("password").send_keys("qq123456")
-#确认密码
-driver.find_element_by_id("password2").send_keys("qq123456")
-#点击同意注册
-driver.find_element_by_link_text("同意协议并注册").click()
-time.sleep(3)
-#关闭浏览器驱动
-driver.quit()
-4.#导包
-import time
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 
-from selenium import webdriver
-#创建浏览器驱动对象
 driver=webdriver.Chrome()
-#打开tpshop登录网站
-driver.get("http://tpshop-test.itheima.net/Home/user/login.html")
-#输入手机号码
-driver.find_element_by_id("username").send_keys("13800138006")
-#输入密码
-driver.find_element_by_xpath("//*[@placeholder='密码']").send_keys("123456")
-#输入验证码
-driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys("8888")
-#点击登录
-driver.find_element_by_link_text("登    录").click()
+#打开tpshop网站
+driver.get("http://tpshop-test.itheima.net/")
+#窗口最大化和隐式等待
+driver.maximize_window()
+driver.implicitly_wait(10)
+#登录tpshop网站
+driver.find_element_by_css_selector(".red").click()
+driver.find_element(By.CSS_SELECTOR,"[placeholder='手机号/邮箱']").send_keys("13800138006")
+driver.find_element(By.CSS_SELECTOR,"[placeholder*='密码']").send_keys("123456")
+driver.find_element(By.CSS_SELECTOR,"[placeholder*='验证码']").send_keys("8888")
+driver.find_element(By.CSS_SELECTOR,".J-login-submit").click()
 time.sleep(3)
-#关闭浏览器驱动
+#返回商城首页
+driver.find_element(By.CSS_SELECTOR,".home").click()
+#搜索框输入小米
+driver.find_element(By.CSS_SELECTOR,"[placeholder*='关键字']").send_keys("小米")
+driver.find_element(By.XPATH,"//button").click()
+#5.点击第一个商品加入到购物车
+driver.find_element(By.CSS_SELECTOR,".p-btn>a").click()
+#6在商品详情页面加入商品到购物车
+driver.find_element(By.CSS_SELECTOR,"#join_cart").click()
+time.sleep(2)
+#7刷新页面
+driver.refresh()
+#8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+e1=driver.find_element(By.CSS_SELECTOR,"#cart_quantity")
+try:
+    action=ActionChains(driver)
+    action.move_to_element(e1)
+    action.perform()
+    print("商品数量为",driver.find_element_by_css_selector("#total_qty").text)
+    print("商品总价为：",driver.find_element_by_css_selector("#total_pay").text)
+except:
+    print("购物车为空")
+#等待5秒，点击去购物车结算
+time.sleep(5)
+driver.find_element_by_css_selector(".c-btn").click()
+#10.判断购物车页面商品勾选按钮是否选中
+print("返回商品勾选按钮为True",driver.find_element_by_css_selector(".checkCartItem").is_selected())
+time.sleep(3)
+#11.打印出商品单价、购买价、数量、小计金额
+print("商品单价",driver.find_element_by_xpath("//*[@style='border-left:0px'][2]").text)
+print("购买价为：",driver.find_element_by_xpath("//*[@style='border-left:0px'][3]").text)
+print("数量为：",driver.find_element_by_xpath("//*[@width='69']").text)
+print("总价为：",driver.find_element_by_xpath("//td[8]").text)
+time.sleep(3)
+# 12.写个判断:判断单价信息是否大于5000块
+# 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+unit_price=driver.find_element_by_xpath("//*[@style='border-left:0px'][2]").text
+if unit_price >"￥5000":
+    print("黑店，不买了")
+    driver.find_element_by_xpath("//*[@id='removeGoods']").click()
+    time.sleep(3)
+else:
+    print("勉勉强强，用吧！不够暂时没钱")
+    time.sleep(3)
 driver.quit()
-day02
-1.ACD
-2.ABCF
-3.AD
-4.AD
-5.ABCD
-6.CD
-7.AB
