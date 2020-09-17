@@ -63,4 +63,86 @@ driver.find_element_by_name("sbtbutton").click()
 time.sleep(2)
 driver.quit()
 ```
-12
+ 2020/9/6
+ 第一题选 b,c,d
+ 第二题，abdef
+ 第三题 abc
+ 第四题，acd
+ 第五题  abd
+ 第六题，ac
+ 第七题 bd
+
+# 导包
+import time
+
+from selenium import webdriver
+
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+time.sleep(2)
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.get("http://localhost/")
+time.sleep(8)
+driver.find_element_by_xpath("//a[@class='red']").click()
+time.sleep(3)
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13800000001")
+time.sleep(2)
+#3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_elements_by_class_name("text_cmu")[2].send_keys("8888")
+time.sleep(2)
+#5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//a[@name='sbtbutton']").click()
+time.sleep(2)
+#6.打印登陆后页面标题和地址信息
+print("页面标题为：", driver.title)
+print("地址信息为：", driver.current_url)
+# 关闭浏览器对象
+driver.quit()
+
+二、提高题
+选择题-B
+代码题:没写全，没想明白！
+
+# 导包
+import time
+from selenium import webdriver
+
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+time.sleep(2)
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.get("http://localhost/")
+time.sleep(8)
+driver.find_element_by_xpath("//a[@class='red']").click()
+time.sleep(3)
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("15766212618")
+time.sleep(2)
+#3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_elements_by_class_name("text_cmu")[2].send_keys("8888")
+time.sleep(2)
+#5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//a[@name='sbtbutton']").click()
+# 6.登录成功后(要做个强制等待,因为登录跳转比较慢)
+time.sleep(10)
+# 7.在顶部搜索输入框输入搜索条件:小米,点击搜索
+driver.find_element_by_xpath("//input").send_keys("小米")
+time.sleep(1)
+driver.find_element_by_xpath("//*[text()='搜索']").click()
+time.sleep(2)
+# 关闭浏览器对象
+driver.quit()
+
