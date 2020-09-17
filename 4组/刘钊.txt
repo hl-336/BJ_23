@@ -16,7 +16,8 @@ PC端：操作系统、分辨率、代码版本、浏览器
 中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源
 的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
 答：分析：适合自动化测试的项目符合三个特征（需求变更不频繁，项目周期较长，有回归测试）
-该项目在迭代过程中每周发布新的功能以及少量历史优化内容（需求变更频繁），周期较短，不适合做web自动化测试
+该项目在迭代过程中每周发布新的功能以及少量历史优化内容（需求变更不频繁），可以回归测试，适
+合做自动化测试
 
 三、3、元素定位练习题：
 注册流程
@@ -59,5 +60,62 @@ driver.find_element_by_id('username').send_keys('13700134466')  # 账号
 driver.find_element_by_name('password').send_keys('asc123')  # 密码
 driver.find_element_by_name('verify_code').send_keys('8888')  # 验证码
 driver.find_element_by_name('sbtbutton').click()  # 登陆
+time.sleep(3)
+driver.quit()
+
+
+9月16日作业
+1、C、D
+2、A、B、C、D、E
+3、A、B、C、D
+4、A、B
+5、A、B、C、D
+6、A、B、C
+7、A、B、D
+8、# 打开浏览器后先窗口最大化
+# 1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+# 2.使用id定位定位登陆页面用户名输入框，输入用户名
+# 3.使用name定位定位登陆页面密码输入框，输入密码
+# 4.使用class定位定位登陆页面验证码输入框，输入验证码
+# 5.使用xpath定位登陆按钮执行点击
+# 6.打印登陆后页面标题和地址信息
+from selenium import webdriver
+import time
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get('http://localhost/')
+time.sleep(2)
+driver.find_element_by_xpath('//a[@class="red"]').click()
+driver.find_element_by_id('username').send_keys('13800138006')
+driver.find_element_by_name('password').send_keys('123456')
+driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
+driver.find_element_by_xpath('//a[@name="sbtbutton"]').click()
+print(f'登陆后页面标题为：{driver.title}')
+print(f'地址信息为：{driver.current_url}')
+time.sleep(3)
+driver.quit()
+提高：
+1、A、C、D
+2、from selenium import webdriver
+import time
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get('http://localhost/')
+time.sleep(2)
+driver.find_element_by_xpath('//a[@class="red"]').click()
+driver.find_element_by_id('username').send_keys('13800138006')
+driver.find_element_by_name('password').send_keys('123456')
+driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
+driver.find_element_by_xpath('//a[@name="sbtbutton"]').click()
+time.sleep(15)
+# 通过定位到元素返回列表集合
+for i in driver.find_elements_by_xpath('//*[@class="mu-afte fl"]/ul/li/a'):
+    print(i.text)
+driver.find_element_by_id('q').send_keys('小米')
+driver.find_element_by_xpath('//*[contains(@onclick,"if")]').click()
+# 找到能够代表商品特征的元素集合，返回结果为列表，可以统计长度就是数量
+print("商品数量为：", len(driver.find_elements_by_xpath('//*[@class="xs_img"]')))
 time.sleep(3)
 driver.quit()

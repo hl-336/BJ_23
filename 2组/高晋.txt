@@ -39,3 +39,43 @@ day01-9月15日
     driver.find_element_by_name('sbtbutton').click()
     time.sleep(30)
     driver.quit()
+
+day02-9月16日
+一、基础题
+选择题
+1.[多选]:针对标签定位下面说法正确的是:
+ABCD
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？
+ABCDF
+3.[多选]:对于xpath下面说法正确的是？
+ABCD
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？
+AB
+5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：
+ABD
+6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：
+ABC
+7.[多选]定位下面html中所有input标签，使用方法正确的是：
+BD
+代码题
+1.按以下要求完成登陆流程：
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+driver.get('http://localhost/')
+time.sleep(3)
+driver.maximize_window()
+driver.find_element_by_xpath('//*[@class="fl nologin"]/a[1]').click()
+driver.find_element_by_id('username').send_keys('13133091234')
+driver.find_element_by_name('password').send_keys('123456')
+driver.find_element_by_id('verify_code').send_keys('8888')
+driver.find_element_by_xpath('//*[@class="login_bnt"]/a').click()
+print(driver.title)
+print(driver.current_url)
+time.sleep(10)
+driver.quit()
+二、提高题
+选择题
+1.如下html，class属性每次打开页面后面数字都会发生改变，如需要定位定位第三个input标签，下面表达式正确的是：
+AD
