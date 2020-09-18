@@ -45,13 +45,13 @@ driver.close()
 """第二天"""
 
 一,基础题
-# 1. A,B,C,D        √
-# 2. A,B,C,D,E,F    √
-# 3. B,C,D          A也是正确选项
-# 4. A,B,D          √
-# 5. A,B,C,D        √
-# 6. A,B,C          √如果题目是xpath表示正确问题则答案正确,题目要求是属性层级的话应该只有C
-# 7. A,B,D          A错误,题目要求是找到所有的input标签
+# 1. A,B,C,D
+# 2. A,B,C,D,E,F
+# 3. B,C,D
+# 4. A,B,D
+# 5. A,B,C,D
+# 6. A,B,C
+# 7. A,B,D
 # 代码题1
 import time
 from selenium import webdriver
@@ -69,11 +69,9 @@ time.sleep(10)
 print("标题为", driver.title)
 print("地址信息为", driver.current_url)
 driver.close()
-------
-注意:一般在完成测试后不要用close去关闭浏览器,这种关闭方法不会关闭浏览器进程,会占用系统资源
 
 二.提高题
-# 1[不清]. B,D        √
+# 1[不清]. B,D
 # 2.
 import time
 from selenium import webdriver
