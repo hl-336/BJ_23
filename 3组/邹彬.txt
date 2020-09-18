@@ -161,7 +161,6 @@ print("数量：", driver.find_element_by_css_selector('[id*="changeQuantity_"]'
 print("小计金额：", driver.find_element_by_css_selector('[id*="market_price"]').text)
 # 12.写个判断:判断单价信息是否大于5000块
 print('价格为', price[1:5])
-
 if int(price[1:5]) > 5000:
     print('黑店，不买了')
     driver.find_element_by_class_name('deleteGoods')
