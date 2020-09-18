@@ -1,4 +1,4 @@
----DAY01---
+---DAY01---（已修改）
 1、自动化测试类型有哪些？能解决一些什么样的问题？
 自动化测试类型：
 （1）web端自动化测试
@@ -55,20 +55,22 @@ driver.find_element_by_class_name("J-login-submit").click()  # 点击
 time.sleep(3)
 driver.quit()
 
+
 ------------------------------------------------------------------------------------------------------------------------
 
----DAY02---
+
+---DAY02---（已修改）
 一、基础题
 选择题
-1.[多选]:针对标签定位下面说法正确的是:( A C D )
+1.[多选]:针对标签定位下面说法正确的是:( A B C D )
 --->B选项也是正确 //input匹配界面所有input标签元素,而driver.find_element_by_xpath默认选择第一个,所有的元素定位方式匹配
 到多个的时候都会默认返回第一个符合条件的元素对象
 
-2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？( A B D F )
+2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？( A B C D E F )
 --->CE选项也是正确,C默认返回第一个a标签,E相对路径表达式从//div匹配所有div,下面有a标签的只有一个
 
-3.[多选]:对于xpath下面说法正确的是？( B C D )   √
-4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？( A B )
+3.[多选]:对于xpath下面说法正确的是？(A B C D )   √
+4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？( A B D )
 --->D选项正确,匹配第一个input标签,xpath表达式中索引初始值为1
 
 5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：( A B C D )   √
@@ -77,17 +79,19 @@ driver.quit()
 
 代码题
 import time
-from selenium import webdriver
-driver = webdriver.Chrome()
-driver.get("http://ttmp.research.itcast.cn/")  # 进入网站
-driver.maximize_window()  # 窗口最大化
-driver.find_element_by_xpath('//*[@placeholder="请输入手机号"]').send_keys("13911111111")  # 输入手机号
-driver.find_element_by_xpath('//*[@placeholder="验证码"]').send_keys("246810")  # 输入验证码
-time.sleep(3)
-driver.find_element_by_class_name("el-button--primary").click()  # 点击登录
+from selenium import webdriver  # 导包
+driver = webdriver.Chrome()  # 创建浏览器驱动对象
+driver.maximize_window()  #  窗口最大化
+driver.get("http://tpshop-test.itheima.net/")  # 输入网址
+driver.find_element_by_xpath("//*[@class='red']").click()  # 点击登录
+time.sleep(2)
+driver.find_element_by_id("username").send_keys("13800000003")  # 输入手机号
+driver.find_element_by_name("password").send_keys("123456")  # 输入密码
+driver.find_element_by_id("verify_code").send_keys("8888")  # 输入验证码
+driver.find_element_by_xpath('//*[@class="J-login-submit"]').click()  # 点击登录
 time.sleep(10)
-print(driver.title)  # 打印页面标题
-print(driver.current_url)  # 打印页面地址信息
+print(driver.title)  # 打印标题
+print(driver.current_url)  # 打印地址信息
 driver.quit()
 
 
@@ -97,20 +101,106 @@ driver.quit()
 
 代码题
 import time
-from selenium import webdriver
-driver = webdriver.Chrome()
-driver.get("http://ttmp.research.itcast.cn/")  # 进入网站
+from selenium import webdriver  # 导包
+driver = webdriver.Chrome()  # 创建浏览器驱动对象
 driver.maximize_window()  # 窗口最大化
-driver.find_element_by_xpath('//*[@placeholder="请输入手机号"]').send_keys("13911111111")  # 输入手机号
-driver.find_element_by_xpath('//*[@placeholder="验证码"]').send_keys("246810")  # 输入验证码
-time.sleep(3)
-driver.find_element_by_class_name("el-button--primary").click()  # 点击登录
+driver.get("http://tpshop-test.itheima.net/")  # 输入网址
+driver.find_element_by_xpath("//*[@class='red']").click()  # 点击登录
+time.sleep(2)
+driver.find_element_by_id("username").send_keys("13800000003")  # 输入手机号
+driver.find_element_by_name("password").send_keys("123456")  # 输入密码
+driver.find_element_by_id("verify_code").send_keys("8888")  # 输入验证码
+driver.find_element_by_xpath('//*[@class="J-login-submit"]').click()  # 点击登录
 time.sleep(5)
-print(driver.title)  # 打印页面标题
-print(driver.current_url)  # 打印页面地址信息
-text_data = driver.find_elements_by_class_name("text")  # 获取元素文本
-num_data = driver.find_elements_by_class_name("num")  # 获取元素文本
-for i, j in zip(text_data, num_data):  # 循环遍历两个列表
-    print(i.text, j.text)  # 按格式打印
+print(driver.title)  # 打印标题
+print(driver.current_url)  # 打印地址信息
+title_element = driver.find_elements_by_xpath("//div[@class='mu-afte fl']/ul/li/a/span")
+data_element = driver.find_elements_by_xpath("//*[@class='mu-num']")
+unit_element = driver.find_elements_by_xpath("//*[@class='mu-unit']")  # 定位数据
+for i in range(len(title_element)):  # 循环遍历
+    print(title_element[i].text, data_element[i].text, unit_element[i].text)  # 打印文本
+driver.find_element_by_xpath("//*[@id='q']").send_keys("小米")  # 搜索框输入‘小米’
+time.sleep(2)
+driver.find_element_by_xpath("//*[@class='search_usercenter_btn']").click()  # 点击搜索
+num = driver.find_elements_by_xpath("//*[@class='xs_img']//*[@class='lazy-list']")  # 定位数据
+print(f"显示商品数量为：{len(num)}")  # 打印商品数量
+time.sleep(2)
 driver.quit()
 
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+---DAY03---
+一、基础题
+选择题
+1.[多选]通过自动化脚本获取元素信息的目的有哪些？( A B )
+2.[多选]以下获取元素信息的常用方法说法正确的是？( A B C )
+3.下面哪个为实例化鼠标操作的方法？( B )
+4.[多选]下面常用鼠标操作方法和说明正确匹配的是:( A C D )
+5.[多选]元素对象send_keys方法用途包含:( A C D )
+6.[多选]关于元素等待下面说法错误的是:( B D )
+7.[多选]关于隐式等待下面说法错误的是:( A D )
+
+简答题
+1.如何实现输入悬停到下面所描述元素对象上？
+action.move_to_element(driver.find_element_by_id("testA"))
+action.perform()
+
+二、代码题
+1.按以下要求完成操作流程(定位方式不限)：
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+driver = webdriver.Chrome()  # 创建驱动对象
+driver.maximize_window()  # 窗口最大化
+driver.implicitly_wait(5)  # 设置隐式等待时间 10 s
+driver.get("http://tpshop-test.itheima.net/")  # 打开网站
+driver.find_element_by_css_selector('.red').click()  # 点击登录
+driver.find_element_by_css_selector('#username').send_keys("13800000003")  # 输入手机号
+driver.find_element_by_css_selector('#password').send_keys("123456")  # 输入密码
+driver.find_element_by_css_selector('#verify_code').send_keys("8888")  # 输入验证码
+driver.find_element_by_css_selector('[name="sbtbutton"]').click()  # 点击登录
+driver.find_element_by_css_selector('.home').click()  # 点击返回商城首页
+driver.find_element_by_css_selector('#q').send_keys("小米")  # 搜索框输入小米
+driver.find_element_by_css_selector('.ecsc-search-button').click()  # 点击搜索
+driver.find_element_by_css_selector('.p-btn>[onclick*="104"]').click()  # 点击加入购物车进入商品详情页
+driver.find_element_by_css_selector('#join_cart').click()  # 点击加入购物车
+time.sleep(2)
+driver.refresh()  # 刷新页面
+action = ActionChains(driver)  # 实例化对象
+action.move_to_element(driver.find_element_by_xpath('//*[text()="我的购物车"]'))  # 悬停鼠标
+action.perform()  # 执行下达的指令
+time.sleep(5)
+cart_num = driver.find_element_by_css_selector('#cart_quantity')  # 查看购物车内商品数量
+if int(cart_num.text) == 0:  # 判断购物车是否为空
+    no_goods = driver.find_element_by_css_selector('.ma')
+    print(no_goods.text)
+else:
+    goods_num = driver.find_element_by_css_selector('.t-n')
+    logo_data = driver.find_element_by_xpath('//*[@class="t-p red fr"]/em')
+    price = driver.find_element_by_css_selector('#total_pay')
+    print(f"购物车商品件数为：{goods_num.text}\n"
+          f"购物车商品总价为：{logo_data.text}{price.text}")
+driver.find_element_by_css_selector('.c-btn').click()  # 点击其购物车结算
+time.sleep(5)
+select = driver.find_element_by_css_selector('.pa-le-28 .checkCart').is_selected()  # 勾选结果
+if select:  # 判断勾选结果
+    print('已勾选')
+else:
+    print('未勾选')
+original_price = driver.find_element_by_css_selector('[id$="_goods_price"]')
+buy_price = driver.find_element_by_css_selector('[id$="_member_goods_price"]')
+num = driver.find_element_by_css_selector('[id^="changeQuantity_"]').get_attribute("value")
+subtotal = driver.find_element_by_css_selector('[id$="_market_price"]')
+print(f'商品单价为：{original_price.text}\n'
+      f'商品购买价为：{buy_price.text}\n'
+      f'商品数量为：{num}\n'
+      f'商品小计金额为：{subtotal.text}')
+if float(original_price.text[1:]) > 5000:  # 判断价钱是否大于5000
+    print('黑店,不买了')
+    driver.find_element_by_css_selector('#removeGoods').click()
+else:
+    print('勉勉强强,用吧！不过暂时没钱')
+time.sleep(2)
+driver.quit()
