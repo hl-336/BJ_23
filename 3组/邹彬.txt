@@ -114,7 +114,6 @@ driver.quit()
 import time
 from selenium import webdriver
 
-
 # 创建浏览器对象
 driver = webdriver.Chrome()
 #打开浏览器后先窗口最大化
