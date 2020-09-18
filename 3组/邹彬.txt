@@ -12,7 +12,7 @@ day 03 homework
 1.如何实现输入悬停到下面所描述元素对象上？
 action.move_to_element(driver.find_element_by_id("testA"))
 
-二、
+二、代码题
 # 导包
 import time
 from selenium import webdriver
@@ -61,20 +61,21 @@ driver.find_element_by_class_name('c-btn').click()
 # 10.判断购物车页面商品勾选按钮是否选中
 print("购物车页面商品是勾选上：True ==?", driver.find_element_by_class_name("checkCartAll").is_selected())
 # 11.打印出商品单价、购买价、数量、小计金额
-print('商品单价是', driver.find_elements_by_id('cart_135_goods_price').text)
-print('购买价格是', driver.find_elements_by_id('cart_135_member_goods_price').text)
-print('数量是', driver.find_elements_by_id('goods_num').text)
-print('小计金额是', driver.find_elements_by_id('total_fee').text)
+price = driver.find_element_by_css_selector('[id$="goods_price"]').text
+print("商品单价：", price)
+print("商品购买价：", driver.find_element_by_css_selector('[id$="member_goods_price"]').text)
+print("数量：", driver.find_element_by_css_selector('[id*="changeQuantity_"]').get_attribute("value"))
+print("小计金额：", driver.find_element_by_css_selector('[id*="market_price"]').text)
 # 12.写个判断:判断单价信息是否大于5000块
-m2_element = float(driver.find_element_by_id('cart_135_goods_price').text[1:])
-if m2_element > 5000:
-#     # 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
-    print("黑店,不买了")
-    driver.find_element_by_class_name('gwc-gb').click()
+print('价格为', price[1:5])
+
+if int(price[1:5]) > 5000:
+    print('黑店，不买了')
+    driver.find_element_by_class_name('deleteGoods')
     driver.quit()
-# # 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+# # 如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
 else:
-    print("勉勉强强,用吧！不过暂时没钱")
+    print('勉勉强强，用吧！不过暂时没钱')
     driver.quit()
-# """
+
 
