@@ -1,8 +1,3 @@
--------------------------
-前面两天的作业都做的很好呀，咋DAY03的作业不见了~~~~~~~~！！
--------------------------
-
-
 day01-9月15日
 1、自动化测试类型有哪些？能解决一些什么样的问题？
   回归测试：对于历史版本功能的验证、对于缺陷修复之后的验证
@@ -48,20 +43,13 @@ day01-9月15日
 day02-9月16日
 一、基础题
 选择题
-1.[多选]:针对标签定位下面说法正确的是:
-ABCD
-2.[多选]:对于下面的元素，能成功定位a标签的表达式有哪些？
-ABCDF
-3.[多选]:对于xpath下面说法正确的是？
-ABCD
-4.[多选]:定位下面<input>的元素，xpath路径定位策略表达式正确是？
-AB
-5.[多选]:定位<a>标签待付款，对于xpath属性定位表达式正确的是：
-ABD
-6.[多选]:定位<a>全部订单付款，对于xpath属性层级表达式正确的是：
-ABC
-7.[多选]定位下面html中所有input标签，使用方法正确的是：
-BD
+1.ABCD
+2.ABCDEF
+3.ABCD
+4.ABD
+5.ABCD
+6.C
+7.BD
 代码题
 1.按以下要求完成登陆流程：
 import time
@@ -79,8 +67,72 @@ driver.find_element_by_xpath('//*[@class="login_bnt"]/a').click()
 print(driver.title)
 print(driver.current_url)
 time.sleep(10)
+title_ele = driver.find_elements_by_xpath('//div[@class="mu-afte fl"]/ul/li/a/span')
+data_ele = driver.find_elements_by_xpath('//em[@class="mu-num"]')
+unit_ele = driver.find_elements_by_xpath('//em[@class="mu-unit"]')
+for i in range(len(title_ele)):
+    print(title_ele[i].text, data_ele[i].text, unit_ele[i].text)
 driver.quit()
-二、提高题
-选择题
-1.如下html，class属性每次打开页面后面数字都会发生改变，如需要定位定位第三个input标签，下面表达式正确的是：
-AD
+
+day03-9月17日
+一、基础题
+1.AB
+2.ABCD
+3.B
+4.ACD
+5.ABCD
+6.D
+7.A
+简答题
+from seleniun import webdriver
+from selenium.webdriver import ActionsChains
+driver = webdriver.Chrome()
+action = ActionsChains(driver)
+action.move_to_element(driver.find_element_by_id('testA'))
+acton.perform()
+driver.quit()
+二、代码题
+import time
+
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('http://localhost/')
+driver.maximize_window()
+driver.implicitly_wait(10)
+driver.find_element(By.LINK_TEXT, '登录').click()
+driver.find_element(By.ID, 'username').send_keys('13133091234')
+driver.find_element(By.ID, 'password').send_keys('123456')
+driver.find_element(By.ID, 'verify_code').send_keys('8888')
+driver.find_element(By.NAME, 'sbtbutton').click()
+driver.find_element(By.CLASS_NAME, 'home').click()
+driver.find_element(By.ID, 'q').send_keys('小米')
+driver.find_element(By.CLASS_NAME, 'ecsc-search-button').click()
+driver.find_element(By.CSS_SELECTOR, '.p-btn a').click()
+driver.find_element(By.ID, 'join_cart').click()
+driver.refresh()
+s_car = driver.find_element(By.CSS_SELECTOR, '.c-n span')
+try:
+    action = ActionChains(driver)
+    action.move_to_element(s_car)
+    action.perform()
+    print(driver.find_element(By.ID, 'total_qty').text)
+    print(driver.find_element(By.ID, 'total_pay').text)
+except:
+    print('亲，购物车中没有商品呦~')
+time.sleep(5)
+driver.find_element(By.CLASS_NAME, 'c-btn').click()
+driver.find_element(By.NAME, 'checkItem').is_selected()
+print(driver.find_element(By.ID, 'cart_18_goods_price').text)
+print(driver.find_element(By.ID, 'cart_18_member_goods_price').text)
+print(driver.find_element(By.ID, 'changeQuantity_18').text)
+print(driver.find_element(By.ID, 'cart_18_market_price').text)
+price = driver.find_element(By.ID, 'cart_18_goods_price').text
+if price > str(5000):
+    print('黑店，不买了')
+    driver.find_element(By.CLASS_NAME, 'gwc-gb').click()
+else:
+    print('勉勉强强,用吧！不过暂时没钱')
+driver.quit()
