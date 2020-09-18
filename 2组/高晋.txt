@@ -85,9 +85,9 @@ day03-9月17日
 7.A
 简答题
 from seleniun import webdriver
-from selenium.webdriver import ActionsChains
+from selenium.webdriver import ActionChains
 driver = webdriver.Chrome()
-action = ActionsChains(driver)
+action = ActionChains(driver)
 action.move_to_element(driver.find_element_by_id('testA'))
 acton.perform()
 driver.quit()
