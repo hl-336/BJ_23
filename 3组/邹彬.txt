@@ -45,7 +45,6 @@ time.sleep(3)
 action = ActionChains(driver)
 driver.refresh()
 action.perform()
-
 # 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
 try:
     action.move_to_element(driver.find_element_by_class_name('c-n')).perform()
