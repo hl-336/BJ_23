@@ -1,56 +1,52 @@
-# 1、自动化测试类型有哪些？能解决一些什么样的问题？
- # UI自动化测试(功能测试/黑盒测试)
- # web端自动化测试
- # 移动端自动化测试
- # 桌面应用自动化测试
- # 接口自动化测试
- # 单元测试
- #
- # 回归测试
- # 压力测试
- # 兼容性测试
- #
- # 2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，
- # 平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，
- # 该项目是否适合做web自动化测试并简单说明分析过程？
- # 不适合
- # 至少半年以上项目
- >>>>>>>>>>>>>>>>>>>>>>>>>>>>
- # 注册流程
- # 2 打开TPSHOP商城进入注册页面，暂停3s；
- # 3 成注册流程；
- # 4 元素定位方式不限；
- # 5 element.click()#点击事件
- import time
-   from selenium import webdriver
-   driver = webdriver.Chrome()
- driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
- time.sleep(3)
- driver.find_element_by_name("username").send_keys("15556787894")
- time.sleep(3)
- driver.find_element_by_name("verify_code").send_keys("8888")
- time.sleep(3)
- driver.find_element_by_name("password").send_keys("789456")
- time.sleep(3)
- driver.find_element_by_name("password2").send_keys("789456")
- time.sleep(3)
- driver.find_element_by_class_name("regbtn").click()
- time.sleep(3)
- driver.quit()
- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- # 登录练习：
- # 2 #1)打开TPSHOP商城进入登录界面
- # 3 #2)使用注册练习注册成功的用户信息登录TPSHOP
- import time
-   from selenium import webdriver
- driver = webdriver.Chrome()
- driver.get("http://tpshop-test.itheima.net/Home/user/login.html")
- driver.find_element_by_id("username").send_keys("15556787894")
- time.sleep(1)
- driver.find_element_by_id("password").send_keys("789456")
- time.sleep(1)
- driver.find_element_by_id("verify_code").send_keys("8888")
- time.sleep(1)
- driver.find_element_by_name("sbtbutton").click()
- time.sleep(10)
- driver.quit()
+1、ABCD
+ 2、ABCDEF
+ 3、ABCD
+ 4、ABD
+ 5、ABCD
+ 6、ABC
+ 7、BCD
+  打开浏览器后先窗口最大化
+# 1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+# 2.使用id定位    定位登陆页面用户名输入框，输入用户名
+# 3.使用name定位  定位登陆页面密码输入框，输入密码
+# 4.使用class定位 定位登陆页面验证码输入框，输入验证码
+# 5.使用xpath定位登陆按钮执行点击
+# 6.打印登陆后页面标题和地址信息
+# http://ttmp.research.itcast.cn/
+# 测试账号:13911111111
+# 验证码:246810
+
+
+# 1、导包
+import time
+from selenium import webdriver
+# 2、创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 3、打开tpshop商城首页
+driver.get(
+    "http://ttmp.research.itcast.cn/"
+)
+time.sleep(1)
+# 4.1、使用class定位定位登陆页面用户名输入框，输入用户名
+driver.find_elements_by_class_name("el-input__inner")[0].send_keys("13911111111")
+time.sleep(1)
+# 4.2、使用xpath定位 定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath("//*[@placeholder='验证码']").send_keys("246810")
+time.sleep(1)
+# 4.3、使用class定位登陆按钮执行点击登录
+driver.find_element_by_class_name("el-button--primary").click()
+time.sleep(1)
+# 4.4、打印登陆后页面标题和地址信息
+print(driver.title)
+print(driver.current_url)
+time.sleep(2)
+# 窗口最大化
+driver.maximize_window()
+time.sleep(1)
+
+
+
+
+
+# 5、关闭浏览器
+driver.quit()

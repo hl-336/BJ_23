@@ -87,3 +87,100 @@ print(driver.title)
 print(driver.current_url)
 选择题
 A
+
+
+day03
+选择题
+1.A.B.C
+2.A,B,C
+3.B
+4.A.C.D
+4.A,C,D
+5.C,D
+6.B,D
+
+简答题
+#1.导包 ActionChains
+from selenium.webdriver import ActionChains
+from selenium import webdriver
+driver=webdriver.Chrome()
+#2.创建鼠标对象
+action = ActionChains(driver)
+action.move_to_element(driver.find_element_by_id("testA"))
+#4.执行下达的指令
+action.perform()
+
+代码题
+# 1.打开tpshop,设置窗口最大化和隐式等待
+# 导包
+import time
+
+from selenium import webdriver
+# 打开谷歌浏览器对象
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+# 输入网址
+driver.get("http://tpshop-test.itheima.net/")
+# 设置窗口最大化
+driver.maximize_window()
+# 设置隐式等待
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+# 点击登陆
+driver.find_element_by_class_name("red").click()
+# 输入账号
+driver.find_element_by_id("username").send_keys("13800000009")
+# 输入密码
+driver.find_element_by_id("password").send_keys("chenlei521")
+# 输入验证码
+driver.find_element_by_id("verify_code").send_keys("8888")
+# 点击登陆
+driver.find_element_by_class_name("J-login-submit").click()
+# 3.在会员首页点击返回商城首页
+# 点击首页
+driver.find_element_by_link_text('首页').click()
+# 4.输入搜索条件小米
+driver.find_element_by_id("q").send_keys('小米')
+# 点击搜索
+driver.find_element_by_class_name("ecsc-search-button").click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_xpath('//div[@class="p-btn"]/a').click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_id("join_cart").click()
+# 7.刷新界面
+driver.refresh()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+# 悬停购物车图标
+action = ActionChains(driver)
+action.move_to_element(driver.find_element_by_css_selector('[class="c-n fl"]'))
+action.perform()
+num = print(driver.find_element_by_id('total_qty').text)
+if num == 0:
+    print(driver.find_element_by_css_selector("[class='empty-c'] i").text)
+else:
+    print("商品总数", driver.find_element_by_css_selector("[class='red']").text)
+    print('商品总价', driver.find_element_by_id('total_pay').text)
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+# 点击结算
+driver.find_element_by_class_name("c-btn").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print(driver.find_element_by_class_name("check-box").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+print('单价', driver.find_element_by_id("cart_136_goods_price").text)
+print("购买价", driver.find_element_by_id("cart_84_member_goods_price").text)
+print("小计金额", driver.find_element_by_id("cart_84_market_price").text)
+# 12.写个判断:判断单价信息是否大于5000块 如大于则打印"黑店,不买了",
+# 并删除购物车的该商品,关闭浏览器 如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+price = print(driver.find_element_by_id("cart_84_goods_price").text)
+if '￥' in price:
+    price1 = price.replace('￥', '')
+    price = price1
+if price > 50000:
+    print("黑店,不买了")
+    driver.find_element_by_id("removeGoods").click()
+    driver.quit()
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
+    driver.quit()

@@ -45,13 +45,13 @@ driver.close()
 """第二天"""
 
 一,基础题
-# 1. A,B,C,D
-# 2. A,B,C,D,E,F
-# 3. B,C,D
-# 4. A,B,D
-# 5. A,B,C,D
-# 6. A,B,C
-# 7. A,B,D
+# 1. A,B,C,D        √
+# 2. A,B,C,D,E,F    √
+# 3. B,C,D          A也是正确选项
+# 4. A,B,D          √
+# 5. A,B,C,D        √
+# 6. A,B,C          √如果题目是xpath表示正确问题则答案正确,题目要求是属性层级的话应该只有C
+# 7. A,B,D          A错误,题目要求是找到所有的input标签
 # 代码题1
 import time
 from selenium import webdriver
@@ -69,43 +69,25 @@ time.sleep(10)
 print("标题为", driver.title)
 print("地址信息为", driver.current_url)
 driver.close()
+------
+注意:一般在完成测试后不要用close去关闭浏览器,这种关闭方法不会关闭浏览器进程,会占用系统资源
 
 二.提高题
-# 1[不清]. B,D
+# 1[不清]. B,D        √
 # 2.
 import time
 from selenium import webdriver
 
 driver = webdriver.Chrome()
-driver.get("http://localhost/")
+driver.get("http://ttmp.research.itcast.cn/#/login")
 time.sleep(3)
-driver.find_element_by_xpath('//div[@class="fl nologin"]/a[@class="red"]').click()
-time.sleep(3)
-driver.find_element_by_id('username').send_keys('18033727684')
-driver.find_element_by_name('password').send_keys('123456')
-driver.find_elements_by_class_name('text_cmu')[2].send_keys('8888')
-driver.find_element_by_xpath('//a[@class="J-login-submit"]').click()
-time.sleep(10)
-a = driver.find_elements_by_xpath('//ul[@class="mu-a1"]//a/*')
-b = driver.find_elements_by_xpath('//ul[@class="mu-a2"]//a/*')
-c = driver.find_elements_by_xpath('//a[@href="/Home/User/recharge.html"]/*')
-d = driver.find_elements_by_xpath('//a[@href="/Home/User/coupon.html"]/*')
+driver.find_element_by_xpath("//input").send_keys(13911111111)
+driver.find_element_by_xpath('//input[@placeholder="验证码"]').send_keys(246810)
+driver.find_element_by_class_name("el-button--primary").click()
 driver.maximize_window()
-for i in (1, 3, 2):
-    print(a[i].text, end=" ")
-print("\n")
-for i in (1, 3, 2):
-    print(b[i].text, end=" ")
-print("\n")
-for i in (1, 3, 2):
-    print(c[i].text, end=" ")
-print("\n")
-for i in (1, 3, 2):
-    print(d[i].text, end=" ")
-print("\n")
-
-driver.find_element_by_xpath('//form[@id = "sourch_form"]/input').send_keys("小米")
-driver.find_element_by_xpath('//form[@id = "sourch_form"]/a').click()
-xiaomi = driver.find_elements_by_xpath('// div[@class = "p-btn"]')
-print("小米商品数量为", len(xiaomi))
+time.sleep(10)
+list1 = driver.find_elements_by_xpath('//div[@class="num"]')
+list2 = driver.find_elements_by_xpath('//div[@class="text"]')
+for i in range(3):
+    print(list1[i].text, list2[i].text)
 driver.close()
