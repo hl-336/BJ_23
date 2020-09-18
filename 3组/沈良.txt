@@ -116,3 +116,88 @@ driver.find_element_by_xpath("//a[@class='J-login-submit']").click()
 print('登录后的标题:', driver.title)
 print('登录后的地址信息:', driver.current_url)
 
+
+
+day03作业
+选择题
+1.[多选]通过自动化脚本获取元素信息的目的有哪些？
+    A B C
+2.[多选]以下获取元素信息的常用方法说法正确的是？
+    A B C D
+3.下面哪个为实例化鼠标操作的方法？
+    B
+4.[多选]下面常用鼠标操作方法和说明正确匹配的是
+    A B C
+5.[多选]元素对象send_keys方法用途包含:
+    B D
+6.[多选]关于元素等待下面说法错误的是:
+    A B C
+7.[多选]关于隐式等待下面说法错误的是:
+    A B C D
+
+简答题
+
+1.如何实现输入悬停到下面所描述元素对象上？
+action.move_to_element(driver.find_element_by_id("testA")).perform()
+
+
+代码题
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+action = ActionChains(driver)
+driver.get("http://127.0.0.1")
+driver.maximize_window()
+driver.implicitly_wait(10)
+driver.find_element_by_link_text("登录").click()
+time.sleep(2)
+
+driver.find_element_by_xpath("//*[@id='username']").send_keys("17610026018")
+time.sleep(1)
+
+driver.find_element_by_xpath("//*[@id='password']").send_keys("123456")
+time.sleep(1)
+
+driver.find_element_by_xpath("//*[@id='verify_code']").send_keys("8888")
+time.sleep(1)
+
+driver.find_element_by_css_selector("[name*='sb']").click()
+time.sleep(2)
+
+driver.find_element_by_link_text("返回商城首页").click()
+time.sleep(2)
+
+driver.find_element_by_css_selector("[placeholder*='关键字']").send_keys("小米")
+time.sleep(2)
+
+driver.find_element_by_xpath("//*[@class='ecsc-search-button']").click()
+time.sleep(2)
+driver.find_element_by_css_selector("[onclick^='AjaxAddCart(104']").click()
+time.sleep(2)
+driver.find_element_by_css_selector("[data-original$='104_236_236.jpeg']").click()
+time.sleep(2)
+driver.find_element_by_css_selector("[onclick$='(104,1);']").click()
+time.sleep(2)
+driver.refresh()
+time.sleep(12)
+action.move_to_element(driver.find_element_by_xpath("//*[@class='c-n fl']")).perform()
+time.sleep(10)
+print("购物车商品总件数", driver.find_element_by_id("total_qty").text)
+print("购物车商品总价钱", driver.find_element_by_id("total_pay").text)
+time.sleep(5)
+driver.find_element_by_link_text("去购物车结算 >>").click()
+time.sleep(2)
+print("购物车商品是否勾选：", driver.find_element_by_xpath("//input[@value='6']").is_enabled())
+time.sleep(1)
+print("商品单价为：", driver.find_element_by_id("cart_6_goods_price").text)
+print("商品购买价为：", driver.find_element_by_id("cart_6_member_goods_price").text)
+print("商品购数量为：", driver.find_element_by_id("changeQuantity_6").get_attribute("value"))
+print("商品购小计为：", driver.find_element_by_id("cart_6_market_price").text)
+price = driver.find_element_by_id("cart_6_goods_price").text
+
+if float(price[1:10]) > 5000:
+    print("黑店不买了")
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
