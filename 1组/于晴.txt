@@ -52,3 +52,13 @@ driver.find_element_by_xpath("//*[@type='text' and @placeholder='验证码']").s
 driver.find_element_by_xpath("//*[@type=button'and @class='el-button el-button--primary']").click()
 --->
 driver.quit()
+day03
+1.ABC
+2.ABC
+3.B
+4.CD
+5.ACD
+6.AD
+7.A
+简答题
+action.move_to_element(driver.find_element_by_id("testA"))

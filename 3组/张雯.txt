@@ -1,17 +1,14 @@
 # 一、基础题
-# 1.ABC
-# 2.ACD
-# 3.B
-# 4.C
-# 5.BD
-# 6.CD
-# 7.AB
-
-
+# 1.ABC       C选项错误,获取元素信息并不是为了获取元素的
+# 2.ACD       B选项正确
+# 3.B         √
+# 4.C         AD正确记忆不牢固
+# 5.BD        AC选项没有问题,课上讲过呀
+# 6.CD        C是正确的,可能被多选误导了
+# 7.AB        B选项正确,后面我再强调一下,然后也可能被误导了
 
 # 简答题
 action.move_to_element(driver.find_element_by_tag_id("testA"))
-
 
 # 二、代码题
 
