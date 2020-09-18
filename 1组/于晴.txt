@@ -119,6 +119,7 @@ if price > 5000:
     print("黑店,不买了")
 else:
     print("勉勉强强,用吧！")
+#关闭浏览器
 driver.quit()
 
 
