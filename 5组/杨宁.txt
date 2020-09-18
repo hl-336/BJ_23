@@ -113,7 +113,8 @@ day02作业
 - E.driver.find_element_by_xpath("//div/a")
 - F.driver.find_element_by_xpath("//*[@title='家用电器']")
 - G.driver.find_element_by_xpath("//*[text()='家用']")
-答：ABCDF
+答：ABCDEF
+E：//div可以定位到两个div，//div/a是直接从第二个div定位到a
 ---
 3.[多选]:对于xpath下面说法正确的是？
 
@@ -173,7 +174,8 @@ day02作业
 - B.//li/a
 - C.//li[@id='table1']/a
 - D.//ul[@class='tb1']/a[1]
-答：ABCD
+答：C
+ABC都能定位到，但是属性和层级相结合的只有C
 ---
 7.[多选]定位下面html中所有input标签，使用方法正确的是：
 
@@ -393,5 +395,3 @@ else:
     print("勉勉强强,用吧！不过暂时没钱")
 time.sleep(3)
 driver.quit()
-
-
