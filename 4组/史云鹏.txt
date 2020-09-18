@@ -224,4 +224,4 @@ if price >= 5000:
     driver.find_element_by_id("removeGoods").click()
     driver.quit()
 else:
-    print('勉勉强强,用吧！不过暂时没钱')
+    print('勉勉强强,用吧！不过暂时没钱')111
