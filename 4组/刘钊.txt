@@ -65,13 +65,13 @@ driver.quit()
 
 
 9月16日作业
-1、C、D
-2、A、B、C、D、E
+1、A、B、C、D
+2、A、B、C、D、E、F
 3、A、B、C、D
-4、A、B
+4、A、B、D
 5、A、B、C、D
-6、A、B、C
-7、A、B、D
+6、C
+7、B、D
 8、# 打开浏览器后先窗口最大化
 # 1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
 # 2.使用id定位定位登陆页面用户名输入框，输入用户名
@@ -97,7 +97,8 @@ time.sleep(3)
 driver.quit()
 提高：
 1、A、C、D
-2、from selenium import webdriver
+2、
+from selenium import webdriver
 import time
 
 driver = webdriver.Chrome()
@@ -111,11 +112,94 @@ driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
 driver.find_element_by_xpath('//a[@name="sbtbutton"]').click()
 time.sleep(15)
 # 通过定位到元素返回列表集合
-for i in driver.find_elements_by_xpath('//*[@class="mu-afte fl"]/ul/li/a'):
-    print(i.text)
+title_element = driver.find_elements_by_xpath('//*[@class="mu-afte fl"]/ul/li/a/span')
+num = driver.find_elements_by_xpath('//*[@class="mu-unit"]')
+acout = driver.find_elements_by_xpath('//*[@class="mu-num"]')
+for i in range(len(title_element)):
+    print(title_element[i].text, acout[i].text, num[i].text)
 driver.find_element_by_id('q').send_keys('小米')
 driver.find_element_by_xpath('//*[contains(@onclick,"if")]').click()
 # 找到能够代表商品特征的元素集合，返回结果为列表，可以统计长度就是数量
 print("商品数量为：", len(driver.find_elements_by_xpath('//*[@class="xs_img"]')))
 time.sleep(3)
 driver.quit()
+
+
+9月17日作业
+1、A、B、C
+2、A、B、C
+3、B
+4、A、C、D
+5、C、D
+6、B、D
+7、B、D
+简答题：
+**1.如何实现输入悬停到下面所描述元素对象上？**
+<div id='testA' name='testA'/>
+步骤：1、导包
+2、生成鼠标对象使用变量接收
+3、鼠标执行悬停命令.move_to_element(driver.find_element_by_id('testA'))
+4、执行动作.perform()
+二、代码题
+# 1.打开tpshop,设置窗口最大化和隐式等待
+import time
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+driver.get('http://tpshop-test.itheima.net/Home/Index/index.html')
+driver.find_element_by_class_name('red').click()
+driver.find_element_by_id('username').send_keys('13800138006')
+driver.find_element_by_id('password').send_keys('123456')
+driver.find_element_by_id('verify_code').send_keys('8888')
+driver.find_element_by_name('sbtbutton').click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_class_name('home').click()
+# 4.输入搜索条件小米
+driver.find_element_by_id('q').send_keys('小米')
+driver.find_element_by_css_selector('[type*="ub"]').click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_xpath('//a[contains(@href,"104")]/img').click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_css_selector("#join_cart").click()
+# 7.刷新界面
+driver.refresh()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息(使用异常捕获)
+try:
+    action = ActionChains(driver)
+    action.move_to_element(driver.find_element_by_id('cart_quantity')).perform()
+    list1 = driver.find_element_by_xpath('//p[@class="t-n fl"]')
+    list3 = driver.find_element_by_css_selector('p[class="t-p red fr"] em')
+    list4 = driver.find_element_by_id('total_pay')
+    print('商品总件数：', list1.text)
+    print('总价:', list3.text, list4.text)
+except NoSuchElementException:
+    print(driver.find_element_by_xpath('//span[@class="ma"]').text)
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_xpath('//div[@class="c-n fl"]/span').click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print('断言:', driver.find_element_by_name("checkItem").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+num = driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[4].text
+print('商品单价：', num)
+print(type(driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[4].text))
+print('购买价：', driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[5].text)
+print('数量：', driver.find_element_by_xpath('//div/input').get_attribute('value'))
+print('小计：', driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[7].text)
+# 12.写个判断:判断单价信息是否大于5000块
+num1 = str.replace(num, '￥', '')
+if int(float(num1)) > 5000:
+    # 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+    print('黑店，不买了')
+    driver.find_element_by_css_selector('.gwc-gb').click()
+    driver.quit()
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+else:
+    print('勉勉强强,用吧！不过暂时没钱')
+    driver.quit()
