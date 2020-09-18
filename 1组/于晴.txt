@@ -4,9 +4,6 @@
 3.移动端自动化测试：对手机端的软件进行测试
 4.接口自动化测试：系统各个接口的请求和返回的测试
 5.单元测试：对软件系统的代码和业务逻辑进行测试
-可以解决对于版本迭代带来的回归测试，对旧版本的功能进行测试和对修复后的bug进行测试
-可以对常用接口，并发数较多的接口进行压力测试，对于用户的常用功能场景进行压力测试
-对pc端和移动端进行兼容性测试
 
 某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程
 中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源
@@ -36,3 +33,22 @@ driver.find_element_by_id("username").send_keys("13132124811")
 driver.find_element_by_id("password").send_keys("123456")
 driver.find_element_by_id("verify_code").send_keys("8888")
 driver.find_element_by_class_name("J-login-submit").click()
+
+
+day02
+1.A C D            B也是正确选项
+2.A B C E F        D也是正确选项
+3.A B C D          √
+4.A D              B也是正确选项
+5.A B C D          √
+6.C                √
+7.B D              √
+
+driver = webdriver.Chrome()
+driver.get("http://ttmp.research.itcast.cn/")
+driver.maximize_window()
+driver.find_element_by_xpath("//*[@type='text' and @placeholder='请输入手机号']").send_keys("13911111111")
+driver.find_element_by_xpath("//*[@type='text' and @placeholder='验证码']").send_keys("246810")
+driver.find_element_by_xpath("//*[@type=button'and @class='el-button el-button--primary']").click()
+--->
+driver.quit()
