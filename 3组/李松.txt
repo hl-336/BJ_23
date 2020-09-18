@@ -170,5 +170,95 @@ day02Homework
         print('\n', '搜索到的小米手机个数为：', len(list_img))
 
 
+dar03Homework
+    1、ABC
+    2、ABC
+    3、B
+    4、ACD
+    5、BD
+    6、ABC
+    7、AD
+    8、
+    答：
+        假设各依赖包皆已导入
+        driver = webdriver.Chorm()
+        action = ActionChtains(driver)
+        action.move_to_element(driver.find_element_by_id('testA'))
+    9、代码实现如下：
+        # 导包
+        import time
+        from selenium import webdriver
+        from selenium.webdriver import ActionChains
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.common.keys import Keys
+
+        # 1.打开tpshop,设置窗口最大化和隐式等待
+        driver = webdriver.Chrome()
+        driver.maximize_window()
+        driver.implicitly_wait(10)
+        # 2.登陆tpshop网站
+        driver.get('http://tpshop-test.itheima.net')
+        driver.find_element_by_css_selector('.red').click()
+        driver.find_element(By.ID, 'username').send_keys('13833345678')
+        driver.find_element(By.CSS_SELECTOR, '[type="password"]').send_keys('123456')
+        driver.find_element(By.NAME, 'verify_code').send_keys('8888')
+        driver.find_element_by_xpath('//*[contains(@href, "script:v")]').click()
+        # 3.在会员首页点击返回商城首页
+        driver.find_element(By.XPATH, '//*[text()="返回商城首页"]').click()
+        # 4.输入搜索条件小米
+        driver.find_element(By.XPATH, '//*[starts-with(@placeholder, "请输入")]').clear()
+        driver.find_element(By.XPATH, '//*[starts-with(@placeholder, "请输入")]').send_keys('小米')
+        driver.find_element_by_css_selector('.ecsc-search-button').click()
+        # 5.点击第一个搜索到商品接口对应加入购物车
+        driver.find_element_by_xpath('//*[text()="加入购物车"]').click()
+        # 6.在商品详情页面点击加入购物车
+        action = ActionChains(driver)
+        action.move_to_element(driver.find_element_by_id('number')).double_click().perform()
+        driver.find_element_by_id('number').send_keys(Keys.BACK_SPACE)
+        driver.find_element_by_id('number').send_keys('2')
+        driver.find_element_by_xpath('//*[contains(@onclick, "AjaxAddCart")]').click()
+        # 7.刷新界面
+        driver.refresh()
+        # 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+        action = ActionChains(driver)
+        time.sleep(3)
+        action.move_to_element(driver.find_element_by_css_selector('.c-n')).perform()
+        time.sleep(3)
+        try:
+            total_items = driver.find_element_by_id('total_qty').text
+            total_pay = driver.find_element_by_id('total_pay').text
+        except Exception as result:
+            print('错误类型为：', result)
+            print('亲，购物车中没有商品哟~')
+        else:
+            print(f'购物车的商品总件数为:{total_items}件')
+            print(f'购物车的商品总价为：{total_pay}元')
+        finally:
+            # 9.等待5s,点击去购物车结算
+            time.sleep(5)
+            driver.find_element_by_class_name('c-btn').click()
+            # 10.判断购物车页面商品勾选按钮是否选中
+            change = driver.find_element_by_css_selector('[name="checkItem"]')
+            if change.is_enabled():
+                # 11.打印出商品单价、购买价、数量、小计金额
+                print('单价为：', driver.find_element_by_id('cart_90_goods_price').text, '元')
+                print('购买价为', driver.find_element(By.ID, 'cart_90_member_goods_price').text, '元')
+                print('数量为', driver.find_element_by_id('changeQuantity_90').get_attribute('value'))
+                print('小计金额', driver.find_element_by_id('cart_90_market_price').text)
+            else:
+                change.click()
+            # 12.写个判断:判断单价信息是否大于5000块
+            #         如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+            #         如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+            if float(driver.find_element_by_id('cart_90_goods_price').text[1:]) >= 5000:
+                print('黑店,不买了')
+                driver.quit()
+            else:
+                print('勉勉强强,用吧！不过暂时没钱')
+                driver.quit()
+
+
+
+
 
 
