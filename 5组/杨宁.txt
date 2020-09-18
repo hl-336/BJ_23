@@ -302,4 +302,96 @@ time.sleep(3)
 driver.find_element_by_xpath("//button[@class='el-button el-button--primary']").click()
 time.sleep(10)
 driver.quit()
+---
+day03作业
+day03作业
+1.AB
+2.AB
+3.B
+4.ABCD
+5.BD
+6.AD
+7.A
+---
+简答题
+# 1.如何实现输入悬停到下面所描述元素对象上？
+# <div id='testA' name='testA'/>
+答：
+# 导包
+import time
+
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 创建鼠标对象
+action = ActionChains(driver)
+# 悬停
+action.move_to_element(driver.find_elements_by_xpath("//div[@id='testA' and @name='testA']")).perform()
+# 暂停3秒后关闭浏览器
+time.sleep(3)
+driver.quit()
+---
+代码题目
+# 导包
+import time
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ActionChains
+
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+# 创建鼠标对象
+action = ActionChains(driver)
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver.get("http://tpshop-test.itheima.net/")
+driver.maximize_window()
+driver.implicitly_wait(20)
+# 2.登陆tpshop网站
+driver.find_element_by_xpath("//a[text()='登录']").click()
+driver.find_element_by_id("username").send_keys("13800138006")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_css_selector("a[name='sbtbutton']").click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_link_text("返回商城首页").click()
+# 4.输入搜索条件小米
+driver.find_element_by_id("q").send_keys("小米")
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_css_selector("button[class='ecsc-search-button']").click()
+driver.find_element_by_xpath("//div[@class='p-btn']/a").click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_id("join_cart").click()
+# 7.刷新界面
+driver.refresh()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+try:
+    action.move_to_element(driver.find_element_by_xpath("//span[text()='我的购物车']")).perform()
+    print("购物车的商品总件数：", driver.find_element_by_xpath("//p[@class='t-n fl']").text)
+    print("购物车的商品总价格：", driver.find_element_by_xpath("//p[@class='t-p red fr']").text)
+except NoSuchElementException:
+    print(driver.find_element_by_xpath("//span[@class='ma']").text)
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_css_selector(".c-btn").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print("购物车页面商品勾选按钮已选中：", driver.find_element_by_name("checkItem").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+unit_price = driver.find_elements_by_xpath("//div[@id='tpshop-cart']/table/tbody/tr/td")[4].text
+print("商品单价：", unit_price)
+print("商品购买价：", driver.find_elements_by_xpath("//div[@id='tpshop-cart']/table/tbody/tr/td")[5].text)
+print("商品数量：", driver.find_element_by_xpath("//div/input").get_attribute("value"))
+print("商品小计金额：", driver.find_elements_by_xpath("//div[@id='tpshop-cart']/table/tbody/tr/td")[7].text)
+# 12.写个判断:判断单价信息是否大于5000块
+price = str.replace(unit_price,"￥","")
+if int(float(price)) > 5000:
+    # 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+    print("黑店,不买了")
+    driver.find_element_by_css_selector("#removeGoods").click()
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
+time.sleep(3)
+driver.quit()
+
 
