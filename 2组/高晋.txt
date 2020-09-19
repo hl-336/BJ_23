@@ -77,12 +77,12 @@ driver.quit()
 day03-9月17日
 一、基础题
 1.AB
-2.ABCD
+2.ABC
 3.B
 4.ACD
 5.ABCD
 6.D
-7.A
+7.AD
 简答题
 from seleniun import webdriver
 from selenium.webdriver import ActionsChains
@@ -99,9 +99,9 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 driver = webdriver.Chrome()
-driver.get('http://localhost/')
 driver.maximize_window()
 driver.implicitly_wait(10)
+driver.get('http://localhost/')
 driver.find_element(By.LINK_TEXT, '登录').click()
 driver.find_element(By.ID, 'username').send_keys('13133091234')
 driver.find_element(By.ID, 'password').send_keys('123456')
@@ -114,23 +114,24 @@ driver.find_element(By.CSS_SELECTOR, '.p-btn a').click()
 driver.find_element(By.ID, 'join_cart').click()
 driver.refresh()
 s_car = driver.find_element(By.CSS_SELECTOR, '.c-n span')
+action = ActionChains(driver)
+action.move_to_element(s_car)
+action.perform()
 try:
-    action = ActionChains(driver)
-    action.move_to_element(s_car)
-    action.perform()
     print(driver.find_element(By.ID, 'total_qty').text)
     print(driver.find_element(By.ID, 'total_pay').text)
-except:
-    print('亲，购物车中没有商品呦~')
+except Exception as e:
+    print(driver.find_element(By.CSS_SELECTOR, '.ma').text)
 time.sleep(5)
 driver.find_element(By.CLASS_NAME, 'c-btn').click()
-driver.find_element(By.NAME, 'checkItem').is_selected()
-print(driver.find_element(By.ID, 'cart_18_goods_price').text)
-print(driver.find_element(By.ID, 'cart_18_member_goods_price').text)
-print(driver.find_element(By.ID, 'changeQuantity_18').text)
-print(driver.find_element(By.ID, 'cart_18_market_price').text)
-price = driver.find_element(By.ID, 'cart_18_goods_price').text
-if price > str(5000):
+if driver.find_element(By.NAME, 'checkItem').is_selected():
+    print('默认勾选状态，PASS')
+print(driver.find_element_by_css_selector(".item-single span").text)
+price = driver.find_elements_by_css_selector("[align='center']")[11].text
+print(price)
+print(driver.find_elements_by_css_selector("[align='center']")[12].text)
+print(driver.find_element(By.CSS_SELECTOR, "[id*='changeQuantity']").get_attribute('value'))
+if round(float(price.split('￥')[1])) > 5000:
     print('黑店，不买了')
     driver.find_element(By.CLASS_NAME, 'gwc-gb').click()
 else:
