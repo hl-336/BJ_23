@@ -1,0 +1,172 @@
+#### 1、自动化测试类型有哪些？能解决一些什么样的问题？
+
+1.UI自动化测试(**功能测试/黑盒测试**)
+
+2.接口自动化测试
+
+3.单元测试
+
+替代手工，减少重复性的操作，减少成本，发现手工检测不到的问题。
+
+#### 2、某电商平台web系统基础版本耗时3个月已上线，现已进入产品版本迭代过程中，平均每周会发布一些新的功能以及少量历史优化类容。在不考虑当前人力资源的情况下，该项目是否适合做web自动化测试并简单说明分析过程？
+
+该项目适合做web自动化。原因如下：1.系统版本时间较长，有足够的时间去做自动化测试。2.版本迭代过程中历史内容改动较少，原有功能相对稳定。3.人力资源不设限，人力充足情况下手工、自动化可分头进行。
+
+
+
+
+#### 3、元素定位练习题：
+
+```python
+#注册流程
+#1)打开TPSHOP商城进入注册页面，暂停3s；
+#2)完成注册流程；
+#3)元素定位方式不限；
+element.click()#点击事件
+```
+
+```
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://tpshop-test.itheima.net/Home/user/reg.html")
+driver.find_element_by_name("username").send_keys("13671302098")
+time.sleep(2)
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(2)
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("password2").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("invite").send_keys("13800000001")
+time.sleep(2)
+driver.find_element_by_xpath("//a [@class='regbtn J_btn_agree']").click()
+time.sleep(2)
+driver.quit()
+```
+```
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+driver.find_element_by_name("username").send_keys("13671302096")
+time.sleep(2)
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+driver.find_element_by_name("verify_code").send_keys("8888")
+time.sleep(2)
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(2)
+driver.quit()
+```
+ 2020/9/6
+ 第一题选 b,c,d
+ 第二题，abdef
+ 第三题 abc
+ 第四题，acd
+ 第五题  abd
+ 第六题，ac
+ 第七题 bd
+
+# 导包
+import time
+from selenium import webdriver
+
+# 创建浏览器对象
+driver = webdriver.Chrome()
+#打开浏览器后先窗口最大化
+driver.maximize_window()
+time.sleep(2)
+#1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
+driver.get("http://localhost/")
+time.sleep(8)
+driver.find_element_by_xpath("//a[@class='red']").click()
+time.sleep(3)
+#2.使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13800000001")
+time.sleep(2)
+#3.使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+time.sleep(2)
+#4.使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_elements_by_class_name("text_cmu")[2].send_keys("8888")
+time.sleep(2)
+#5.使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//a[@name='sbtbutton']").click()
+time.sleep(2)
+#6.打印登陆后页面标题和地址信息
+print("页面标题为：", driver.title)
+print("地址信息为：", driver.current_url)
+# 关闭浏览器对象
+driver.quit()
+
+二、提高题
+选择题-B
+# 导包
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver = webdriver.Chrome()
+driver.get("http://tpshop-test.itheima.net/")
+driver.maximize_window()
+driver.implicitly_wait(10)
+time.sleep(2)
+# 2.登陆tpshop网站
+driver.find_element_by_link_text("登录").click()
+driver.find_element_by_name("username").send_keys("13800000001")
+driver.find_element_by_name("password").send_keys("123456")
+driver.find_element_by_name("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(2)
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_link_text("返回商城首页").click()
+# 4.输入搜索条件小米
+driver.find_element_by_id("q").send_keys("小米")
+driver.find_element_by_xpath("//button [@class='ecsc-search-button']").click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_link_text("加入购物车").click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_css_selector("#join_cart").click()
+time.sleep(3)
+# 7.刷新界面
+action = ActionChains(driver)
+driver.refresh()
+action.perform()
+
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+try:
+    action.move_to_element(driver.find_element_by_class_name('c-n')).perform()
+    price_element = driver.find_elements_by_id("total_qty")
+    total_element = driver.find_elements_by_id("total_pay")
+    for i in range(len(price_element)):
+        print('商品数量是', price_element[i].text, '商品总价是', total_element[i].text)
+except:
+    print("购物车中没有商品")
+# 9.等待5s,点击去购物车结算
+driver.implicitly_wait(5)
+driver.find_element_by_class_name('c-btn').click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print("购物车页面商品是勾选上：True ==?", driver.find_element_by_class_name("checkCartAll").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+price = driver.find_element_by_css_selector('[id$="goods_price"]').text
+print("商品单价：", price)
+print("商品购买价：", driver.find_element_by_css_selector('[id$="member_goods_price"]').text)
+print("数量：", driver.find_element_by_css_selector('[id*="changeQuantity_"]').get_attribute("value"))
+print("小计金额：", driver.find_element_by_css_selector('[id*="market_price"]').text)
+# 12.写个判断:判断单价信息是否大于5000块
+print('价格为', price[1:5])
+if int(price[1:5]) > 5000:
+    print('黑店，不买了')
+    driver.find_element_by_class_name('deleteGoods')
+    driver.quit()
+# # 如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+else:
+    print('勉勉强强，用吧！不过暂时没钱')
+    driver.quit()
+

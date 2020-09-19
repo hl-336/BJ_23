@@ -201,3 +201,71 @@ for i in num:
 print('搜索小米数量为', n)
 time.sleep(3)
 driver.quit()
+********************************************************************************************************
+day03
+选择题
+1 AB
+2 ABC
+3 B
+4 ACD
+5 ABC
+6 AD
+7 AD
+简答题
+from selenium.webdriver import ActionChains
+action = ActionChains（driver）
+action.move_to_click(driver.find_element_by_id("testA")).perform()
+代码题
+import unittest
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+
+class Dome(unittest.TestCase):
+    def setUp(self) -> None:
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+
+    def tearDown(self) -> None:
+        self.driver.quit()
+
+    def test_func1(self):
+        self.driver.get("http://127.0.0.1/")
+        self.driver.find_element_by_css_selector('div a[class="red"]').click()
+        self.driver.find_element_by_css_selector("#username").send_keys("15766212618")
+        self.driver.find_element_by_css_selector("#password").send_keys("123456")
+        self.driver.find_element_by_css_selector("#verify_code").send_keys("8888")
+        self.driver.find_element_by_css_selector(".J-login-submit").click()
+        self.driver.find_element_by_class_name('home').click()
+        self.driver.find_element_by_id('q').send_keys('小米')
+        self.driver.find_element_by_class_name('ecsc-search-button').click()
+        self.driver.find_element_by_css_selector(
+            'a[href="/Home/Goods/goodsInfo/id/104.html"] img[class="lazy-list"]').click()
+        self.driver.find_element_by_css_selector("#join_cart").click()
+        self.driver.refresh()
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_css_selector('div[id="hd-my-cart"] a div')).perform()
+        try:
+            b = self.driver.find_element_by_class_name('t-n').text
+            c = self.driver.find_element_by_css_selector('p em').text
+            d = int(self.driver.find_element_by_css_selector('p span[id="total_pay"]').text)
+            print(b, c, d)
+        except:
+            print(self.driver.find_element_by_css_selector('.c-i').text)
+        a = int(self.driver.find_element_by_id('total_qty').text)
+        # d = int(self.driver.find_element_by_css_selector('p span[id="total_pay"]').text)
+        time.sleep(5)
+        self.driver.find_element_by_css_selector('.c-btn').click()
+        e = self.driver.find_element_by_id('cart_29_goods_price').text
+        f = self.driver.find_element_by_id('cart_29_member_goods_price').text
+        g = self.driver.find_element_by_css_selector("div>input[value]").get_attribute('value')
+        h = self.driver.find_element_by_id('cart_29_market_price').text
+        print(f"单价$购买价$数量$小计金额$", (e, f, g, h))
+        unit_price = (d / a)
+        if unit_price > 5000:
+            print('黑店,不买了')
+            self.driver.find_element_by_css_selector('.gwc-gb').click()
+        else:
+            print("勉勉强强,用吧！不过暂时没钱")
