@@ -58,3 +58,64 @@ time.sleep(1)
 
 # 5、关闭浏览器
 driver.quit()
+day03
+1.AB
+2.ABCD
+3.B
+4.ACD
+5.ABCD
+6.D
+7.A
+简答题
+from seleniun import webdriver
+from selenium.webdriver import ActionsChains
+driver = webdriver.Chrome()
+action = ActionsChains(driver)
+action.move_to_element(driver.find_element_by_id('testA'))
+acton.perform()
+driver.quit()
+二、代码题
+import time
+
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('http://localhost/')
+driver.maximize_window()
+driver.implicitly_wait(10)
+driver.find_element(By.LINK_TEXT, '登录').click()
+driver.find_element(By.ID, 'username').send_keys('13133091234')
+driver.find_element(By.ID, 'password').send_keys('123456')
+driver.find_element(By.ID, 'verify_code').send_keys('8888')
+driver.find_element(By.NAME, 'sbtbutton').click()
+driver.find_element(By.CLASS_NAME, 'home').click()
+driver.find_element(By.ID, 'q').send_keys('小米')
+driver.find_element(By.CLASS_NAME, 'ecsc-search-button').click()
+driver.find_element(By.CSS_SELECTOR, '.p-btn a').click()
+driver.find_element(By.ID, 'join_cart').click()
+driver.refresh()
+s_car = driver.find_element(By.CSS_SELECTOR, '.c-n span')
+try:
+    action = ActionChains(driver)
+    action.move_to_element(s_car)
+    action.perform()
+    print(driver.find_element(By.ID, 'total_qty').text)
+    print(driver.find_element(By.ID, 'total_pay').text)
+except:
+    print('亲，购物车中没有商品呦~')
+time.sleep(5)
+driver.find_element(By.CLASS_NAME, 'c-btn').click()
+driver.find_element(By.NAME, 'checkItem').is_selected()
+print(driver.find_element(By.ID, 'cart_18_goods_price').text)
+print(driver.find_element(By.ID, 'cart_18_member_goods_price').text)
+print(driver.find_element(By.ID, 'changeQuantity_18').text)
+print(driver.find_element(By.ID, 'cart_18_market_price').text)
+price = driver.find_element(By.ID, 'cart_18_goods_price').text
+if price > str(5000):
+    print('不买')
+    driver.find_element(By.CLASS_NAME, 'gwc-gb').click()
+else:
+    print('没钱')
+driver.quit()
