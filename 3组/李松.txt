@@ -269,7 +269,7 @@ day05HomeWork
         # 类名称
         python_classes = Test*
         # 方法名称
-        python_functions = test_*
+        python_functions = test*
 
     测试脚本代码实现如下
         # 导包
@@ -284,21 +284,27 @@ day05HomeWork
 
         class TestHomework(object):
             data_login = [('13833345678', '123456', '8888', '返回商城首页')]
-            data_address = [("赵朝朝", "安徽省", "合肥市", "市辖区", None, "地球村村头中国区尾号", 13812345678, "收货人", True),
+            data_address = [("赵朝朝", "安徽省", "合肥市", "瑶海区", "七里塘街道", "地球村村头中国区尾号", 13812345678, "收货人", True),
                             ("钱钱钱", "北京市", "市辖区", "东城区", "东华门街道", "地球村村尾中亚组华中院墙角", "9999-12345678", "手机号码格式有误", False)]
 
-            def setup_class(self):
-                # 实例化浏览器驱动，窗口最大化并设置隐式等待为30秒
+            # def setup_class(self):
+            #     # 实例化浏览器驱动，窗口最大化并设置隐式等待为30秒
+            #     self.driver = webdriver.Chrome()
+            #     self.driver.maximize_window()
+            #     self.driver.implicitly_wait(30)
+
+            def setup(self):
                 self.driver = webdriver.Chrome()
                 self.driver.maximize_window()
                 self.driver.implicitly_wait(30)
-
-            def setup(self):
                 time.sleep(3)
                 self.driver.get("http://tpshop-test.itheima.net/")
 
-            def teardown_class(self):
+            def teardown(self):
                 self.driver.quit()
+
+            # def teardown_class(self):
+            #     self.driver.quit()
 
             # 登录测试用例
             @pytest.mark.run(order=-2)
@@ -361,17 +367,19 @@ day05HomeWork
                 # 点击‘保存收货地址’按钮
                 self.driver.find_element(By.XPATH, '//*[text()="保存收货地址"]').click()
                 # 截屏保存
-                self.driver.get_screenshot_as_file(f'./img_dir/test_{bull}_assert{time.strftime("%Y%m%d%H%M%S")}.png')
+                self.driver.get_screenshot_as_file(f'./img_dir/test_assert_{bull}{time.strftime("%Y%m%d%H%M%S")}.png')
                 # 正向用力则继续，反向用例则结束
                 if bull:
-                    self.driver.execute_script("window.srcollTo(x,200)")
-                    print(f'共有{self.driver.find_element_by_css_selector(".gp_num2 > .red")}条地址')
-                    assert self.driver.find_element_by_xpath('//*[text()="收货人"]').text == expect
+                    # frame退回
+                    self.driver.switch_to.default_content()
+                    # self.driver.execute_script("window.srcollTo(x,200)")
+                    print(f'共有{self.driver.find_element_by_css_selector(".gp_num2>.red")}条地址')
+                    assert self.driver.find_element_by_xpath('//*[text()="收货人"]') == expect
                 else:
-                    time.sleep(3)
                     print(self.driver.switch_to.alert.text)
                     self.driver.switch_to.alert.dismiss()
                     assert self.driver.switch_to.alert.text == expect
+
 
 
 
