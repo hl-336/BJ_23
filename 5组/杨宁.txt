@@ -397,3 +397,167 @@ time.sleep(3)
 driver.quit()
 ------------------------------------------------------
 day05作业
+# 目的:编写tpshop添加地址的测试用例
+# 导包
+import time
+import pytest
+from parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+# 创建测试类
+class TestLogin(object):
+    def setup_class(self):
+        # 创建浏览器驱动对象
+        self.driver = webdriver.Chrome()
+        # 打开首页
+        self.driver.get("http://tpshop-test.itheima.net/")
+        # 窗口最大化
+        self.driver.maximize_window()
+        # 隐式等待30秒
+        self.driver.implicitly_wait(30)
+        # 登录成功
+        # self.driver.find_element_by_class_name("red").click()
+        # self.driver.find_element_by_id("username").send_keys('13800138006')
+        # self.driver.find_element_by_id("password").send_keys('123456')
+        # self.driver.find_element_by_id("verify_code").send_keys('8888')
+        # self.driver.find_element_by_class_name("J-login-submit").click()
+
+    def teardown_class(self):
+        # 关闭浏览器
+        time.sleep(3)
+        self.driver.quit()
+
+    def setup(self):
+        # 添加地址成功，在断言中会点击安全退出，页面会自动刷新为首页
+        # 添加失败，则将当前页面关闭
+        time.sleep(3)
+        self.driver.get("http://tpshop-test.itheima.net/")
+
+    # 参数化的数据
+    test_login_data = [("12345678900", "123456", "8888", "账号不存在!", False),
+                       ("13800138006", "error", "8888", "密码错误!", False),
+                       ("13800138006", "123456", "8888", "安全退出", True)]
+
+    # 参数化
+    # 测试用例
+    @pytest.mark.run(order=1)
+    @parameterized.expand(test_login_data)
+    def test_login(self, username, password, verify_code, expect, is_success):
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys(username)
+        self.driver.find_element_by_id("password").send_keys(password)
+        self.driver.find_element_by_id("verify_code").send_keys(verify_code)
+        self.driver.find_element_by_class_name("J-login-submit").click()
+        # 断言
+        # 正向用例
+        if is_success:
+            expect_response_success = "//a[text()='{}']".format(expect)
+            element_success = WebDriverWait(self.driver, 10, 1).until(
+                lambda x: x.find_element_by_xpath(expect_response_success))
+            assert element_success
+        # 反向用例
+        else:
+            element_fail = self.driver.find_element_by_xpath(
+                "//div[@class='layui-layer-content layui-layer-padding']").text
+            assert element_fail == expect
+
+    # 添加地址的参数化数据
+    test_add_address_data_list = [("王五02", "江苏省", "南京市", "浦口区", "沿江街道", "润泰花园01", "210008", "17761976940", True),
+                                  ("王五03", "江苏省", "南京市", "浦口区", "沿江街道", "润泰花园02", "210008", "", False)]
+
+    # 测试添加地址的用例
+    # 1.重新打开首页，点击‘我的订单’进入后台管理页面
+    # 参数化
+    @pytest.mark.run(order=2)
+    @parameterized.expand(test_add_address_data_list)
+    def test_add_address(self, consignee, province, city, district, twon, address, zipcode, mobile, is_success):
+        # 登录成功
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys('13800138006')
+        self.driver.find_element_by_id("password").send_keys('123456')
+        self.driver.find_element_by_id("verify_code").send_keys('8888')
+        self.driver.find_element_by_class_name("J-login-submit").click()
+        # 点击我的订单,我的订单是一个新窗口
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//a[text()='我的订单']").click()
+        # 2.选择‘账户设置’下的‘收货地址’选项
+        # 切换到最新窗口-我的订单
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[-1])
+        # 创建鼠标对象
+        action = ActionChains(self.driver)
+        # 鼠标悬停在 ‘账户设置’
+        action.move_to_element(self.driver.find_element_by_css_selector("div[class='u-dl']")).perform()
+        # 点击‘收货地址’
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//a[text()='收货地址']").click()
+        # 3.点击地址管理下的‘增加新地址’按钮
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//span[text()='增加新地址']").click()
+        # 4.输入地址信息，利用参数化新增两条地址
+        # 切换到frame
+        self.driver.switch_to.frame(self.driver.find_element_by_xpath("//iframe[@scrolling='auto']"))
+        time.sleep(3)
+        # 填写收件人的名字
+        self.driver.find_element_by_xpath("//input[@name='consignee']").send_keys(consignee)
+        # 创建下拉框对象--省份
+        select = Select(self.driver.find_element_by_id("province"))
+        # 选择省份
+        select.select_by_visible_text(province)
+        # 创建下拉框对象--城市
+        select = Select(self.driver.find_element_by_id("city"))
+        # 选择城市
+        select.select_by_visible_text(city)
+        # 创建下拉框对象--区域
+        select = Select(self.driver.find_element_by_id("district"))
+        # 选择区域
+        select.select_by_visible_text(district)
+        # 创建下拉框对象--街道
+        select = Select(self.driver.find_element_by_id("twon"))
+        # 选择街道
+        select.select_by_visible_text(twon)
+        # 填写详细地址
+        self.driver.find_element_by_id("address").send_keys(address)
+        # 填写邮编
+        self.driver.find_element_by_xpath("//input[@name='zipcode']").send_keys(zipcode)
+        # 填写手机或固定电话
+        self.driver.find_element_by_xpath("//input[@name='mobile']").send_keys(mobile)
+        # 5.点击‘保存收货地址’按钮
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//span[text()='保存收货地址']").click()
+
+        # 断言
+        time.sleep(2)
+        if is_success:
+            # 滚动条往下滑动200
+            js_str = "window.scrollTo(0,200)"
+            self.driver.execute_script(js_str)
+            # 截图
+            self.driver.get_screenshot_as_file("./img/add_success_{}.png".format(time.strftime("%Y%m%d%H%M%S")))
+            # 打印已保存的地址数量
+            saved_address_num = self.driver.find_element_by_xpath("//p[@class='gp_num2']/em").text
+            print("已保存的地址数量：", saved_address_num)
+            # 断言已保存的地址数量不超过20条
+            assert saved_address_num
+            # 添加成功了就点击安全退出
+            WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_xpath('//a[text()="安全退出"]')).click()
+        else:
+            # 添加失败会有弹出框
+            alert = self.driver.switch_to.alert
+            # 警告框点击确定
+            alert.accept()
+            # 截图
+            self.driver.get_screenshot_as_file("./img/add_fail_{}.png".format(time.strftime("%Y%m%d%H%M%S")))
+            # 打印警告框的提示信息
+            print("警告框的提示信息：", alert.text)
+            # # 警告框点击确定
+            # alert.accept()
+            # 关闭当前窗口
+            time.sleep(3)
+            self.driver.close()
+
+
