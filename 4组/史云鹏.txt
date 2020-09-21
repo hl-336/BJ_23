@@ -144,5 +144,50 @@ time.sleep(1)
 driver.find_element_by_xpath("//*[text()='搜索']").click()
 time.sleep(2)
 # 关闭浏览器对象
+driver.quite
+...........................................
+from selenium import webdriver
+import time
+
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.implicitly_wait(30)
+driver.get('http://tpshop-test.itheima.net/')
+driver.find_element_by_class_name('red').click()
+driver.find_element_by_id('username').send_keys('13800138006')
+driver.find_element_by_id('password').send_keys('123456')
+driver.find_element_by_id('verify_code').send_keys('8888')
+driver.find_element_by_name('sbtbutton').click()
+# 进入页面
+driver.find_elements_by_css_selector('.top-ri-header a')[0].click()
+time.sleep(2)
+num = driver.window_handles
+driver.switch_to.window(num[1])
+action = ActionChains(driver)
+action.move_to_element(driver.find_element_by_class_name('u-dl')).perform()
+time.sleep(2)
+driver.find_element_by_xpath('//a[text()="收货地址"]').click()
+element = WebDriverWait(driver, 10, 1).until(lambda x: x.find_element_by_xpath('//span[text()="增加新地址"]'))
+element.click()
+driver.switch_to.frame(driver.find_element_by_id('layui-layer-iframe100001'))
+driver.find_element_by_name('consignee').send_keys('第一位')
+select = Select(driver.find_element_by_id('province'))
+select.select_by_index(1)
+select = Select(driver.find_element_by_id('city'))
+select.select_by_value('2')
+select = Select(driver.find_element_by_id('district'))
+select.select_by_value('3')
+select = Select(driver.find_element_by_id('twon'))
+select.select_by_value('4')
+driver.find_element_by_id('address').send_keys('华夏幸福小区')
+driver.find_element_by_name('zipcode').send_keys('0101111')
+driver.find_element_by_name('mobile').send_keys('13679006666')
+driver.find_element_by_xpath('//span[text()="保存收货地址"]').click()
+time.sleep(5)
 driver.quit()
+
 
