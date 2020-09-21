@@ -131,15 +131,15 @@ driver.quit()
 ------------------------------------------------------------------------------------------------------------------------
 
 
----DAY03---
+---DAY03---（已修改）
 一、基础题
 选择题
 1.[多选]通过自动化脚本获取元素信息的目的有哪些？( A B )
 2.[多选]以下获取元素信息的常用方法说法正确的是？( A B C )
 3.下面哪个为实例化鼠标操作的方法？( B )
-4.[多选]下面常用鼠标操作方法和说明正确匹配的是:( A C D )
+4.[多选]下面常用鼠标操作方法和说明正确匹配的是:( A B C D )
 5.[多选]元素对象send_keys方法用途包含:( A C D )
-6.[多选]关于元素等待下面说法错误的是:( B D )
+6.[多选]关于元素等待下面说法错误的是:( D )
 7.[多选]关于隐式等待下面说法错误的是:( A D )
 
 简答题
@@ -182,6 +182,18 @@ else:
     price = driver.find_element_by_css_selector('#total_pay')
     print(f"购物车商品件数为：{goods_num.text}\n"
           f"购物车商品总价为：{logo_data.text}{price.text}")
+
+"""
+使用try...except...方法判断购物车内容
+try:
+    print("商品件数为=%s" % driver.find_element_by_id("total_qty").text)
+    print("商品总价为=%s" % driver.find_element_by_id("total_pay").text)
+    # 点击进入购物车
+    driver.find_element_by_css_selector(".c-btn").click()
+except Exception as e:
+    print("无商品信息,信息提示=%s" % driver.find_element_by_css_selector(".ma").text)
+"""
+
 driver.find_element_by_css_selector('.c-btn').click()  # 点击其购物车结算
 time.sleep(5)
 select = driver.find_element_by_css_selector('.pa-le-28 .checkCart').is_selected()  # 勾选结果
@@ -204,3 +216,92 @@ else:
     print('勉勉强强,用吧！不过暂时没钱')
 time.sleep(2)
 driver.quit()
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+---DAY05---
+【pytest.ini】
+[pytest]
+addopts = -s --html=report/tpshop_report.html
+testpaths = ./tpshop_case
+python_files = work_*.py
+python_classes = Test*
+python_functions = test*
+
+【work_01.py】
+import time
+import pytest
+from selenium import webdriver
+from parameterized import parameterized
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+class TestShop:
+    """测试tpshop"""
+
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+
+    def teardown_class(self):
+        time.sleep(3)
+        self.driver.quit()
+
+    def setup(self):
+        self.driver.get("http://tpshop-test.itheima.net/")
+
+    login_data_list = [('13800000003', '123456', '8888', '安全退出')]
+    add_address_data_list = [('海绵宝宝', '338', '339', '410', '416', '海底世界1-1-101', '123', '13811111111'),
+                             ('派大星', '33007', '33008', '33163', '33165', '海底世界1-1-102', '123', '13822222222')]
+
+    @pytest.mark.run(order=1)
+    @parameterized.expand(login_data_list)
+    def test_login(self, username, password, verify_code, text_data):
+        """测试登录成功"""
+        self.driver.find_element_by_css_selector('.red').click()  # 点击商城首页登录
+        self.driver.find_element_by_css_selector('#username').send_keys(username)  # 输入用户名
+        self.driver.find_element_by_css_selector('#password').send_keys(password)  # 输入密码
+        self.driver.find_element_by_css_selector('#verify_code').send_keys(verify_code)  # 输入验证码
+        self.driver.find_element_by_css_selector('.J-login-submit').click()  # 点击登录
+        element_string = f"// *[text() = '{text_data}']"
+        returns_text = WebDriverWait(self.driver, 10, 0.5).until(lambda x: x.find_element_by_xpath(element_string))
+        assert returns_text  # 断言
+
+    @pytest.mark.run(order=2)
+    @parameterized.expand(add_address_data_list)
+    def test_address(self, username, province, city, district, twon, address, zipcode, mobile):
+        """测试添加地址"""
+        self.driver.find_element_by_link_text('我的订单').click()  # 点击我的订单
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[-1])  # 页面切换
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_xpath("//*[text()='账户设置']"))  # 悬停鼠标
+        action.perform()  # 执行
+        time.sleep(1)
+        self.driver.find_element_by_link_text('收货地址').click()  # 点击收货地址
+        time.sleep(1)
+        before_address_num = self.driver.find_elements_by_css_selector('.gp_num2>.red')[0].text  # 新增地址前地址条数
+        self.driver.find_element_by_css_selector('.co_blue').click()  # 点击添加新地址
+        frame_page = self.driver.find_element_by_id('layui-layer-iframe100001')
+        self.driver.switch_to.frame(frame_page)  # 定位frame
+        time.sleep(1)
+        self.driver.find_element_by_name('consignee').send_keys(username)  # 输入收件人
+        select = Select(self.driver.find_element_by_css_selector('#province'))  # 下拉选择省份
+        select.select_by_value(province)
+        select = Select(self.driver.find_element_by_css_selector('#city'))  # 下拉选择城市
+        select.select_by_value(city)
+        select = Select(self.driver.find_element_by_css_selector('#district'))  # 下拉选择区县
+        select.select_by_value(district)
+        select = Select(self.driver.find_element_by_css_selector('#twon'))  # 下拉选择街道
+        select.select_by_value(twon)
+        self.driver.find_element_by_css_selector('#address').send_keys(address)  # 详细地址
+        self.driver.find_element_by_name('zipcode').send_keys(zipcode)  # 邮编
+        self.driver.find_element_by_name('mobile').send_keys(mobile)  # 电话
+        self.driver.find_element_by_xpath("//*[text()='保存收货地址']").click()  # 点击保存收货地址
+        after_address_num = self.driver.find_elements_by_css_selector('.gp_num2>.red')[0].text
+        assert int(before_address_num) + 1 == int(after_address_num)
