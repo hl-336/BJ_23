@@ -42,7 +42,7 @@ class TestTPShop:
     site_data = [('', '河北省', "1291", 1, "河北工程大学", "15900000000", "收货人不能为空", False),
                  ('张三', '河北省', "1291", 0, "河北工程大学", "15900000000", "", True),
                  ('张三', '河北省', "1291", 1, "", "15900000000", "请填写地址", False),
-                 ('张三', '河北省', "1291", 1, "河北工程大学", "15900000000", True)]
+                 ('张三', '河北省', "1291", 1, "河北工程大学", "15900000000", "", True)]
 
     @pytest.mark.run(order=2)
     @pytest.mark.skipif(a <= 2, reason="测试登录")
@@ -86,10 +86,10 @@ class TestTPShop:
             js_str = "window.scrollTo(0,200)"
             self.driver.execute_script(js_str)
             num_1 = self.driver.find_elements_by_css_selector(".add_conta>.sx2>span")
+            n = 0
             for i in num_1:
-                n = 0
                 n += 1
-                print('地址数量', n)
+            print('地址数量', n)
             text = self.driver.find_element_by_xpath('//*[text()="张三"]').text
             assert text == name
             self.driver.close()
