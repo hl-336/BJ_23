@@ -393,3 +393,78 @@ else:
     print("勉勉强强,用吧！不过暂时没钱")
     time.sleep(3)
     driver.quit()
+day05作业
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+import pytest
+from selenium import webdriver
+import time
+
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+class TestLoginAddress:
+
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        self.driver.get("http://tpshop-test.itheima.net/")
+
+    def setup(self):
+        time.sleep(3)
+        self.driver.get("http://tpshop-test.itheima.net/")
+
+    def teardown_class(self):
+        time.sleep(3)
+        self.driver.quit()
+
+    @pytest.mark.run(order=1)
+    def test_01_login(self):
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys("15800000001")
+        self.driver.find_element_by_id("password").send_keys("123456")
+        self.driver.find_element_by_id("verify_code").send_keys("8888")
+        self.driver.find_element_by_name("sbtbutton").click()
+
+    def test_02_add_address(self):
+        self.driver.find_element_by_xpath("//*[text()='我的订单']").click()
+        self.handles = self.driver.window_handles
+        # 窗口切换
+        self.driver.switch_to.window(self.handles[-1])
+        self.action = ActionChains(self.driver)
+        self.action.move_to_element(self.driver.find_element_by_xpath("//*[text()='账户设置']"))
+        self.action.perform()
+        self.driver.find_element_by_xpath("//*[text()='收货地址']").click()
+        time.sleep(7)
+        print((self.driver.find_element_by_css_selector("[class*='gp_num']").text))
+        self.driver.find_element_by_xpath("//*[text()='增加新地址']").click()
+        # iframe框架
+        self.driver.switch_to.frame(self.driver.find_element_by_css_selector("[name*='layui-layer-iframe']"))
+        time.sleep(8)
+        self.driver.find_element_by_name("consignee").send_keys("花花")
+        self.select1 = Select(self.driver.find_element_by_id("province"))
+        self.select1.select_by_visible_text("北京市")
+        self.select2 = Select(self.driver.find_element_by_id("city"))
+        self.select2.select_by_visible_text("市辖区")
+        self.select3 = Select(self.driver.find_element_by_id("district"))
+        self.select3.select_by_visible_text("西城区")
+        self.select4 = Select(self.driver.find_element_by_id("twon"))
+        self.select4.select_by_visible_text("月坛街道")
+        self.driver.find_element_by_id("address").send_keys("招商花园小区")
+        self.driver.find_element_by_name("zipcode").send_keys("100000")
+        self.driver.find_element_by_name("mobile").send_keys("13800000002")
+        self.driver.find_element_by_xpath("//span[text()='保存收货地址']").click()
+        # self.driver.switch_to.default_content()
+        time.sleep(10)
+        js_data = "window.scrollTo(0,200)"
+        self.driver.execute_script(js_data)
+        file_path = "./img/test{}.png".format(time.strftime("%Y%m%d%H%M%S"))
+        self.driver.get_screenshot_as_file(file_path)
+        element = WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_css_selector('.gp_num2'))
+        # address_num1 =self.driver.find_element_by_xpath("//div[@class='menumain p']']").text
+        # print("当前已保存的地址数量：", address_num1)
+
+
+        还没写完，后续再补补。。。。。。。。。。。。。。。。。

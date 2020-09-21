@@ -186,3 +186,94 @@ if round(float(unit_price.split("￥")[1])) > 5000:
 else:
     print("勉勉强强,用吧！不过暂时没钱")
     driver.quit()
+----------------------------------------------------------------------------------
+day05
+----------------------------------------------------------------------------------
+
+[pytest]
+# 命令行参数
+addopts = -s --html=report/report.html --reruns 2
+# 文件路径
+testpaths = ./test_tpshop/
+# 文件名称
+python_files = test_02.py
+# 类名称
+python_classes = Test*
+# 方法名称
+python_functions = test_*
+
+# 导包
+import time
+import pytest
+from parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+
+
+# 创建测试类
+class TestLogin:
+    """测试类"""
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("http://tpshop-test.itheima.net/")
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+    def teardown_class(self):
+        time.sleep(3)
+        self.driver.quit()
+    date_login = [("13844649477", "13844649477", "8888")]
+    data_select = [("小余", "甘肃省", "白银市", "会宁县", "会宁镇", "会宁县第一中学", "13844649477"),
+                   ("小余", "甘肃省", "白银市", "会宁县", "会宁镇", "会宁县第二中学", "13844649487")]
+
+    @parameterized.expand(date_login)
+    def test_01_login(self, username, password, verify_code):
+        # 点击‘登录’跳转到登录页面
+        self.driver.find_element_by_class_name("red").click()
+        # 输入用户名、密码和万能验证码，点击登录按钮登录系统
+        self.driver.find_element_by_id("username").send_keys(username)
+        self.driver.find_element_by_id("password").send_keys(password)
+        self.driver.find_element_by_id("verify_code").send_keys(verify_code)
+        self.driver.find_element_by_name("sbtbutton").click()
+
+    @parameterized.expand(data_select)
+    def test_02_add(self, name, province, city, district, twon, address, mobile):
+        # 点击我的订单
+        self.driver.find_element_by_xpath('//*[text()="我的订单"]').click()
+        # 页面切换
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[1])
+        # 2. 选择‘账户设置’下的‘收货地址’选项
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_xpath('//*[text()="账户设置"]'))
+        time.sleep(3)
+        action.perform()
+        self.driver.find_element_by_xpath('//*[text()="收货地址"]').click()
+        # 3. 点击地址管理下的‘增加新地址’按钮
+        self.driver.find_element_by_class_name("co_blue").click()
+        # 4. 输入地址信息，利用参数化新增两条地址
+        # frame切换
+        self.driver.switch_to.frame(self.driver.find_element_by_id("layui-layer-iframe100001"))
+        # 收货人
+        self.driver.find_element_by_css_selector('[class="wi80-BFB"][name="consignee"]').send_keys(name)
+        # 定位省份
+        select = Select(self.driver.find_element_by_id("province"))
+        select.select_by_visible_text(province)
+        # 定位市
+        select = Select(self.driver.find_element_by_id("city"))
+        select.select_by_visible_text(city)
+        # 定位县
+        select = Select(self.driver.find_element_by_id("district"))
+        select.select_by_visible_text(district)
+        # 定位乡镇
+        select = Select(self.driver.find_element_by_id("twon"))
+        select.select_by_visible_text(twon)
+        # 添加详细地址
+        self.driver.find_element_by_xpath('//*[@id="address"]').send_keys(address)
+        # 添加手机号
+        self.driver.find_element_by_name('mobile').send_keys(mobile)
+        # 5. 点击‘保存收货地址’按钮
+        self.driver.find_element_by_css_selector('[class="box-ok ma-le--70"]').click()
+        # 新增完之后下拉滚动条200像素, 并且获取已保存多少地址
+        js_str = "window,scrollTo(0,200)"
+        self.driver.execute_script(js_str)
