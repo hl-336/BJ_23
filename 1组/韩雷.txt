@@ -1,1 +1,93 @@
-我开发完了我的了
+DAY03作业答案:
+1.AB
+2.ABCD
+3.B
+4.ACD
+5.ABCD
+6.D
+7.A
+-----代码题-----------------
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.implicitly_wait(10)
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+time.sleep(3)
+driver.find_element_by_id("username").send_keys("15800000001")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(5)
+"-------------------------登陆结束--------------------"
+driver.find_element_by_xpath("//*[text()='返回商城首页']").click()
+driver.find_element_by_id('q').send_keys("小米")
+driver.find_element_by_css_selector(".ecsc-search-button").click()
+driver.find_element_by_xpath("//*[text()='加入购物车']").click()
+"------------------------进入到详情页------------------"
+driver.find_element_by_id("join_cart").click()
+time.sleep(3)
+action = ActionChains(driver)
+driver.refresh()
+"------------------------获取购物车中信息--------------"
+time.sleep(3)
+action.move_to_element(driver.find_element_by_css_selector(".c-n"))
+action.perform()
+try:
+    print("商品件数为=%s" % driver.find_element_by_id("total_qty").text)
+    print("商品总价为=%s" % driver.find_element_by_id("total_pay").text)
+    # 点击进入购物车
+    driver.find_element_by_css_selector(".c-btn").click()
+except Exception as e:
+    print("无商品信息,信息提示=%s" % driver.find_element_by_css_selector(".ma").text)
+"------------------------判断商品是否默认为勾选--------------"
+if driver.find_element_by_css_selector("[name='checkItem']").is_selected():
+    print("默认勾选状态,PASS")
+"------------------------打印市场价、单价、购买价、数量--------------"
+time.sleep(3)
+print(driver.find_element_by_css_selector(".item-single span").text)
+unit_price = driver.find_elements_by_css_selector("[align='center']")[11].text
+print(unit_price)
+print(driver.find_elements_by_css_selector("[align='center']")[12].text)
+print(driver.find_element_by_css_selector("[id*='changeQuantity']").get_attribute("value"))
+
+if round(float(unit_price.split("￥")[1])) > 5000:
+    print("黑店,不买了")
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
+driver.quit()
+
+
+
+DAY02作业答案:
+一、选择题----------------
+1.ABCD
+2.ABCDEF
+3.ABCD
+4.ABD
+5.ABCD
+6.C
+7.BD
+二、代码题------------------
+import time
+from selenium import webdriver
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+time.sleep(3)
+driver.find_element_by_id("username").send_keys("15800000001")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(5)
+"------------------登陆-------------------------------------"
+title_element = driver.find_elements_by_xpath("//div[@class='mu-afte fl']/ul/li/a/span")
+data_element = driver.find_elements_by_xpath("//*[@class='mu-num']")
+unit_element = driver.find_elements_by_xpath("//*[@class='mu-unit']")
+# 遍历出所有元素对象之后每次遍历都去打印一次遍历出来的元素对象文本
+for i in range(len(title_element)):
+    print(title_element[i].text, data_element[i].text, unit_element[i].text)
+time.sleep(3)
+driver.quit()

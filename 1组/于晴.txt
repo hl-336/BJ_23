@@ -36,13 +36,13 @@ driver.find_element_by_class_name("J-login-submit").click()
 
 
 day02
-1.A C D
-2.A B C E F
-3.A B C D
-4.A D
-5.A B C D
-6.C
-7.B D
+1.A C D            B也是正确选项
+2.A B C E F        D也是正确选项
+3.A B C D          √
+4.A D              B也是正确选项
+5.A B C D          √
+6.C                √
+7.B D              √
 
 driver = webdriver.Chrome()
 driver.get("http://ttmp.research.itcast.cn/")
@@ -50,3 +50,173 @@ driver.maximize_window()
 driver.find_element_by_xpath("//*[@type='text' and @placeholder='请输入手机号']").send_keys("13911111111")
 driver.find_element_by_xpath("//*[@type='text' and @placeholder='验证码']").send_keys("246810")
 driver.find_element_by_xpath("//*[@type=button'and @class='el-button el-button--primary']").click()
+--->
+driver.quit()
+day03
+1.ABC
+2.ABC
+3.B
+4.CD
+5.ACD
+6.AD
+7.A
+简答题
+action.move_to_element(driver.find_element_by_id("testA"))
+代码题
+import time
+
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver.maximize_window()
+driver.implicitly_wait(20)
+# 2.登陆tpshop网站
+driver.find_element_by_css_selector("[placeholder='手机号/邮箱']").send_keys("13800000002")
+driver.find_element_by_xpath("//input[@type='password']").send_keys("yuqing")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_css_selector(".J-login-submit").click()
+time.sleep(3)
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_xpath("//*[text()='返回商城首页']").click()
+# 4.输入搜索条件小米
+driver.find_element_by_id('q').send_keys('小米')
+driver.find_element_by_css_selector("button").click()
+
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_elements_by_link_text("加入购物车")[0].click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_id("join_cart").click()
+time.sleep(3)
+# 7.刷新界面
+driver.refresh()
+time.sleep(3)
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+action = ActionChains(driver)
+action.move_to_element(driver.find_element_by_xpath("//div/a/div[@class='c-n fl']"))
+action.perform()
+try:
+    print("商品件数为：%s" %driver.find_element_by_id("total_qty").text)
+    print("商品价格为：%s" %driver.find_element_by_id("total_pay").text)
+except:
+    print("无商品时为：%s" %driver.find_element_by_css_selector(".ma").text)
+
+
+
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_xpath("//div[@class='mn-c-total']/a").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print("是否为true", driver.find_element_by_xpath("//input[@class='check-box checkCart checkCartItem']").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+# a = driver.find_elements_by_xpath("//tr[@class='ba-co-danhui']/th[@align='center']")[3:7]
+# b = driver.find_elements_by_xpath("//td[@valign='middle']")[2:6]
+# for i, j in zip(range(len(a)), range(len(b))):
+#     print(a[i].text, b[j].text)
+print(driver.find_element_by_css_selector(".item-single span").text)
+unit_price = driver.find_elements_by_css_selector("[align='center']")[11].text
+print(unit_price)
+print(driver.find_elements_by_css_selector("[align='center']")[12].text)
+print(driver.find_element_by_css_selector("[id*='changeQuantity']").get_attribute("value"))
+
+# 12.写个判断:判断单价信息是否大于5000块
+if round(float(unit_price.split("￥")[1])) > 5000:
+
+
+    print("黑店,不买了")
+else:
+    print("勉勉强强,用吧！")
+driver.quit()
+# 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+
+
+
+day05
+#导包
+import time
+
+import pytest
+from nose_parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+
+#定义tpshop商城的类
+class Test_tpshop:
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        self.driver.get("http://tpshop-test.itheima.net/index.php")
+
+    def teardown_class(self):
+        self.driver.execute_script("window.scrollTo(0,200)")
+        print("已保存%s条用例" % self.driver.find_elements_by_xpath("//p[@class='gp_num2']/em[@class='red']")[0].text)
+        #窗口截图
+        file_path = "./img/test-{}.png".format(time.strftime("%Y%m%d%H%M%S"))
+        self.driver.get_screenshot_as_file(file_path)
+        time.sleep(3)
+        self.driver.quit()
+    #登录接口
+    @pytest.mark.run(order = 1)
+    def test_login(self):
+        #点击登录
+        self.driver.find_element_by_class_name("red").click()
+        #账号
+        self.driver.find_element_by_id("username").send_keys("13800000002")
+        #密码
+        self.driver.find_element_by_id("password").send_keys("yuqing")
+        #验证码
+        self.driver.find_element_by_id("verify_code").send_keys("8888")
+        #点击登录按钮
+        self.driver.find_element_by_name("sbtbutton").click()
+    #地址列表
+
+    address_list = (["米奇","天津市","市辖区","塘沽区","杭州道街道","天津市塘沽区米奇妙妙屋","300450","13800000002"],
+                    ["小猪佩奇","天津市","市辖区","塘沽区","杭州道街道","天津市塘沽区小猪佩奇的家","300450","13800000005"])
+    # # #添加地址接口
+    @parameterized.expand(address_list)
+    @pytest.mark.run(order = 2)
+    def test_address(self,name,province,city,district,twon,address,zipcode,tel):
+        #返回商城首页按钮
+        self.driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/ul/li[1]/a").click()
+        #点击我的订单按钮
+        self.driver.find_element_by_xpath("//*[text()='我的订单']").click()
+        #获取所有句柄信息
+        self.handles =self.driver.window_handles
+    #关闭前一个页面
+        self.driver.close()
+        #获取当前页面
+        self.driver.switch_to.window(self.handles[1])
+        self.action = ActionChains(self.driver)
+        #鼠标悬浮到账号设置
+        self.action.move_to_element(self.driver.find_element_by_css_selector(".u-dt"))
+        time.sleep(3)
+        #点击收货地址
+        self.driver.find_element_by_xpath("/html/body/div[2]/div/div[3]/ul/li[2]/div/div[2]/a[2]").click()
+
+        self.driver.find_element_by_xpath("./html/body/div[3]/div/div[2]/div[2]/div/div[1]/a/span").click()
+        self.driver.switch_to.frame(self.driver.find_element_by_id("layui-layer-iframe100001"))
+
+        self.driver.find_element_by_css_selector("[class='wi80-BFB'][name='consignee']").send_keys(name)
+        self.select = Select(self.driver.find_element_by_id("province"))
+        self.select.select_by_visible_text(province)
+
+        self.select = Select(self.driver.find_element_by_id("city"))
+
+        self.select.select_by_visible_text(city)
+
+        self.select = Select(self.driver.find_element_by_id("district"))
+        self.select.select_by_visible_text(district)
+
+        self.select = Select(self.driver.find_element_by_id("twon"))
+        self.select.select_by_visible_text(twon)
+        self.driver.find_element_by_id("address").send_keys(address)
+
+
+        self.driver.find_element_by_name("zipcode").send_keys(zipcode)
+        self.driver.find_element_by_xpath("//input[@name='mobile']").send_keys(tel)
+        self.driver.find_element_by_css_selector("button").click()

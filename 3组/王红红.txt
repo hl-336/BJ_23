@@ -1,3 +1,9 @@
+-----------------------
+红红掌握的很不错咯,很多元素定位都能灵活运用了,加油！！！！！
+-----------------------
+
+
+
 DAY01
 1、自动化测试类型有哪些？能解决一些什么样的问题？
  答：UI自动化测试，接口自动化测试，单元测试
@@ -98,3 +104,95 @@ driver.find_element_by_xpath("//form/a").click()
 time.sleep(5)
 # 关闭浏览
 driver.quit()
+****************************************************************************
+DAY03
+一、基础题
+选择题
+1.ABC        C选项错误,获取元素信息并不是为了获取元素的
+2.ABCD       √
+3.B          √
+4.ACD        √
+5.BD         AC选项没有问题,课上讲过呀
+6.ABC        选反咯D
+7.ABCD       只有A是错误选项哈,答案是BCD
+
+二、简答题
+1.如何实现输入悬停到下面所描述元素对象上？
+<div id='testA' name='testA'/>
+
+    # 导包
+    # 创建浏览器对象
+    打开浏览器
+    # 创建鼠标对象
+    action.move_to_element(driver.find_element_by_id("testA"))
+
+二、代码题
+# 导包
+import time
+
+from selenium import webdriver
+# 创建浏览器驱动对象
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+# 创建鼠标对象
+action = ActionChains(driver)
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver.get("http://tpshop-test.itheima.net/")
+# 窗口最大化
+driver.maximize_window()
+# 隐式等待10秒
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+driver.find_element_by_css_selector('.red').click()
+driver.find_element_by_id("username").send_keys("13800138006")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_css_selector('.home').click()
+# 4.输入搜索条件小米
+driver.find_element_by_id('q').send_keys('小米')
+driver.find_element_by_class_name('ecsc-search-button').click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_css_selector('[onclick$="4).val());"]').click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_css_selector('.shop_name2 a').click()
+driver.find_element_by_id('join_cart').click()
+time.sleep(3)
+# # 7.刷新界面
+driver.find_element_by_class_name("layui-layer-ico").click()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+
+try:
+    action.move_to_element(driver.find_element_by_xpath('//*[@id="hd-my-cart"]/a/div'))
+    action.perform()
+    print("商品总件数：", driver.find_element_by_css_selector(".c-t p").text)
+    print("商品总价：", driver.find_element_by_id("total_pay").text)
+except Exception as e:
+    print("购物车没有商品：", driver.find_element_by_class_name("ma").text)
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_css_selector(".c-n span").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print("是否勾选：", driver.find_element_by_name("checkItem").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+price = driver.find_element_by_css_selector('[id$="goods_price"]').text
+print("商品单价：", price)
+print("商品购买价：", driver.find_element_by_css_selector('[id$="member_goods_price"]').text)
+print("数量：", driver.find_element_by_css_selector('[id*="changeQuantity_"]').get_attribute("value"))
+print("小计金额：", driver.find_element_by_css_selector('[id*="market_price"]').text)
+# 12.写个判断:判断单价信息是否大于5000块
+print('价格为', price[1:5])
+
+if int(price[1:5]) > 5000:
+    print('黑店，不买了')
+    driver.find_element_by_class_name('deleteGoods')
+    driver.quit()
+# # 如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+else:
+    print('勉勉强强，用吧！不过暂时没钱')
+    driver.quit()
+# 如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+
+
