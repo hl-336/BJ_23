@@ -1,1 +1,56 @@
-题目一定要做,除非是已经搞清楚了所有代码,绝对能搞掂！！！
+1.ABC
+2.ABC
+3.B
+4.ACD
+5.D
+6.D
+7.B
+简答：
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+driver = webdriver.Chrome()
+action = ActionChains(driver)
+action.move_to_element(driver.find_element_by_id('testA'))
+action.perform()
+driver.quit()
+代码：
+import time
+
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+action = ActionChains(driver)
+driver.get('http://127.0.0.1/Home/User/login.html')
+driver.maximize_window()
+driver.implicitly_wait(10)
+driver.find_element_by_id("username").send_keys('13825522060')
+driver.find_element_by_id("password").send_keys('123456')
+driver.find_element_by_id("verify_code").send_keys('8888')
+driver.find_element_by_name('sbtbutton').click()
+driver.find_element_by_class_name("home").click()
+driver.find_element_by_id("q").send_keys("小米")
+driver.find_element_by_class_name("ecsc-search-button").click()
+driver.find_element_by_class_name("p-btn").click()
+driver.find_element_by_id("join_cart").click()
+driver.refresh()
+action.move_to_element(driver.find_element_by_class_name("c-n")).perform()
+try:
+    print(driver.find_element_by_id("total_qty").text, "件")
+    print(driver.find_element_by_id("total_pay").text, "元")
+except:
+    print("亲，购物车中没有商品哟~")
+time.sleep(5)
+driver.find_element_by_class_name("c-btn").click()
+driver.find_element_by_xpath("//*[@class='checkCart checkCartAll']")
+prince = driver.find_element_by_id("cart_11_goods_price").text
+print("单价：", prince)
+print('数量', driver.find_element_by_id("cart_11_member_goods_price").text)
+print('小计', driver.find_element_by_id("changeQuantity_11").get_attribute("value"))
+print('小计金额', driver.find_element_by_id("cart_11_market_price").text)
+if prince > 5000:
+    print("黑店不买了")
+    driver.find_element_by_id("removeGoods").click()
+else:
+    print("勉勉强强，用吧！不过暂时没钱")
+driver.quit()
