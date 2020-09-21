@@ -1,3 +1,71 @@
+day05-9月20日
+import time
+
+import pytest
+from parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+
+class TestTpShop:
+    def setup_class(self):
+        # 实例化浏览器
+        self.driver = webdriver.Chrome()
+        # 最大化窗口、隐式等待
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        # 进入首页
+        self.driver.get('http://tpshop-test.itheima.net')
+
+    def teardown_class(self):
+        # 关闭浏览器
+        self.driver.quit()
+
+    @pytest.mark.run(order=1)
+    def test_login(self):
+        # 点击登录
+        self.driver.find_element_by_class_name('red').click()
+        # 登录
+        self.driver.find_element_by_id('username').send_keys('13133091234')
+        self.driver.find_element_by_id('password').send_keys('123456')
+        self.driver.find_element_by_id('verify_code').send_keys('8888')
+        self.driver.find_element_by_class_name('J-login-submit').click()
+
+    list1 = [('囚牛', 1, 2, 3, 4, '山西省', '044000', '13133091231')]
+
+    @pytest.mark.run(order=2)
+    @parameterized.expand(list1)
+    def test_address(self, name, province, city, district, twon, address, code, phone):
+        self.driver.get('http://tpshop-test.itheima.net')
+        self.driver.find_element_by_css_selector('.fr a').click()
+        self.driver.close()
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[-1])
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_css_selector('.u-dt span')).perform()
+        self.driver.find_element_by_link_text('收货地址').click()
+        self.driver.find_element_by_class_name('co_blue').click()
+        self.driver.switch_to.frame(self.driver.find_element_by_css_selector('[scrolling="auto"]'))
+        self.driver.find_element_by_css_selector("[name = 'consignee']").send_keys(name)
+        self.driver.find_element_by_css_selector(f'select [value="{province}"]').click()
+        self.driver.find_element_by_css_selector(f'[value="{city}"]').click()
+        self.driver.find_element_by_css_selector(f'[value="{district}"]').click()
+        self.driver.find_element_by_css_selector(f'[value="{twon}"]').click()
+        self.driver.find_element_by_id('address').send_keys(address)
+        self.driver.find_element_by_name('zipcode').send_keys(code)
+        self.driver.find_element_by_name('mobile').send_keys(phone)
+        self.driver.find_element_by_css_selector('.box-ok span').click()
+        try:
+            self.driver.switch_to.default_content()
+            time.sleep(3)
+            action.move_to_element(self.driver.find_element_by_css_selector('.u-dt span')).perform()
+            time.sleep(3)
+        except Exception as e:
+            self.driver.switch_to.frame(self.driver.find_element_by_css_selector('[scrolling="auto"]'))
+            self.driver.switch_to.alert.accept()
+            self.driver.switch_to.default_content()
+            self.driver.find_element_by_class_name('layui-layer-ico').click()
+
 day01-9月15日
 1、自动化测试类型有哪些？能解决一些什么样的问题？
   回归测试：对于历史版本功能的验证、对于缺陷修复之后的验证
