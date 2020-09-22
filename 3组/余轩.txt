@@ -1,3 +1,6 @@
+-------------------------
+前面两天的作业都做的很好呀，咋DAY03的作业不见了~~~~~~~~！！
+-------------------------
 day01
 --------------------------------------
 1、自动化测试类型有哪些？能解决一些什么样的问题？
@@ -95,8 +98,182 @@ print("地址信息", driver.current_url)
 time.sleep(5)
 # 关闭
 driver.quit()
+-----------------------------------------------------------------------------------
+day03
+-----------------------------------------------------------------------------------
+一、
+选择题：
+# 一、基础题
+# 1.AB
+# 2.ABCD
+# 3.B
+# 4.ACD
+# 5.ABCD
+# 6.D
+# 7.A
+简答题:
+action.move_to_element(driver.find_element_by_tag_id("testA"))
+# 导包
+import time
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+action = ActionChains(driver)
+# 打开网址
+driver.get("http://localhost/index.php/Home/User/index.html")
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver.maximize_window()
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+driver.find_element_by_id("username").send_keys("13844649477")
+driver.find_element_by_id('password').send_keys("123456")
+driver.find_element_by_id('verify_code').send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_xpath('//div[@class="m-navitems"]/ul/li/a').click()
+# 4.输入搜索条件小米
+driver.find_element_by_id('q').send_keys("小米")
+driver.find_element_by_class_name("ecsc-search-button").click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_link_text("加入购物车").click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_id("join_cart").click()
+# 7.刷新界面
+driver.refresh()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息try
+try:
+    # 悬停
+    action.move_to_element(driver.find_element_by_css_selector(".c-n"))
+    action.perform()
+    time.sleep(3)
+    # 获取
+    print("获取商品数量", driver.find_element_by_id('total_qty').text)
+    print("获取价格", driver.find_element_by_id('total_pay').text)
+except:
+    print("亲，购物车中没有商品呦~")
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_css_selector(".c-btn").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print("判断按钮是否勾选：True", driver.find_element_by_css_selector(".check-box").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+-----------------------------------------------------------------------
+# print("商品单价:", driver.find_element_by_id("cart_15_goods_price").text)
+# print("购买价:", driver.find_element_by_id("cart_15_member_goods_price").text)
+# print("数量:", driver.find_element_by_css_selector("[id*='changeQuantity']").get_attribute("value"))
+# print("小计金额:", driver.find_element_by_id("cart_15_market_price").text)
+------------------------------------------------------------------------
+修改：
+print(driver.find_element_by_css_selector(".item-single span").text)
+unit_price = driver.find_elements_by_css_selector("[align='center']")[11].text
+print(unit_price)
+print(driver.find_elements_by_css_selector("[align='center']")[12].text)
+print(driver.find_element_by_css_selector("[id*='changeQuantity']").get_attribute("value"))
+------------------------------------------------------------------------------
+# 12.写个判断:判断单价信息是否大于5000块
+# 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+-------------------------------------------------------------------------------
+修改：
+# money = driver.find_element_by_id("cart_15_member_goods_price").text
+# if money > str(5000):
+---------------------------------------------------------------------------------
+if round(float(unit_price.split("￥")[1])) > 5000:
+    print("黑店,不买了")
+    driver.find_element_by_css_selector('[class="gwc-gb deleteGoods"]').click()
+    driver.quit()
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
+    driver.quit()
+----------------------------------------------------------------------------------
+day05
+----------------------------------------------------------------------------------
+
+[pytest]
+# 命令行参数
+addopts = -s --html=report/report.html --reruns 2
+# 文件路径
+testpaths = ./test_tpshop/
+# 文件名称
+python_files = test_02.py
+# 类名称
+python_classes = Test*
+# 方法名称
+python_functions = test_*
+
+# 导包
+import time
+import pytest
+from parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
 
 
+# 创建测试类
+class TestLogin:
+    """测试类"""
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("http://tpshop-test.itheima.net/")
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+    def teardown_class(self):
+        time.sleep(3)
+        self.driver.quit()
+    date_login = [("13844649477", "13844649477", "8888")]
+    data_select = [("小余", "甘肃省", "白银市", "会宁县", "会宁镇", "会宁县第一中学", "13844649477"),
+                   ("小余", "甘肃省", "白银市", "会宁县", "会宁镇", "会宁县第二中学", "13844649487")]
 
+    @parameterized.expand(date_login)
+    def test_01_login(self, username, password, verify_code):
+        # 点击‘登录’跳转到登录页面
+        self.driver.find_element_by_class_name("red").click()
+        # 输入用户名、密码和万能验证码，点击登录按钮登录系统
+        self.driver.find_element_by_id("username").send_keys(username)
+        self.driver.find_element_by_id("password").send_keys(password)
+        self.driver.find_element_by_id("verify_code").send_keys(verify_code)
+        self.driver.find_element_by_name("sbtbutton").click()
 
-
+    @parameterized.expand(data_select)
+    def test_02_add(self, name, province, city, district, twon, address, mobile):
+        # 点击我的订单
+        self.driver.find_element_by_xpath('//*[text()="我的订单"]').click()
+        # 页面切换
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[1])
+        # 2. 选择‘账户设置’下的‘收货地址’选项
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_xpath('//*[text()="账户设置"]'))
+        time.sleep(3)
+        action.perform()
+        self.driver.find_element_by_xpath('//*[text()="收货地址"]').click()
+        # 3. 点击地址管理下的‘增加新地址’按钮
+        self.driver.find_element_by_class_name("co_blue").click()
+        # 4. 输入地址信息，利用参数化新增两条地址
+        # frame切换
+        self.driver.switch_to.frame(self.driver.find_element_by_id("layui-layer-iframe100001"))
+        # 收货人
+        self.driver.find_element_by_css_selector('[class="wi80-BFB"][name="consignee"]').send_keys(name)
+        # 定位省份
+        select = Select(self.driver.find_element_by_id("province"))
+        select.select_by_visible_text(province)
+        # 定位市
+        select = Select(self.driver.find_element_by_id("city"))
+        select.select_by_visible_text(city)
+        # 定位县
+        select = Select(self.driver.find_element_by_id("district"))
+        select.select_by_visible_text(district)
+        # 定位乡镇
+        select = Select(self.driver.find_element_by_id("twon"))
+        select.select_by_visible_text(twon)
+        # 添加详细地址
+        self.driver.find_element_by_xpath('//*[@id="address"]').send_keys(address)
+        # 添加手机号
+        self.driver.find_element_by_name('mobile').send_keys(mobile)
+        # 5. 点击‘保存收货地址’按钮
+        self.driver.find_element_by_css_selector('[class="box-ok ma-le--70"]').click()
+        # 新增完之后下拉滚动条200像素, 并且获取已保存多少地址
+        js_str = "window,scrollTo(0,200)"
+        self.driver.execute_script(js_str)

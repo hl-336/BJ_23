@@ -1,3 +1,9 @@
+-------------------------
+前面两天的作业都做的很好呀，咋DAY03的作业不见了~~~~~~~~！！
+-------------------------
+
+
+
 day01作业
 1.自动化测试类型有哪些？能解决一些什么样的问题？
 答：自动化测试类型有：B/S架构-web自动化测试 移动端自动化测试 C/S架构-桌面应用自动化测试
@@ -124,4 +130,106 @@ driver.quit()
 
 提高题
 选择题C
+代码题
+import time
+from selenium import webdriver
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("http://tpshop-test.itheima.net/Home/User/login.html")
+time.sleep(3)
+driver.find_element_by_id("username").send_keys("15800000001")
+driver.find_element_by_id("password").send_keys("123456")
+driver.find_element_by_id("verify_code").send_keys("8888")
+driver.find_element_by_name("sbtbutton").click()
+time.sleep(5)
+
+title_element = driver.find_elements_by_xpath("//div[@class='mu-afte fl']/ul/li/a/span")
+data_element = driver.find_elements_by_xpath("//*[@class='mu-num']")
+unit_element = driver.find_elements_by_xpath("//*[@class='mu-unit']")
+# 遍历出所有元素对象之后每次遍历都去打印一次遍历出来的元素对象文本
+for i in range(len(title_element)):
+    print(title_element[i].text, data_element[i].text, unit_element[i].text)
+time.sleep(3)
+driver.quit()
+
+----------day03作业-------------------------------------------------------------------------------
+1.A,B,C
+2.A,B,C,D
+3.B
+4.A,C,D
+5.B,D
+6.A,B,C
+7.C,D
+---------简答题------------------------------------------------------------------------------------
+1.如何实现输入悬停到下面所描述元素对象上
+<div id='testA' name='testA'/>
+    答：1.创建鼠标对象
+    action = ActionChains(driver)
+    2.下达指令操作鼠标悬停
+    action.move_to_element(driver.find_element_by_id("testA"))
+    3.下达执行指令
+    action.perform()
+-------代码题----------------------------------------------------------------------------------
+# 导包
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+# 创建浏览器驱动对象
+driver = webdriver.Chrome()
+action = ActionChains(driver)
+# 输入网址
+driver.get("http://127.0.0.1/")
+# 1.打开tpshop,设置窗口最大化和隐式等待
+driver.maximize_window()
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+# 定位登录 并点击
+driver.find_element_by_xpath("//*[text()='登录']").click()
+# 使用id定位定位登陆页面用户名输入框，输入用户名
+driver.find_element_by_id("username").send_keys("13800000008")
+# 使用name定位定位登陆页面密码输入框，输入密码
+driver.find_element_by_name("password").send_keys("123456")
+# 使用class定位定位登陆页面验证码输入框，输入验证码
+driver.find_element_by_xpath("//*[@id='verify_code']").send_keys("8888")
+# 使用xpath定位登陆按钮执行点击
+driver.find_element_by_xpath("//*[@name='sbtbutton']").click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_xpath("//*[text()='返回商城首页']").click()
+# 4.输入搜索条件小米
+driver.find_element_by_xpath("//*[@id='q']").send_keys("小米")
+driver.find_element_by_xpath("//*[text()='搜索']").click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_xpath("//*[text()='加入购物车']").click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_xpath("//*[@id='join_cart']").click()
+# 7.刷新界面
+driver.find_element_by_xpath("//*[@id='layui-layer1']/span/a").click()
+action.move_to_element(driver.find_element_by_xpath("//*[@id='hd-my-cart']/a/div"))
+action.perform()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
+print(driver.find_element_by_xpath("//*[@id='total_qty']").text)
+print(driver.find_element_by_xpath("//*[@id='total_pay']").text)
+# 9.等待5s,点击去购物车结算
+driver.find_element_by_xpath("//*[text()='去购物车结算 >>']").click()
+# 10.判断购物车页面商品勾选按钮是否选中
+selected = driver.find_element_by_xpath("//*[@name='checkItem']").is_enabled()
+print("商品是否选中？==", selected)
+# 11.打印出商品单价、购买价、数量、小计金额
+price = driver.find_element_by_xpath("//*[@id='cart_14_goods_price']").text
+print("商品单价为：", price)
+purchase = driver.find_element_by_xpath("//*[@id='cart_14_member_goods_price']").text
+print("商品购买价为：", purchase)
+number = driver.find_element_by_xpath("//*[@id='changeQuantity_14']").get_attribute("value")
+print("商品数量为：", number)
+count = driver.find_element_by_xpath("//*[@id='cart_14_market_price']").text
+print("商品小计为：", count)
+# 12.写个判断:判断单价信息是否大于5000块
+# 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+if price[1:] > 5000:
+    print("黑店,不买了")
+    driver.find_element_by_xpath(" // *[ @ id = 'edge_12'] / td[9] / a").click()
+else:
+    print("勉勉强强,用吧！不过暂时没钱")
+# 关闭
+driver.quit()
 

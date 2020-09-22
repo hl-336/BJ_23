@@ -1,3 +1,9 @@
+-----------------------
+红红掌握的很不错咯,很多元素定位都能灵活运用了,加油！！！！！
+-----------------------
+
+
+
 DAY01
 1、自动化测试类型有哪些？能解决一些什么样的问题？
  答：UI自动化测试，接口自动化测试，单元测试
@@ -102,18 +108,13 @@ driver.quit()
 DAY03
 一、基础题
 选择题
-1.ABC
-
-2.ABCD
-
-3.B
-4.ACD
-
-5.BD
-
-6.ABC
-
-7.ABCD
+1.ABC        C选项错误,获取元素信息并不是为了获取元素的
+2.ABCD       √
+3.B          √
+4.ACD        √
+5.BD         AC选项没有问题,课上讲过呀
+6.ABC        选反咯D
+7.ABCD       只有A是错误选项哈,答案是BCD
 
 二、简答题
 1.如何实现输入悬停到下面所描述元素对象上？
@@ -193,5 +194,146 @@ else:
     print('勉勉强强，用吧！不过暂时没钱')
     driver.quit()
 # 如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+**************************************************************
+DAY05的作业
+import time
+
+import pytest
+from parameterized import parameterized
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+# 测试tpshop登录
+class TestLogin:
+    login_data_list = [('15800001244', '123456', '8888', '账号不存在!', False),
+                       ('15800000001', '12345', '8888', '密码错误!', False),
+                       ('18514057576', '123456', '8888', '安全退出', True)]
+    address_data = [('王女士', '636', '邢台市', 8, '1628', '河北省邢台市天一家园001号', '055350', '18514057576', '18514057576', True),
+                    ('孟女士', '1', '市辖区', 5, '56', '北京市朝阳区劲松街道', '100000', '185140575', '手机号码格式有误', False)]
+
+    # def setup_class(self):
+    #     self.driver = webdriver.Chrome()
+    #     self.driver.maximize_window()
+    #     self.driver.get("http://tpshop-test.itheima.net/")
+    #     self.driver.implicitly_wait(30)
+    def setup(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        time.sleep(2)
+        self.driver.get("http://tpshop-test.itheima.net/")
+        self.driver.implicitly_wait(30)
+
+    def teardown(self):
+        time.sleep(3)
+        self.driver.quit()
+
+    # def teardown_class(self):
+    #     time.sleep(3)
+    #     self.driver.quit()
+
+    @pytest.mark.run(order=-1)
+    @parameterized.expand(login_data_list)
+    def test01_login(self, username, password, code, expect, is_scu):
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys(username)
+        self.driver.find_element_by_id("password").send_keys(password)
+        self.driver.find_element_by_id("verify_code").send_keys(code)
+        self.driver.find_element_by_name("sbtbutton").click()
+        # 如果标记是True，则表示运行正向的测试用例
+        if is_scu:
+            # 根据期望的文本到登陆之后去找指定元素，如能找到该元素表示登陆成功
+            tex_xpath = '//*[text()="{}"]'.format(expect)
+            element = WebDriverWait(self.driver, 10, 0.5).until(lambda x: x.find_element_by_xpath(tex_xpath))
+            self.driver.get_screenshot_as_file('./img/test_{}.png'.format(time.strftime("%Y%m%d%H%M%S")))
+            assert element
+        else:
+            # 因为获取弹出框文本信息可能有延时，所以等待2秒
+            time.sleep(2)
+            # 获取错误弹出框提示信息文本
+            res_text = self.driver.find_element_by_css_selector(".layui-layer-content").text
+            self.driver.get_screenshot_as_file('./img/test_{}.png'.format(time.strftime("%Y%m%d%H%M%S")))
+            assert res_text == expect
+
+    @pytest.mark.run(order=-2)
+    @parameterized.expand(address_data)
+    def test02_add_address(self, name, province, city, county, country, detailed_address, zipcode, mobile, expect,
+                           is_scu):
+        # self.driver.add_cookie({"name": "PHPSESSID",
+        #                         "value": "q4jb8is4b2ufpqcd2i4hemhn82"})
+        # self.driver.refresh()
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys('18514057576')
+        self.driver.find_element_by_id("password").send_keys('123456')
+        self.driver.find_element_by_id("verify_code").send_keys('8888')
+        self.driver.find_element_by_name("sbtbutton").click()
+        # 重新打开首页
+        self.driver.find_element_by_css_selector('.home').click()
+        # 点击‘我的订单’进入后台管理页面
+        self.driver.find_element_by_link_text('我的订单').click()
+        # 切换页面
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        # 选择‘账户设置’下的‘收货地址’选项
+        # a)鼠标悬停
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_xpath("//*[text()='账户设置']"))
+        action.perform()
+        # b）点击收货地址
+        self.driver.find_element_by_xpath('//*[text()="收货地址"]').click()
+        # 点击添加地址
+        self.driver.find_element_by_css_selector('.co_blue').click()
+        # frame切换
+        self.driver.switch_to.frame(self.driver.find_element_by_css_selector("[id^='layui-layer-iframe']"))
+        # 添加地址信息
+
+        self.driver.find_element_by_name('consignee').send_keys(name)
+        select = Select(self.driver.find_element_by_css_selector('td>#province'))
+        select.select_by_value(province)
+        select = Select(self.driver.find_element_by_id('city'))
+        select.select_by_visible_text(city)
+        select = Select(self.driver.find_element_by_id('district'))
+        select.select_by_index(county)
+        select = Select(self.driver.find_element_by_id('twon'))
+        select.select_by_value(country)
+        self.driver.find_element_by_css_selector('#address').send_keys(detailed_address)
+        self.driver.find_element_by_name('zipcode').send_keys(zipcode)
+        self.driver.find_element_by_name('mobile').send_keys(mobile)
+        self.driver.find_element_by_css_selector('button').click()
+        if is_scu:
+            # 滚动条向下拉200像素
+            js_str = "window.scrollTo(0,200)"
+            self.driver.execute_script(js_str)
+            print("已经保存的地址数量为：", self.driver.find_element_by_xpath("//*[@class='red']").text)
+            self.driver.get_screenshot_as_file('./img/test_{}.png'.format(time.strftime("%Y%m%d%H%M%S")))
+            mobile_phone = self.driver.find_elements_by_xpath("//*[@class='sx3']")[-1].text
+            assert mobile_phone == expect
+
+        else:
+            # 获取弹出框对象
+            alert = self.driver.switch_to.alert
+            # 获取弹出框文本
+            time.sleep(5)
+            error_info = alert.text
+            self.driver.get_screenshot_as_file('./img/test_{}.png'.format(time.strftime("%Y%m%d%H%M%S")))
+            assert error_info == expect
+            # 取消弹出框
+            alert.dismiss()
+            # 返回主页面
+            self.driver.switch_to.default_content()
+____________________________________________________________________
+[pytest]
+# 添加命令行参数
+addopts = -s --html=report/report.html
+# 文件搜索路径
+testpaths = ./
+# 文件名称
+python_files = hm_d*.py
+# 类名称   筛选以Test开头的类名
+python_classes = Test*
+# 方法名称   筛选以test开头的方法名
+python_functions = test*
+
 
 

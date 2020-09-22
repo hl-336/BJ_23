@@ -1,3 +1,107 @@
+day05
+
+import time
+import pytest
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from parameterized import parameterized
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+class TestTPShop:
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        self.driver.get('http://127.0.0.1/')
+
+    def teardown_class(self):
+        time.sleep(3)
+        self.driver.quit()
+
+    login_data = [("15800001244", "123456", "8888", "账号不存在!", False),
+                  ("15766212618", "error", "8888", "密码错误!", False),
+                  ("", "123456", "8888", "用户名不能为空!", False),
+                  ("15766212618", "123456", "8888", "15766212618", True)]
+    a = 2
+
+    @pytest.mark.run(order=1)
+    @parameterized.expand(login_data)
+    def test_1_login(self, username, password, verify_code, expect, judge):
+        self.driver.find_element_by_css_selector('.red').click()
+        self.driver.find_element_by_css_selector('#username').send_keys(username)
+        self.driver.find_element_by_css_selector('#password').send_keys(password)
+        self.driver.find_element_by_css_selector('#verify_code').send_keys(verify_code)
+        self.driver.find_element_by_css_selector('.J-login-submit').click()
+        if judge:
+            assert self.driver.find_element_by_css_selector('.mu-m-phone').text == expect
+        else:
+            assert self.driver.find_element_by_css_selector(".layui-layer-content").text == expect
+
+    site_data = [('', '河北省', "1291", 1, "河北工程大学", "15900000000", "收货人不能为空", False),
+                 ('张三', '河北省', "1291", 0, "河北工程大学", "15900000000", "", True),
+                 ('张三', '河北省', "1291", 1, "", "15900000000", "请填写地址", False),
+                 ('张三', '河北省', "1291", 1, "河北工程大学", "15900000000", "", True)]
+
+    @pytest.mark.run(order=2)
+    @pytest.mark.skipif(a <= 2, reason="测试登录")
+    @parameterized.expand(site_data)
+    def test_2_site(self, name, province, city, district, address, num, expect, judge):
+        # 登录成功
+        self.driver.find_element_by_class_name("red").click()
+        self.driver.find_element_by_id("username").send_keys('15766212618')
+        self.driver.find_element_by_id("password").send_keys('123456')
+        self.driver.find_element_by_id("verify_code").send_keys('8888')
+        self.driver.find_element_by_class_name("J-login-submit").click()
+        # 重新打开首页
+        self.driver.find_element_by_css_selector('a[href="/Home/Index/index.html"]').click()
+        # 点击‘我的订单’进入后台管理页面
+        self.driver.refresh()
+        self.driver.find_element_by_css_selector('[href*="order_list.html"]').click()
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[-1])
+        # 选择‘账户设置’下的‘收货地址’选项
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_css_selector('.u-dt span')).perform()
+        self.driver.find_element_by_css_selector('.u-dd a[href*="address_list.html"]').click()
+        # 点击地址管理下的‘增加新地址’按钮
+        self.driver.find_element_by_css_selector('a .co_blue').click()
+        # 输入地址信息，利用参数化新增两条地址   点击‘保存收货地址’按钮
+        self.driver.switch_to.frame(self.driver.find_element_by_css_selector('#layui-layer-iframe100001'))
+        self.driver.find_element_by_css_selector('[name="consignee"]').send_keys(name)
+        select_province = Select(self.driver.find_element_by_css_selector('#province'))
+        select_province.select_by_visible_text(province)
+        select_city = Select(self.driver.find_element_by_css_selector('#city'))
+        select_city.select_by_value(city)
+        select_district = Select(self.driver.find_element_by_css_selector('#district'))
+        select_district.select_by_index(district)
+        self.driver.find_element_by_css_selector("#address").send_keys(address)
+        self.driver.find_element_by_css_selector('.wi40-BFB').send_keys(num)
+        self.driver.find_element_by_css_selector(".box-ok span").click()
+        # 截图
+        self.driver.get_screenshot_as_file("./report/printscreen{}.png".format(time.strftime("%Y%m%d%H%M%S")))
+        if judge:
+            # 新增完之后下拉滚动条200像素,并且获取已保存多少地址
+            js_str = "window.scrollTo(0,200)"
+            self.driver.execute_script(js_str)
+            num_1 = self.driver.find_elements_by_css_selector(".add_conta>.sx2>span")
+            n = 0
+            for i in num_1:
+                n += 1
+            print('地址数量', n)
+            text = self.driver.find_element_by_xpath('//*[text()="张三"]').text
+            assert text == name
+            self.driver.close()
+        else:
+            self.driver.find_element_by_css_selector(".layui-layer-ico").click()
+            assert self.driver.find_element_by_css_selector(".layui-layer-padding").text == expect
+            self.driver.find_element_by_css_selector('.layui-layer-btn0').click()
+            self.driver.close()
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[-1])
+        WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_xpath('//a[text()="安全退出"]')).click()
+
 day01
 1、自动化测试类型有哪些？能解决一些什么样的问题？
 
@@ -208,9 +312,9 @@ day03
 2 ABC
 3 B
 4 ACD
-5 ABC
-6 AD
-7 AD
+5 ABCD
+6 D
+7 A
 简答题
 from selenium.webdriver import ActionChains
 action = ActionChains（driver）
@@ -254,17 +358,15 @@ class Dome(unittest.TestCase):
             print(b, c, d)
         except:
             print(self.driver.find_element_by_css_selector('.c-i').text)
-        a = int(self.driver.find_element_by_id('total_qty').text)
-        # d = int(self.driver.find_element_by_css_selector('p span[id="total_pay"]').text)
         time.sleep(5)
         self.driver.find_element_by_css_selector('.c-btn').click()
-        e = self.driver.find_element_by_id('cart_29_goods_price').text
-        f = self.driver.find_element_by_id('cart_29_member_goods_price').text
+        self.driver.find_element_by_css_selector('.check-box').is_selected()
+        e = self.driver.find_elements_by_css_selector("[align='center']")[11].text
+        f = self.driver.find_elements_by_css_selector('[align="center" ]')[12].text
         g = self.driver.find_element_by_css_selector("div>input[value]").get_attribute('value')
-        h = self.driver.find_element_by_id('cart_29_market_price').text
+        h = self.driver.find_elements_by_css_selector('[align="center" ]')[14].text
         print(f"单价$购买价$数量$小计金额$", (e, f, g, h))
-        unit_price = (d / a)
-        if unit_price > 5000:
+        if round(float(e.split("￥")[1])) > 5000:
             print('黑店,不买了')
             self.driver.find_element_by_css_selector('.gwc-gb').click()
         else:

@@ -65,13 +65,13 @@ driver.quit()
 
 
 9月16日作业
-1、C、D
-2、A、B、C、D、E
+1、A、B、C、D
+2、A、B、C、D、E、F
 3、A、B、C、D
-4、A、B
+4、A、B、D
 5、A、B、C、D
-6、A、B、C
-7、A、B、D
+6、C
+7、B、D
 8、# 打开浏览器后先窗口最大化
 # 1.使用xpath定位定位tpshop首页登陆超链接，并执行点击
 # 2.使用id定位定位登陆页面用户名输入框，输入用户名
@@ -97,7 +97,8 @@ time.sleep(3)
 driver.quit()
 提高：
 1、A、C、D
-2、from selenium import webdriver
+2、
+from selenium import webdriver
 import time
 
 driver = webdriver.Chrome()
@@ -111,11 +112,229 @@ driver.find_elements_by_class_name("text_cmu")[2].send_keys('8888')
 driver.find_element_by_xpath('//a[@name="sbtbutton"]').click()
 time.sleep(15)
 # 通过定位到元素返回列表集合
-for i in driver.find_elements_by_xpath('//*[@class="mu-afte fl"]/ul/li/a'):
-    print(i.text)
+title_element = driver.find_elements_by_xpath('//*[@class="mu-afte fl"]/ul/li/a/span')
+num = driver.find_elements_by_xpath('//*[@class="mu-unit"]')
+acout = driver.find_elements_by_xpath('//*[@class="mu-num"]')
+for i in range(len(title_element)):
+    print(title_element[i].text, acout[i].text, num[i].text)
 driver.find_element_by_id('q').send_keys('小米')
 driver.find_element_by_xpath('//*[contains(@onclick,"if")]').click()
 # 找到能够代表商品特征的元素集合，返回结果为列表，可以统计长度就是数量
 print("商品数量为：", len(driver.find_elements_by_xpath('//*[@class="xs_img"]')))
 time.sleep(3)
 driver.quit()
+
+
+9月17日作业
+1、A、B、C
+2、A、B、C
+3、B
+4、A、C、D
+5、C、D
+6、B、D
+7、B、D
+简答题：
+**1.如何实现输入悬停到下面所描述元素对象上？**
+<div id='testA' name='testA'/>
+步骤：1、导包
+2、生成鼠标对象使用变量接收
+3、鼠标执行悬停命令.move_to_element(driver.find_element_by_id('testA'))
+4、执行动作.perform()
+二、代码题
+# 1.打开tpshop,设置窗口最大化和隐式等待
+import time
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.implicitly_wait(10)
+# 2.登陆tpshop网站
+driver.get('http://tpshop-test.itheima.net/Home/Index/index.html')
+driver.find_element_by_class_name('red').click()
+driver.find_element_by_id('username').send_keys('13800138006')
+driver.find_element_by_id('password').send_keys('123456')
+driver.find_element_by_id('verify_code').send_keys('8888')
+driver.find_element_by_name('sbtbutton').click()
+# 3.在会员首页点击返回商城首页
+driver.find_element_by_class_name('home').click()
+# 4.输入搜索条件小米
+driver.find_element_by_id('q').send_keys('小米')
+driver.find_element_by_css_selector('[type*="ub"]').click()
+# 5.点击第一个搜索到商品接口对应加入购物车
+driver.find_element_by_xpath('//a[contains(@href,"104")]/img').click()
+# 6.在商品详情页面点击加入购物车
+driver.find_element_by_css_selector("#join_cart").click()
+# 7.刷新界面
+driver.refresh()
+# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息(使用异常捕获)
+try:
+    action = ActionChains(driver)
+    action.move_to_element(driver.find_element_by_id('cart_quantity')).perform()
+    list1 = driver.find_element_by_xpath('//p[@class="t-n fl"]')
+    list3 = driver.find_element_by_css_selector('p[class="t-p red fr"] em')
+    list4 = driver.find_element_by_id('total_pay')
+    print('商品总件数：', list1.text)
+    print('总价:', list3.text, list4.text)
+except NoSuchElementException:
+    print(driver.find_element_by_xpath('//span[@class="ma"]').text)
+# 9.等待5s,点击去购物车结算
+time.sleep(5)
+driver.find_element_by_xpath('//div[@class="c-n fl"]/span').click()
+# 10.判断购物车页面商品勾选按钮是否选中
+print('断言:', driver.find_element_by_name("checkItem").is_selected())
+# 11.打印出商品单价、购买价、数量、小计金额
+num = driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[4].text
+print('商品单价：', num)
+print(type(driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[4].text))
+print('购买价：', driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[5].text)
+print('数量：', driver.find_element_by_xpath('//div/input').get_attribute('value'))
+print('小计：', driver.find_elements_by_xpath('//div[@id="tpshop-cart"]/table/tbody/tr/td')[7].text)
+# 12.写个判断:判断单价信息是否大于5000块
+num1 = str.replace(num, '￥', '')
+if int(float(num1)) > 5000:
+    # 	如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
+    print('黑店，不买了')
+    driver.find_element_by_css_selector('.gwc-gb').click()
+    driver.quit()
+# 	如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
+else:
+    print('勉勉强强,用吧！不过暂时没钱')
+    driver.quit()
+
+
+——————————————————————————————————————————————————————————————————————————————————————————————————————————
+9月21日作业：
+# 数据采用的分离格式,几个文件
+1、返回数据的函数文件：
+import json
+def read_func(filename):
+    with open(filename, encoding='utf-8') as f:
+        result = json.load(f)
+        data_list = list()
+        for i in result:
+            data_list.append(tuple(i.values()))
+    return data_list
+2、测试页面登陆的数据文件
+toshop.json
+[{"username": "15300119987","password": "123456","verify": "8888","expect": "账号不存在!",
+    "is_ext": false},{"username": "13800138006","password": "12345","verify": "8888",
+    "expect": "密码错误!","is_ext": false},{"username": "18800008866","password": "123456",
+    "verify": "8888","expect": "安全退出","is_ext": true}]
+添加地址的数据文件：
+address.json
+[{"username": "18800008866","password": "123456","verify_code": "8888","consigmee": "姓名一",
+    "province": "1","city": "2","district": "3","town": "4","address": "华夏幸福","zipcode": "0101010",
+    "mobile": "13699998888","is_syc": true,"message": "已保存1条地址，还可以保存19条地址"},
+  {"username": "18800008866","password": "123456","verify_code": "8888","consigmee": "姓名二",
+    "province": "338","city": "339","district": "340","town": "341","address": "天津",
+    "zipcode": "2101010","mobile": "13600006666","is_syc": true,"message": "已保存2条地址，还可以保存18条地址"},
+  {"username": "18800008866","password": "123456","verify_code": "8888",
+    "consigmee": "","province": "1","city": "2","district": "3","town": "4","address": "",
+    "zipcode": "","mobile": "","is_syc": false,"message": "添加收货地址"}]
+3、pytest.ini 文件数据
+[pytest]
+addopts = -s --html=report/report.html
+testpaths = ./
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+4、测试用例文件、两个用例如果要一起执行需要更改部分代码，子级运行时时许改的pytest.ini中的functions
+import pytest
+from selenium import webdriver
+import time
+from parameterized import parameterized
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+
+from utlis import read_func
+
+
+class TestTpshop(object):
+
+    def setup_class(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(30)
+        self.driver.get('http://tpshop-test.itheima.net/')
+
+    def setup(self):
+        time.sleep(2)
+        self.driver.get('http://tpshop-test.itheima.net/')
+
+    def teardown_class(self):
+        time.sleep(2)
+        self.driver.quit()
+
+    @pytest.mark.run(order=1)
+    @parameterized.expand(read_func('./data/tpshop.json'))
+    def test_login(self, username, password, verify, expect, is_ext):
+        self.driver.find_element_by_class_name('red').click()
+        self.driver.find_element_by_id('username').send_keys(username)
+        self.driver.find_element_by_id('password').send_keys(password)
+        self.driver.find_element_by_id('verify_code').send_keys(verify)
+        self.driver.find_element_by_name('sbtbutton').click()
+        self.driver.get_screenshot_as_file('./img/login{}.png'.format(time.strftime('%Y%m%d-%H%M%S')))
+        if is_ext:
+            element = self.driver.find_element_by_xpath('//a[text()="安全退出"]')
+            assert element
+        else:
+            time.sleep(2)
+            element = self.driver.find_element_by_css_selector('.layui-layer-content')
+            assert element.text == expect
+
+    @pytest.mark.run(order=2)
+    @parameterized.expand(read_func('./data/address.json'))
+    def test_add_address(self, username, password, verify_code, consigmee, province, city, district, town, address,
+                         zipcode, mobile, is_syc, message):
+        self.driver.find_element_by_class_name('red').click()
+        self.driver.find_element_by_id('username').send_keys(username)
+        self.driver.find_element_by_id('password').send_keys(password)
+        self.driver.find_element_by_id('verify_code').send_keys(verify_code)
+        self.driver.find_element_by_name('sbtbutton').click()
+        # 进入页面
+        self.driver.find_elements_by_css_selector('.top-ri-header a')[0].click()
+        time.sleep(2)
+        # 获取句柄
+        num = self.driver.window_handles
+        # 页面切换
+        self.driver.switch_to.window(num[1])
+        time.sleep(2)
+        action = ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_class_name('u-dl')).perform()
+        time.sleep(2)
+        self.driver.find_element_by_xpath('//a[text()="收货地址"]').click()
+        element = WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_xpath('//span[text()="增加新地址"]'))
+        element.click()
+        self.driver.switch_to.frame(self.driver.find_element_by_id('layui-layer-iframe100001'))
+        self.driver.find_element_by_name('consignee').send_keys(consigmee)
+        select = Select(self.driver.find_element_by_id('province'))
+        select.select_by_value(province)
+        select = Select(self.driver.find_element_by_id('city'))
+        select.select_by_value(city)
+        select = Select(self.driver.find_element_by_id('district'))
+        select.select_by_value(district)
+        select = Select(self.driver.find_element_by_id('twon'))
+        select.select_by_value(town)
+        self.driver.find_element_by_id('address').send_keys(address)
+        self.driver.find_element_by_name('zipcode').send_keys(zipcode)
+        self.driver.find_element_by_name('mobile').send_keys(mobile)
+        self.driver.find_element_by_xpath('//span[text()="保存收货地址"]').click()
+        time.sleep(2)
+        if is_syc:
+            js = 'window.scrollTo(0,200)'
+            self.driver.execute_script(js)
+            self.driver.get_screenshot_as_file(f'./img/a{time.strftime("%Y%m%d%H%M%S")}.png')
+            element = WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_css_selector('.gp_num2'))
+            assert element.text == message
+            WebDriverWait(self.driver, 10, 1).until(lambda x: x.find_element_by_xpath('//a[text()="安全退出"]')).click()
+        else:
+            alert = self.driver.switch_to.alert
+            print("操作失败,提示信息为：", alert.text)
+            alert.dismiss()
+            self.driver.get_screenshot_as_file(f'./img/a{time.strftime("%Y%m%d%H%M%S")}.png')
+            self.driver.close()
+
