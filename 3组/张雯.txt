@@ -1,61 +1,85 @@
-# 一、基础题
-# 1.ABC
-# 2.ACD
-# 3.B
-# 4.C
-# 5.BD
-# 6.CD
-# 7.AB
-
-
-
-# 简答题
-action.move_to_element(driver.find_element_by_tag_id("testA"))
-
-
-# 二、代码题
-
-# 1.打开tpshop,设置窗口最大化和隐式等待
 import time
 from selenium import webdriver
-# 2.登陆tpshop网站
+# 2.创建浏览器驱动对象
 driver = webdriver.Chrome()
-driver.get("http://127.0.0.1/")
-driver.maximize_window()
-driver.implicitly_wait(3)
-# 3.在会员首页点击返回商城首页
-driver.find_element_by_xpath("//*[text()='返回商城首页']").click()
-# 4.输入搜索条件小米
-user_element = driver.find_element_by_id("小米")
-# 5.点击第一个搜索到商品接口对应加入购物车
-driver.find_element_by_class_name("//*[addcar(@placeholder,'加入购物车')]").click()
-# 6.在商品详情页面点击加入购物车
-driver.find_element_by_class_name("//*[contains(@placeholder,'加入购物车')]").click()
-# 7.刷新界面
-driver.refresh()
-# 8.获取界面上购物车的商品总件数和总价,如下图。如购物车没有商品则打印图2中的元素文本信息
-driver.find_element_by_xpath("//*[width(@placeholder,'已选择')]").click()
-driver.find_element_by_xpath("//*[width(@placeholder,'合计')]").click()
-print('我的购物车',driver.find_element_by_xpath('cart_104_market_peice').text)
-# 9.等待5s,点击去购物车结算
+# 3.输入网址
+driver.get("http://127.0.0.1/Home/user/login.html")
 time.sleep(3)
-driver.find_element_by_class_name("//*[gwc-qjs(@placeholder,'去结算')]").click()
-# 10.判断购物车页面商品勾选按钮是否选中
-if float(driver.find_element_by_class_name("//*[checkCart(@placeholder,'全选')]")).click()
-    print('选中')
-else:
-    print('没选中')
-# 11.打印出商品单价、购买价、数量、小计金额
-print('单价,',driver.find_element_by_id('cart_104_goods_price').text)
-print('购买价',driver.find_element_by_id('cart_104_member_goods_price').text)
-print('数量为',driver.find_element_by_id('changgeQuantity_104').get_attribute("value"))
-print('小计金额',driver.find_element_by_id('cart_104_market_peice').text)
-# 12.写个判断:判断单价信息是否大于5000块
-# 如大于则打印"黑店,不买了",并删除购物车的该商品,关闭浏览器
-# 如小于,则打印"勉勉强强,用吧！不过暂时没钱"，关闭浏览器
-if float(driver.find_element_by_id('cart_104_goods_price').text[1:]) >=5000:
-    print('黑店，不买了')
-    driver.quit()
-else:
-    print('勉勉强强，用吧，不过暂时没钱')
-    driver.quit()
+
+TestTPshop:
+def setup_class():
+        # ＃实例化浏览器
+        self.driver = webdriver.Chrome()
+        # ＃最大化窗口和隐形等待
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(10)
+        # 进入首页
+        self.driver.get("http://tpshop-test.itheima.net/")
+
+    def teardown_class():
+        # ＃关闭浏览器
+        self.driver.quit()
+
+    @ pytest.mark.run(order = 1)
+        def test01_login(self):
+        # “”“登录用例一”“”
+        # 点击登录
+        self.driver.find_element_by_class_name('red').click()
+        # 进行登录
+        self.driver.find_element_by_id('用户名').send_keys('18033727684')
+        self.driver.find_element_by_id('password').send_keys('123456')
+        self.driver.find_element_by_id('verify_code').send_keys('8888')
+        self.driver.find_element_by_name("sbtbutton").click()
+        time.sleep(3)
+
+    数据= [(“铁锤2,636,1291,1329,“地”,123456)]
+
+    @ pytest.mark.run(order = 2)
+    @ parameterized.expand(数据)
+    def test02_address(self，a，b，c，d，e，f):
+        # “”“地址用例二”“”
+        # 返回首页
+
+        self.driver.get("http://tpshop-test.itheima.net/”)
+        # 点击我的订单
+        self.driver.find_element_by_css_selector('.fr a').click()
+        # 窗口切换至我的订单，并关闭首页窗口
+        self.driver.close()
+        句柄= self.driver.window_handles
+        self.driver.switch_to.window(handles [-1])
+        # 点击收货地址
+        动作= ActionChains(self.driver)
+        action.move_to_element(self.driver.find_element_by_css_selector('。u-dt span')).perform()
+        self.driver.find_element_by_link_text('收货地址').click()
+        # 点击添加新地址
+        self.driver.find_element_by_class_name('co_blue').click()
+
+        # 切换框架
+        self.driver.switch_to.frame(self.driver.find_element_by_id('layui-layer-iframe100001'))
+
+        # 输入收货人
+        self.driver.find_element_by_css_selector("[名称='收货人']").send_keys(a)
+
+        # 选择河北，邯郸，峰峰矿区，后边的那里至少有数，无论
+        self.driver.find_element_by_css_selector(f'select [value =“ {b}”]').click()
+
+        self.driver.find_element_by_css_selector(f'[value =“ {c}”]').click()
+        self.driver.find_element_by_css_selector(f'[value =“ {d}”]').click()
+        # 输入详细地址
+        self.driver.find_element_by_id('地址').send_keys(e)
+        self.driver.find_element_by_class_name('wi40-BFB').send_keys(f)
+        self.driver.find_element_by_css_selector('。box-ok span').click()
+        # 尝试：
+        #     返回框架
+            self.driver.switch_to.default_content()
+            time.sleep(4)
+            # 尝试悬停账户设置，如果报错，则说明，弹出js框
+            动作= ActionChains(self.driver)
+            action.move_to_element(self.driver.find_element_by_css_selector('。u-dt span')).perform()
+            time.sleep(4)
+        # 例外，例如e：
+        #     处理js框
+            self.driver.switch_to.frame(self.driver.find_element_by_id('layui-layer-iframe100001'))
+            self.driver.switch_to.alert.accept()
+            self.driver.switch_to.default_content()
+            self.driver.find_element_by_class_name('layui-layer-ico').click()
